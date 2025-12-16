@@ -1,0 +1,103 @@
+﻿@*Areas/Identity/Pages/CustomAccount/quanlytaikhoan.cshtml*@
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.CustomAccount.QuanLyTaiKhoanModel
+
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    Layout = "~/Views/Shared/_Layout_Dangnhap_Dangky.cshtml";
+
+}
+
+<style>
+    .manage-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+        .manage-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .nav-link-custom {
+        color: #007bff;
+        font-weight: 500;
+    }
+
+        .nav-link-custom:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+    .alert {
+        margin-top: 10px;
+        display: block !important;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
+</style>
+
+<h1 class="text-center mb-4" style="color: #343a40;">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="manage-card">
+            <!-- Hiển thị thông báo từ TempData -->
+            @if (!string.IsNullOrEmpty(TempData["StatusMessage"]?.ToString()))
+            {
+                <div class="alert @(TempData["StatusMessage"].ToString().StartsWith("Thành công") ? "alert-success" : "alert-danger")">
+                    @TempData["StatusMessage"]
+                </div>
+            }
+
+            <form method="post" novalidate>
+                <!-- Thêm novalidate để tắt validation phía client -->
+                <div class="form-group">
+                    <label asp-for="ThongTinNhap.HoTen" class="font-weight-bold">Tên của bạn</label>
+                    <input asp-for="ThongTinNhap.HoTen" class="form-control" placeholder="Nhập tên của bạn" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThongTinNhap.NgaySinh" class="font-weight-bold">Ngày sinh</label>
+                    <input asp-for="ThongTinNhap.NgaySinh" class="form-control" type="date" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThongTinNhap.DiaChi" class="font-weight-bold">Địa chỉ</label>
+                    <input asp-for="ThongTinNhap.DiaChi" class="form-control" placeholder="Nhập địa chỉ của bạn" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThongTinNhap.SDT" class="font-weight-bold">Số điện thoại</label>
+                    <input asp-for="ThongTinNhap.SDT" class="form-control" placeholder="Nhập số điện thoại" />
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary me-2">Cập nhật thông tin</button>
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">Quay lại</button>
+                </div>
+            </form>
+            <hr />
+            <h5 class="mt-4">Các tùy chọn khác</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><a asp-page="./QuanLyEmail" class="nav-link-custom">Quản lý email</a></li>
+                <li class="list-group-item"><a asp-page="./DoiMatKhau" class="nav-link-custom">Đổi mật khẩu</a></li>
+                <li class="list-group-item"><a asp-page="./XacThucHaiLop" class="nav-link-custom">Xác thực hai lớp</a></li>
+                <li class="list-group-item"><a asp-page="./DuLieuCaNhan" class="nav-link-custom">Dữ liệu cá nhân</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @* Tạm thời tắt validation phía client để kiểm tra *@
+    @* <partial name="_ValidationScriptsPartial" /> *@
+}
