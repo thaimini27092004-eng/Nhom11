@@ -1,0 +1,101 @@
+﻿
+@*Areas/Identity/Pages/Account/Login.cshtml*@
+
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/css/GiaoDien_DangNhap.css" rel="stylesheet">
+    <link href="/css/Logo_Load.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <!-- Hiệu ứng tải -->
+        <div id="loading" style="display: none;">
+            <div class="loading-wrapper">
+                <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="loading-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+     
+        <form id="account" method="post">
+            <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="logo">
+            <h3>Đăng nhập</h3>
+            <p class="sub-text">Xin chào! Hãy đăng nhập để trở tận hưởng ưu đãi</p>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Input.Email" placeholder="NHập email/SDT để đăng nhập" id="Input_Email" autocomplete="username" aria-required="true" required />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+            <input asp-for="Input.Password" placeholder="Mật khẩu của bạn?" id="Input_Password" autocomplete="current-password" aria-required="true" type="password" required />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="remember-me">
+                <input asp-for="Input.RememberMe" class="remember-me-checkbox" />
+                <label asp-for="Input.RememberMe" class="remember-me-label">Ghi nhớ tôi</label>
+            </div>
+            <p class="forgot-password"><a asp-page="./DoiMatKhau" class="custom-link">Quên mật khẩu?</a></p>
+            <button type="submit" class="login-btn">Đăng nhập</button>
+
+            <p class="social-text">Đăng nhập bằng</p>
+            <div class="social-icons">
+                <button type="button" class="social-icon google" id="google-login-btn"><i class="fab fa-google"></i> Google</button>
+                <button type="button" class="social-icon facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+            </div>
+
+            <div class="additional-links">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="custom-link">Đăng ký tài khoản mới</a>
+
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.validation.unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+   
+    <script>
+        $(document).ready(function () {
+            // Hàm hiển thị/ẩn hiệu ứng tải
+            function toggleLoading(show) {
+                if (show) {
+                    $("#loading").show();
+                    $("#account").css("opacity", "0.5");
+                } else {
+                    $("#loading").hide();
+                    $("#account").css("opacity", "1");
+                }
+            }
+
+            // Xử lý gửi biểu mẫu đăng nhập
+            $("#account").on("submit", function (event) {
+                if ($(this).valid()) {
+                    toggleLoading(true);
+                }
+            });
+
+            // Xử lý click nút Google
+            $("#google-login-btn").on("click", function () {
+                toggleLoading(true);
+               window.location.href = "/Account/LoginByGoogle?returnUrl=@(Model.ReturnUrl ?? "/")";
+            });
+
+            // Xử lý click nút Facebook (nếu cần)
+            $(".social-icon.facebook").on("click", function () {
+                toggleLoading(true);
+            });
+        });
+    </script>
+</body>
+</html>
