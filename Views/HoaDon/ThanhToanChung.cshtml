@@ -1,0 +1,186 @@
+﻿@using WebsiteBanHang.Models.QuanLyThanhToan.ViewModel
+@*HoaDon/ThanhToanChung.cshtml*@
+@model ThanhToanViewModel
+@{
+    ViewData["Title"] = "Thanh Toán";
+    Layout = "~/Views/Shared/_Layout_Dangnhap_Dangky.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-primary">Thanh Toán</h1>
+
+    <!-- Thông tin giao hàng -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-body bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-10">
+                    <h4 class="fw-bold text-dark">Thông tin giao hàng</h4>
+                    <p class="mb-1"><strong>Đ/C:</strong> @(Model.DiaChiGiaoHang ?? "Chưa cập nhật địa chỉ")<strong> - SDT:</strong> @(Model.SoDienThoai ?? "Chưa cập nhật số điện thoại")</p>
+                </div>
+                <div class="col-md-2 text-end">
+                    <a href="/Identity/CustomAccount/QuanLyTaiKhoan" class="btn btn-primary btn-sm">Chỉnh sửa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Errors"] != null)
+    {
+        var errors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(TempData["Errors"].ToString());
+        foreach (var error in errors)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @error
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
+
+    @if (Model.DanhSachSanPhamDaChon == null || !Model.DanhSachSanPhamDaChon.Any())
+    {
+        <div class="alert alert-warning text-center">Không có sản phẩm nào để thanh toán.</div>
+    }
+    else
+    {
+        <form asp-controller="HoaDon" asp-action="XacNhanThanhToanChung" method="post">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    @foreach (var item in Model.DanhSachSanPhamDaChon)
+                    {
+                        <div class="card shadow-sm mb-4 border-primary">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="@item.ImageUrl" class="img-fluid rounded-start h-100 object-fit-cover" alt="@item.Name" onerror="this.src='https://via.placeholder.com/200x200';">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body bg-light">
+                                        <h4 class="card-title text-dark">@item.Name</h4>
+                                        <p class="card-text"><strong>Giá:</strong> <span class="text-success">@item.Price.ToString("N0") VND</span></p>
+                                        <p class="card-text"><strong>Mô tả:</strong> <span>@(@Html.Raw(item.Description ?? "Không có mô tả"))</span></p>
+                                        <div class="row align-items-center">
+                                            
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold text-dark">Số lượng:</label>
+                                                <input type="number" name="quantities[@item.ProductId]" class="form-control w-50 border-dark" min="1" value="@item.Quantity" data-ma-san-pham="@item.ProductId" onchange="capNhatTongTien(this)" required />
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <p class="fw-bold mb-0 text-dark">Tổng tiền: <span class="text-success tong-tien-san-pham" data-ma-san-pham="@item.ProductId">@((item.Price * item.Quantity).ToString("N0")) VND</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="card shadow-sm mb-4 border-success">
+                        <div class="card-body bg-light text-center">
+                            <h4 class="fw-bold text-dark">Tổng tiền thanh toán: <span id="tongTienChung" class="text-success">@Model.DanhSachSanPhamDaChon.Sum(i => i.Price * i.Quantity).ToString("N0") VND</span></h4>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4 border-info">
+                        <div class="card-body bg-light">
+                            <label for="paymentMethodId" class="form-label fw-bold text-dark">Phương thức thanh toán:</label>
+                            <select name="paymentMethodId" id="paymentMethodId" class="form-select border-dark" required>
+                                @foreach (var pttt in Model.DanhSachPhuongThucThanhToan)
+                                {
+                                    <option value="@pttt.MaPT">@pttt.TenPT</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success btn-lg me-3">Thanh toán</button>
+                        <a href="@(Model.DanhSachSanPhamDaChon.Count == 1 ? Url.Action("Index", "Home") : Url.Action("Index", "ShoppingCart"))" class="btn btn-secondary btn-lg">Quay lại</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <script>
+            function capNhatTongTien(input) {
+                var maSanPham = input.dataset.maSanPham;
+                var soLuong = parseInt(input.value) || 1;
+
+                fetch('/HoaDon/CapNhatTongTienSanPham', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `maSanPham=${maSanPham}&soLuong=${soLuong}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.thanhCong) {
+                        document.querySelector(`.tong-tien-san-pham[data-ma-san-pham="${maSanPham}"]`).textContent = data.tongTienSanPham.toLocaleString('vi-VN') + " VND";
+                        tinhTongTienChung();
+                    }
+                });
+            }
+
+            function tinhTongTienChung() {
+                fetch('/HoaDon/TinhTongTienChung', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.thanhCong) {
+                            document.getElementById("tongTienChung").textContent = data.tongTienChung.toLocaleString('vi-VN') + " VND";
+                        }
+                    });
+            }
+        </script>
+    }
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .text-primary {
+        color: #0d6efd !important;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .border-primary {
+        border-color: #0d6efd !important;
+    }
+
+    .border-success {
+        border-color: #28a745 !important;
+    }
+
+    .border-info {
+        border-color: #17a2b8 !important;
+    }
+</style>

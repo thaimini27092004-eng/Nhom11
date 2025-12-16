@@ -1,0 +1,85 @@
+﻿@*HoaDon/PaymenRusult.cshtml*@
+
+@model WebsiteBanHang.Models.VnPay.PaymentResponseModel
+@{
+    ViewData["Title"] = "Kết Quả Thanh Toán";
+    var decodedOrderDescription = Uri.UnescapeDataString(Model.OrderDescription); // Giải mã
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Kết Quả Thanh Toán</h2>
+
+    @if (Model.Success && Model.VnPayResponseCode == "00")
+    {
+        <div class="alert alert-success text-center" role="alert">
+            <h4>Thanh toán thành công!</h4>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger text-center" role="alert">
+            <h4>Thanh toán thất bại!</h4>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <h5>Thông tin giao dịch</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Mô tả đơn hàng:</dt>
+                <dd class="col-sm-8">@decodedOrderDescription</dd> <!-- Dùng chuỗi đã giải mã -->
+
+                <dt class="col-sm-4">Mã giao dịch:</dt>
+                <dd class="col-sm-8">@Model.TransactionId</dd>
+
+                <dt class="col-sm-4">Mã đơn hàng:</dt>
+                <dd class="col-sm-8">@Model.OrderId</dd>
+
+                <dt class="col-sm-4">Phương thức thanh toán:</dt>
+                <dd class="col-sm-8">@Model.PaymentMethod</dd>
+
+                <dt class="col-sm-4">Mã thanh toán:</dt>
+                <dd class="col-sm-8">@Model.PaymentId</dd>
+
+                <dt class="col-sm-4">Trạng thái:</dt>
+                <dd class="col-sm-8">
+                    @if (Model.Success)
+                    {
+                        <span class="badge badge-success">Thành công</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">Thất bại</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Mã phản hồi VnPay:</dt>
+                <dd class="col-sm-8">@Model.VnPayResponseCode</dd>
+
+                <dt class="col-sm-4">Token bảo mật:</dt>
+                <dd class="col-sm-8"><small>@Model.Token</small></dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="@Url.Action("DanhSachHoaDon", "HoaDon")" class="btn btn-primary">Quay lại danh sách hóa đơn</a>
+    </div>
+</div>
+
+<style>
+    .card {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+    }
+</style>

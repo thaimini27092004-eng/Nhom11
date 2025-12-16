@@ -1,0 +1,155 @@
+﻿@* Views/HoaDon/ChiTietHoaDon.cshtml *@
+@model WebsiteBanHang.Models.HoaDon
+
+@{
+    ViewData["Title"] = $"Chi Tiết Hóa Đơn #{Model.SoHD}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-title">
+    <h2>Chi Tiết Hóa Đơn #@Model.SoHD</h2>
+</div>
+
+<section class="chi-tiet-hoa-don-section">
+    <div class="container-fluid">
+        <!-- Thông tin giao hàng -->
+        <div class="giao-hang-card">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h4>Thông Tin Giao Hàng</h4>
+                    <p>
+                        <strong>Địa chỉ:</strong> @(Model.DiaChiGiaoHang ?? "Chưa cập nhật địa chỉ")<br>
+                        <strong>SĐT:</strong> @(Model.DTNhanHang ?? "Chưa cập nhật số điện thoại")
+                    </p>
+                </div>
+                @if (ViewBag.NguoiMua != null && (bool)ViewBag.NguoiMua && Model.LichSuTTHD.FirstOrDefault()?.MaTT == 1 && Model.SoLanDoiTT == 0)
+                {
+                    <a href="@Url.Action("ChinhSuaThongTinGiaoHang", "HoaDon", new { id = Model.SoHD })" class="btn btn-primary btn-sm">Chỉnh sửa</a>
+                }
+            </div>
+        </div>
+
+        <!-- Thông tin hóa đơn -->
+        <table class="thong-tin-hoa-don-table">
+            <tbody>
+                <tr>
+                    <th>Số Hóa Đơn</th>
+                    <td>@Model.SoHD</td>
+                </tr>
+                <tr>
+                    <th>Ngày Đặt</th>
+                    <td>@Model.NgayDat.ToString("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <th>Ngày Giao Dự Kiến</th>
+                    <td>@Model.NgayGiaoDuKien.ToString("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <th>Phương Thức Thanh Toán</th>
+                    <td>@Model.PTTT?.TenPT</td>
+                </tr>
+                <tr>
+                    <th>Trạng Thái</th>
+                    <td>@Model.LichSuTTHD.FirstOrDefault()?.TrangThai?.TenTT</td>
+                </tr>
+                <tr>
+                    <th>Khách Hàng</th>
+                    <td>@Model.KhachHang?.TenKH</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Theo dõi trạng thái đơn hàng -->
+        <div class="order-timeline-container">
+            <h4>Theo dõi trạng thái đơn hàng</h4>
+            <div class="timeline-wrapper">
+                <!-- Progress Bar -->
+                @{
+                    var orderedStatus = Model.LichSuTTHD.OrderBy(ls => ls.ThoiGianThayDoi).ToList();
+                    var totalSteps = orderedStatus.Count;
+                    var completedSteps = orderedStatus.Count(s => s.MaTT <= orderedStatus.Last().MaTT);
+                    var progressPercentage = totalSteps > 0 ? (completedSteps * 100.0 / totalSteps) : 0;
+                }
+                <div class="timeline-progress">
+                    <div class="timeline-progress-bar" style="width: @progressPercentage%;"></div>
+                </div>
+
+                <!-- Timeline Steps -->
+                <div class="timeline-steps">
+                    @foreach (var status in orderedStatus)
+                    {
+                        var isCompleted = status.MaTT <= orderedStatus.Last().MaTT;
+                        var isActive = status == orderedStatus.Last();
+                        // Sử dụng UrlAnh từ TrangThai, nếu không có thì dùng ảnh mặc định
+                        var iconPath = string.IsNullOrEmpty(status.TrangThai?.UrlAnh)
+                        ? "~/images/GiaoHang/IconDefault.png"
+                        : status.TrangThai.UrlAnh;
+                        <div class="timeline-step @(isCompleted ? "completed" : "") @(isActive ? "active" : "")">
+                            <div class="timeline-step-icon">
+                                <img src="@Url.Content(iconPath)" alt="@status.TrangThai.TenTT" />
+                            </div>
+                            <p class="timeline-step-status">@status.TrangThai.TenTT</p>
+                            <p class="timeline-step-time">@status.ThoiGianThayDoi.ToString("dd/MM/yyyy HH:mm")</p>
+                            @if (!string.IsNullOrEmpty(status.GhiChu))
+                            {
+                                <div class="timeline-step-tooltip">@status.GhiChu</div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách sản phẩm -->
+        @if (Model.CTHDs != null && Model.CTHDs.Any())
+        {
+            <h3>Danh Sách Sản Phẩm</h3>
+            <table class="san-pham-table">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Số Lượng</th>
+                        <th>Đơn Giá</th>
+                        <th>Tổng Tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var chiTiet in Model.CTHDs)
+                    {
+                        <tr>
+                            <td data-label="Ảnh">
+                                <img src="@(chiTiet.TonKho.SanPham?.UrlAnh ?? "https://via.placeholder.com/50x50")"
+                                     alt="@chiTiet.TonKho.SanPham?.TenSP"
+                                     onerror="this.src='https://via.placeholder.com/50x50';" />
+                            </td>
+                            <td data-label="Tên Sản Phẩm">@chiTiet.TonKho.SanPham?.TenSP</td>
+                            <td data-label="Số Lượng">@chiTiet.SL</td>
+                            <td data-label="Đơn Giá">@chiTiet.DonGia.ToString("N0") Vnđ</td>
+                            <td data-label="Tổng Tiền">@((chiTiet.SL * chiTiet.DonGia).ToString("N0")) Vnđ</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end"><strong>Tổng cộng:</strong></td>
+                        <td><strong>@Model.CTHDs.Sum(ct => ct.SL * ct.DonGia).ToString("N0") Vnđ</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+        else
+        {
+            <p class="no-data">Không có sản phẩm nào trong hóa đơn này.</p>
+        }
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="@Url.Action("DanhSachHoaDon", "HoaDon")" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/Web_HoaDon_ChiTietHoaDon.css" asp-append-version="true" />
+}

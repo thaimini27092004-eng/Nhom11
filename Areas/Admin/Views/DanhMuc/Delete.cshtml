@@ -1,0 +1,10 @@
+﻿@*DanhMuc/Delete.cshtml*@
+
+@model WebsiteBanHang.Models.DanhMuc
+
+<h2>Delete Category</h2>
+<form asp-action="DeleteConfirmed" method="post">
+	<input type="hidden" asp-for="MaDM" />
+	<p>Are you sure you want to delete @Model.TenDM?</p>
+	<button type="submit" class="btn btn-danger">Xoá</button>
+</form>

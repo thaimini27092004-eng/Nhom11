@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo đặt hàng thành công</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 20px; text-align: center; background-color: #28a745; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            <img src="http://localhost:5143/images/logo/logo_dangnhap.PNG" alt="Cửa hàng bán hàng online" style="max-width: 150px;">
+                            <h1 style="color: #ffffff; margin: 10px 0; font-size: 24px;">Đặt hàng thành công!</h1>
+                        </td>
+                    </tr>
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 20px;">
+                            <p style="font-size: 16px; color: #333333;">Xin chào <strong>{{TenKH}}</strong>,</p>
+                            <p style="font-size: 16px; color: #333333;">Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Dưới đây là chi tiết hóa đơn của bạn:</p>
+                            <table width="100%" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin: 20px 0;">
+                                <tr>
+                                    <td style="font-size: 16px; color: #333333;"><strong>Số hóa đơn:</strong></td>
+                                    <td style="font-size: 16px; color: #333333;">{{SoHD}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 16px; color: #333333;"><strong>Ngày đặt:</strong></td>
+                                    <td style="font-size: 16px; color: #333333;">{{NgayDat}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 16px; color: #333333;"><strong>Phương thức thanh toán:</strong></td>
+                                    <td style="font-size: 16px; color: #333333;">{{PhuongThucThanhToan}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 16px; color: #333333;"><strong>Địa chỉ giao hàng:</strong></td>
+                                    <td style="font-size: 16px; color: #333333;">{{DiaChiGiaoHang}}</td>
+                                </tr>
+                            </table>
+                            <!-- Bảng sản phẩm -->
+                            <h3 style="font-size: 18px; color: #333333; margin: 20px 0 10px;">Chi tiết sản phẩm</h3>
+                            <table width="100%" cellpadding="10" cellspacing="0" style="border-collapse: collapse; border: 1px solid #dddddd;">
+                                <thead>
+                                    <tr style="background-color: #f8f8f8;">
+                                        <th style="text-align: left; font-size: 14px; color: #333333; border-bottom: 1px solid #dddddd; width: 15%;">Ảnh</th>
+                                        <th style="text-align: left; font-size: 14px; color: #333333; border-bottom: 1px solid #dddddd;">Sản phẩm</th>
+                                        <th style="text-align: center; font-size: 14px; color: #333333; border-bottom: 1px solid #dddddd; width: 15%;">Số lượng</th>
+                                        <th style="text-align: right; font-size: 14px; color: #333333; border-bottom: 1px solid #dddddd; width: 20%;">Đơn giá</th>
+                                        <th style="text-align: right; font-size: 14px; color: #333333; border-bottom: 1px solid #dddddd; width: 20%;">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{DanhSachSanPham}}
+                                </tbody>
+                            </table>
+                            <p style="font-size: 16px; color: #333333; text-align: right; margin: 10px 0;"><strong>Tổng tiền:</strong> {{TongTien}} VND</p>
+                            <p style="font-size: 16px; color: #333333;">Chúng tôi sẽ xử lý đơn hàng sớm nhất có thể. Bạn có thể theo dõi trạng thái đơn hàng tại:</p>
+                            <p style="text-align: center; margin: 20px 0;">
+                                <a href="http://localhost:5143/HoaDon/ChiTietHoaDon/{{SoHD}}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 4px;">Xem chi tiết hóa đơn</a>
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 20px; text-align: center; background-color: #f8f8f8; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                            <p style="font-size: 14px; color: #666666; margin: 0;">Trân trọng,<br>Cửa hàng bán hàng online</p>
+                            <p style="font-size: 14px; color: #666666; margin: 10px 0;">Liên hệ: phatdet2312@gmail.com | Hotline: 0123 456 789</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

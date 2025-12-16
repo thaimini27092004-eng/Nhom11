@@ -1,0 +1,334 @@
+﻿@model WebsiteBanHang.Models.SanPham
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Thêm Sản Phẩm";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_SanPham.css">
+
+<h2 class="content-title">Thêm Sản Phẩm</h2>
+<div class="form-scroll-container">
+    <div class="form-container">
+        <form id="addForm" asp-action="Add" asp-controller="SanPham" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="TenSP" class="form-label">Tên Sản Phẩm</label>
+                <input asp-for="TenSP" class="form-input" />
+                <span asp-validation-for="TenSP" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gia" class="form-label">Giá</label>
+                <input asp-for="Gia" class="form-input" type="number" step="0.01" />
+                <span asp-validation-for="Gia" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MoTa" class="form-label">Mô Tả</label>
+                <div class="custom-editor">
+                    <div class="toolbar">
+                        <button type="button" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
+                        <button type="button" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
+                        <button type="button" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+                        <button type="button" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                        <select onchange="execCmd('fontName', this.value)" title="Font Family">
+                            <option value="">Font</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <select onchange="execCmd('fontSize', this.value)" title="Font Size">
+                            <option value="">Size</option>
+                            <option value="2">10pt</option>
+                            <option value="3">12pt</option>
+                            <option value="4">14pt</option>
+                            <option value="5">18pt</option>
+                        </select>
+                        <input type="color" onchange="execCmd('foreColor', this.value)" title="Text Color">
+                        <button type="button" onclick="execCmd('insertUnorderedList')" title="Bullet List">•</button>
+                        <button type="button" onclick="execCmd('insertOrderedList')" title="Numbered List">1.</button>
+                        <button type="button" onclick="insertTable()" title="Insert Table">📋</button>
+                        <button type="button" onclick="insertImage()" title="Insert Image">🖼️</button>
+                        <button type="button" onclick="insertLink()" title="Insert Link">🔗</button>
+                    </div>
+                    <div id="descriptionEditor" contenteditable="true">@Html.Raw(Model?.MoTa ?? "")</div>
+                    <input type="hidden" asp-for="MoTa" id="descriptionHidden" />
+                </div>
+                <span asp-validation-for="MoTa" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaDM" class="form-label">Danh Mục</label>
+                <select asp-for="MaDM" asp-items="ViewBag.danhmucs" class="filter-select">
+                    <option value="">-- Chọn danh mục --</option>
+                </select>
+                <span class="error-message" data-valmsg-for="MaDM"></span>
+            </div>
+            <div class="form-group">
+                <label for="maKho" class="form-label">Kho</label>
+                <select name="maKho" asp-items="ViewBag.khos" class="filter-select">
+                    <option value="">-- Chọn kho --</option>
+                </select>
+                <span class="error-message" data-valmsg-for="maKho"></span>
+            </div>
+            <div class="form-group">
+                <label for="slTon" class="form-label">Số Lượng Sản Phẩm</label>
+                <input type="number" name="slTon" class="form-input" min="0" placeholder="Nhập số lượng sản phẩm" />
+                <span class="error-message" data-valmsg-for="slTon"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlAnh" class="form-label">Ảnh Sản Phẩm (Ảnh Đại Diện)</label>
+                <input type="file" name="urlAnh" class="form-input" accept="image/*" />
+                <span asp-validation-for="UrlAnh" class="error-message"></span>
+                <img id="previewImage" src="" alt="Preview Image" class="preview-image" style="display: none;" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Danh Sách Ảnh Bổ Sung</label>
+                <input type="file" name="additionalImages" class="form-input" id="nhapThuVienAnh" multiple accept="image/*" />
+                <small class="sub-text">Chọn nhiều ảnh bằng cách giữ Ctrl (hoặc Cmd) và click vào ảnh.</small>
+                <label class="form-label sub-label">Xem Trước Danh Sách:</label>
+                <div class="update-gallery-preview" id="xemTruocThuVienAnh">
+                    <p id="khongCoAnh" style="display: block;">Không có ảnh nào trong danh sách ảnh.</p>
+                </div>
+                <button type="button" class="view-more-btn" id="viewMoreBtn" style="display: none;">Xem thêm</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="action-bar-centered">
+    <button type="submit" form="addForm" class="action-btn confirm-btn">Đăng Tải</button>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        // Hàm toàn cục cho trình soạn thảo
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            $('#descriptionEditor').focus();
+        }
+
+        function insertTable() {
+            const table = $('<table>').css({
+                border: '1px solid #ccc'
+            });
+            const tbody = $('<tbody>');
+            for (let i = 0; i < 2; i++) {
+                const tr = $('<tr>');
+                for (let j = 0; j < 2; j++) {
+                    const td = $('<td>').css({
+                        border: '1px solid #ccc',
+                        padding: '5px'
+                    }).html(' ');
+                    tr.append(td);
+                }
+                tbody.append(tr);
+            }
+            table.append(tbody);
+            $('#descriptionEditor').append(table);
+        }
+
+        function insertImage() {
+            const input = $('<input>').attr({
+                type: 'file',
+                accept: 'image/*'
+            });
+            input.on('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $('<img>').attr({
+                            src: e.target.result,
+                            style: 'max-width: 100%'
+                        });
+                        $('#descriptionEditor').append(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            input.click();
+        }
+
+        function insertLink() {
+            const url = prompt('Nhập URL:');
+            if (url) {
+                const a = $('<a>').attr('href', url).text(url);
+                $('#descriptionEditor').append(a);
+            }
+        }
+
+        $(document).ready(function () {
+            // Khởi tạo DataTransfer để quản lý danh sách file
+            let fileList = new DataTransfer();
+
+            // Validation
+            $("#addForm").validate({
+                rules: {
+                    TenSP: {
+                        required: true,
+                        minlength: 2
+                    },
+                    Gia: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    MoTa: {
+                        required: true
+                    },
+                    MaDM: {
+                        required: true
+                    },
+                    maKho: {
+                        required: true
+                    },
+                    slTon: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    urlAnh: {
+                        accept: "image/*"
+                    },
+                    additionalImages: {
+                        accept: "image/*"
+                    }
+                },
+                messages: {
+                    TenSP: {
+                        required: "Vui lòng nhập tên sản phẩm.",
+                        minlength: "Tên sản phẩm phải có ít nhất 2 ký tự."
+                    },
+                    Gia: {
+                        required: "Vui lòng nhập giá sản phẩm.",
+                        number: "Giá phải là số.",
+                        min: "Giá không được nhỏ hơn 0."
+                    },
+                    MoTa: {
+                        required: "Vui lòng nhập mô tả sản phẩm."
+                    },
+                    MaDM: {
+                        required: "Vui lòng chọn danh mục."
+                    },
+                    maKho: {
+                        required: "Vui lòng chọn kho."
+                    },
+                    slTon: {
+                        required: "Vùi lòng nhập số lượng sản phẩm.",
+                        number: "Số lượng phải là số.",
+                        min: "Số lượng không được nhỏ hơn 0."
+                    },
+                    urlAnh: {
+                        accept: "Vui lòng chọn file ảnh hợp lệ."
+                    },
+                    additionalImages: {
+                        accept: "Vui lòng chọn file ảnh hợp lệ."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+
+            // Preview ảnh đại diện
+            $('input[name="urlAnh"]').on('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $("#previewImage");
+                        img.attr('src', e.target.result);
+                        img.show();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Xử lý chọn ảnh bổ sung
+            $('#nhapThuVienAnh').on('change', function () {
+                const files = this.files;
+                const previewContainer = $('#xemTruocThuVienAnh');
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileIndex = fileList.files.length; // Lấy chỉ số hiện tại
+                    fileList.items.add(file); // Thêm file vào fileList
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const div = $('<div>').addClass('update-gallery-preview-item').data('file-index', fileIndex);
+                        div.html(`
+                            <img src="${e.target.result}" alt="Ảnh Sản Phẩm" class="preview-additional-image" />
+                            <button type="button" class="update-delete-btn" onclick="xoaAnh(this, ${fileIndex})">×</button>
+                        `);
+                        previewContainer[0].insertBefore(div[0], previewContainer.find('#khongCoAnh')[0]);
+                        updateNoImageState();
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+                // Cập nhật input file
+                $('#nhapThuVienAnh')[0].files = fileList.files;
+                console.log('Số file sau khi thêm:', fileList.files.length);
+            });
+
+            // Xóa ảnh
+            window.xoaAnh = function (button, fileIndex) {
+                const parentElement = button.parentElement;
+                parentElement.remove();
+
+                // Tạo fileList mới, bỏ qua file tại fileIndex
+                const newFileList = new DataTransfer();
+                for (let i = 0; i < fileList.files.length; i++) {
+                    if (i !== fileIndex) {
+                        newFileList.items.add(fileList.files[i]);
+                    }
+                }
+                fileList = newFileList;
+
+                // Cập nhật input file
+                $('#nhapThuVienAnh')[0].files = fileList.files;
+
+                // Cập nhật lại fileIndex cho các phần tử preview
+                $('#xemTruocThuVienAnh .update-gallery-preview-item').each(function (index) {
+                    $(this).data('file-index', index);
+                    $(this).find('.update-delete-btn').attr('onclick', `xoaAnh(this, ${index})`);
+                });
+
+                updateNoImageState();
+                console.log('Số file sau khi xóa:', fileList.files.length);
+            };
+
+            // Cập nhật trạng thái không có ảnh
+            function updateNoImageState() {
+                const previewContainer = $('#xemTruocThuVienAnh');
+                const noImageText = $('#khongCoAnh');
+                const imageCount = previewContainer.find('div.update-gallery-preview-item').length;
+                noImageText.css('display', imageCount > 0 ? 'none' : 'block');
+                if (imageCount > 10) {
+                    $('#viewMoreBtn').css('display', 'block');
+                } else {
+                    $('#viewMoreBtn').css('display', 'none');
+                }
+            }
+
+            // Xử lý nút Xem thêm/Thu gọn
+            $('#viewMoreBtn').on('click', function () {
+                const gallery = $('#xemTruocThuVienAnh');
+                if (gallery.hasClass('show-all')) {
+                    gallery.removeClass('show-all');
+                    $(this).text('Xem thêm');
+                } else {
+                    gallery.addClass('show-all');
+                    $(this).text('Thu gọn');
+                }
+            });
+
+            // Submit nội dung trình soạn thảo
+            $('#addForm').on('submit', function () {
+                const content = $('#descriptionEditor').html();
+                $('#descriptionHidden').val(content);
+                console.log('Số file trước khi submit:', fileList.files.length);
+            });
+        });
+    </script>
+}

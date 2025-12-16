@@ -1,0 +1,560 @@
+﻿@*/Views/Shared/_Layout.cshtml    layout chung cho giao diện người dùng*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TechTrend</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/Layout_Web.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Layout_Chatbox.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <!-- Logo -->
+                <a class="logo" href="/" title="TechTrend">
+                    <img src="/images/logo/logo_dangnhap.PNG" alt="TechTrend Logo" /> <!-- Thay bằng đường dẫn logo thực tế -->
+                    <span>Nhóm 9</span>
+                </a>
+                <!-- Search Bar -->
+                <form asp-action="SanPhams" asp-controller="Home" method="get" class="search-bar" id="searchForm">
+                    <div class="input-group">
+                        <input type="text" id="nhapTuKhoa" name="tuKhoaTimKiem" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="@ViewData["tuKhoaTimKiem"]" autocomplete="off" />
+                        <!-- Nút mic -->
+                        <button type="button" id="micButton" class="btn btn-outline-secondary mic-btn">
+                            <i class="bi bi-mic-fill"></i>
+                        </button>
+                        <!-- Nút tìm kiếm hiện tại -->
+                        <button type="submit" class="btn btn-primary" id="searchButton"><i class="bi bi-search"></i></button>
+                        <!-- Các input ẩn cho bộ lọc -->
+                        <input type="hidden" name="chonDanhMuc" value="@ViewData["chonDanhMuc"]" />
+                        <input type="hidden" name="chonKho" value="@ViewData["chonKho"]" />
+                        <input type="hidden" name="sapXepGia" value="@ViewData["sapXepGia"]" />
+                    </div>
+                    <div id="danhSachGoiY" class="dropdown-menu"></div>
+                </form>
+                <!-- Navigation -->
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+                        <li><a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "SanPhams" ? "active" : "")" asp-controller="Home" asp-action="SanPhams">Sản Phẩm</a></li>
+                        <li><a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "DanhSachHoaDon" ? "active" : "")" asp-controller="HoaDon" asp-action="DanhSachHoaDon">Hoá Đơn</a></li>
+                        <li><a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Contact" ? "active" : "")" asp-controller="Home" asp-action="Contact">Liên Hệ</a></li>
+                    </ul>
+                    <ul class="auth-cart">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="auth-item">
+                                <a class="auth-link" href="/Identity/Account/Manage">
+                                    <img src="@(string.IsNullOrEmpty(ViewBag.AvatarUrl) ? "/images/avatars/default.jpg" : ViewBag.AvatarUrl)" alt="Avatar" class="avatar-img" />
+                                    <span>@ViewBag.HoTen</span>
+                                </a>
+                            </li>
+                            <li class="auth-item">
+                                <a href="#" id="logoutButton" class="auth-link logout-link">Đăng xuất</a>
+                                <form id="logoutForm" method="post" action="/Identity/Account/Logout" style="display: none;">
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="auth-item"><a class="auth-link" href="/Identity/Account/Register">Đăng ký</a></li>
+                            <li class="auth-item"><a class="auth-link" href="/Identity/Account/Login">Đăng nhập</a></li>
+                        }
+                        <li class="auth-item">
+                            <a class="cart-link" asp-controller="ShoppingCart" asp-action="Index">
+                                <i class="bi bi-cart-fill"></i>
+                                @if (ViewBag.SoLuongGioHang != null && (int)ViewBag.SoLuongGioHang > 0)
+                                {
+                                    <span class="cart-count">@ViewBag.SoLuongGioHang</span>
+                                }
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-toggle" type="button" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="site-main has-bg">
+
+        <div class="main-bg">
+            <img src="/images/logo/logo_dangnhap.PNG" alt="Main Background" class="main-bg-img" />
+            <div class="main-overlay"></div>
+        </div>
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- Social Sidebar -->
+    <aside class="social-sidebar">
+        <ul class="social-list">
+            <li><a href="#" class="social-link"><i class="fab fa-facebook"></i></a></li>
+            <li><a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a></li>
+            <li><a href="#" class="social-link"><i class="fab fa-instagram-square"></i></a></li>
+            <li><a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a></li>
+            <li><a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a></li>
+        </ul>
+    </aside>
+
+    <!-- Footer -->
+    @if (ViewContext.RouteData.Values["Action"]?.ToString() != "DanhSachHoaDon")
+    {
+        <footer class="site-footer">
+            <div class="container-fluid">
+                <div class="footer-content">
+                    <p>© 2025 TechTrend. All rights reserved. <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a></p>
+                    <ul class="footer-social">
+                        <li><a href="#"><i class="fab fa-facebook"></i></a></li> <!-- Dùng fa-facebook thay fa-facebook-f -->
+                        <li><a href="#"><i class="fab fa-x-twitter"></i></a></li> <!-- Dùng fa-x-twitter thay fa-twitter -->
+                        <li><a href="#"><i class="fab fa-instagram-square"></i></a></li> <!-- Dùng fa-instagram-square cho logo vuông -->
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    }
+
+    <!-- Nút bật chatbox -->
+    <button class="chatbox-open-btn" id="chatboxOpenBtn" style="display: none;">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+    <!-- Chatbox -->
+    <div class="chatbox active" id="chatbox">
+        <div class="chatbox-header">
+            <span>Chat và tư vấn</span>
+            <button class="chatbox-toggle" id="chatboxToggle"><i class="bi bi-x"></i></button>
+        </div>
+        <div class="chatbox-body" id="chatboxBody">
+            <div class="chat-message bot">
+                Xin chào! Tôi là LaLa trợ lý AI, sẵn sàng tư vấn về sản phẩm trong cửa hàng. Bạn muốn hỏi gì nè?
+            </div>
+        </div>
+        <div class="chatbox-footer">
+            <div class="input-group">
+                <input type="text" id="chatInput" class="form-control" placeholder="Nhập câu hỏi..." />
+                <button type="button" id="chatMicButton" class="btn btn-outline-secondary mic-btn">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
+                <button id="sendMessage" class="btn btn-primary"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="successNotification" class="notification" style="display: none;">
+        Thêm sản phẩm vào giỏ hàng thành công!
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Xác nhận</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có muốn đăng xuất khỏi tài khoản không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="confirmBtn">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Form for Add to Cart -->
+    <form id="addToCartForm" method="post" action="@Url.Action("AddToCart", "ShoppingCart")" style="display: none;">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="productId" id="addToCartProductId" />
+        <input type="hidden" name="quantity" value="1" />
+        <input type="hidden" name="returnUrl" id="addToCartReturnUrl" />
+    </form>
+
+
+    <!-- Micro phóng to giữa màn hình -->
+    <div id="largeMicOverlay" class="large-mic-overlay" style="display: none;">
+        <div class="large-mic-container">
+            <i class="bi bi-mic-fill large-mic-icon"></i>
+            <div class="ripple-effect"></div>
+            <div class="ripple-effect ripple-delay-1"></div>
+            <div class="ripple-effect ripple-delay-2"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Search Suggestions
+            const nhapTuKhoa = $("#nhapTuKhoa");
+            const danhSachGoiY = $("#danhSachGoiY");
+
+            nhapTuKhoa.on("input", function () {
+                const tuKhoa = $(this).val().trim();
+                // Lấy giá trị bộ lọc, mặc định là rỗng nếu không có
+                const chonDanhMuc = $('select[name="chonDanhMuc"]').val() || "";
+                const chonKho = $('select[name="chonKho"]').val() || "";
+                const sapXepGia = $('select[name="sapXepGia"]').val() || "macDinh";
+
+                if (tuKhoa.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("SearchSuggestions", "Home")",
+                        type: "GET",
+                        data: {
+                            term: tuKhoa,
+                            chonDanhMuc: chonDanhMuc,
+                            chonKho: chonKho,
+                            sapXepGia: sapXepGia
+                        },
+                        success: function (danhSach) {
+                            danhSachGoiY.empty();
+                            if (danhSach.length > 0) {
+                                danhSach.forEach(sanPham => {
+                                    danhSachGoiY.append(`
+                                        <a href="/Home/ChiTietSanPham?id=${sanPham.maSP}" class="dropdown-item d-flex align-items-center">
+                                            <img src="${sanPham.urlAnh}" alt="${sanPham.tenSP}" style="width: 3rem; height: 3rem; margin-right: 0.6rem;" />
+                                            <div>
+                                                <strong>${sanPham.tenSP}</strong><br/>
+                                                <small>${sanPham.gia.toLocaleString()} VND</small>
+                                            </div>
+                                        </a>
+                                    `);
+                                });
+                                danhSachGoiY.addClass("show");
+                            } else {
+                                danhSachGoiY.removeClass("show");
+                            }
+                        },
+                        error: function () {
+                            danhSachGoiY.empty().removeClass("show");
+                        }
+                    });
+                } else {
+                    danhSachGoiY.empty().removeClass("show");
+                }
+            });
+
+            $(document).click(function (e) {
+                if (!nhapTuKhoa.is(e.target) && !danhSachGoiY.is(e.target) && danhSachGoiY.has(e.target).length === 0) {
+                    danhSachGoiY.removeClass("show");
+                }
+            });
+
+            // Logout Modal
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            const confirmBtn = document.getElementById('confirmBtn');
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logoutModal.show();
+                });
+            }
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', function() {
+                    $.ajax({
+                        url: '/Identity/Account/Logout',
+                        type: 'POST',
+                        data: $('#logoutForm').serialize(),
+                        success: function() {
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Đăng xuất thất bại. Vui lòng thử lại.');
+                        }
+                    });
+                    logoutModal.hide();
+                });
+            }
+
+            // Add to Cart
+            $(document).on('click', '.add-to-cart', function(e) {
+                e.preventDefault();
+                var productId = $(this).data('product-id');
+                var returnUrl = window.location.pathname;
+                var isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+                if (!isAuthenticated) {
+                    window.location.href = '@Url.Action("AddToCart", "ShoppingCart")' + '?returnUrl=' + encodeURIComponent(returnUrl);
+                } else {
+                    var token = $('#logoutForm input[name="__RequestVerificationToken"]').val();
+                    $.ajax({
+                        url: '@Url.Action("AddToCart", "ShoppingCart")',
+                        type: 'POST',
+                        data: {
+                            productId: productId,
+                            quantity: 1,
+                            '__RequestVerificationToken': token
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#successNotification').fadeIn(500).delay(2000).fadeOut(500);
+                                var cartIcon = $('.bi-cart-fill');
+                                cartIcon.attr('data-count', response.cartCount);
+                                if (response.cartCount > 0) {
+                                    $('.cart-count').text(response.cartCount).show();
+                                } else {
+                                    $('.cart-count').hide();
+                                }
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX error:', error);
+                            alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+                        }
+                    });
+                }
+            });
+
+            // Mobile Menu Toggle
+            $('.mobile-toggle').click(function() {
+                $('.main-nav').toggleClass('active');
+            });
+
+                // Chatbox Toggle (ẩn chatbox)
+        $('#chatboxToggle').click(function() {
+            $('#chatbox').removeClass('active'); // Ẩn chatbox
+            $('#chatboxOpenBtn').show(); // Hiển thị nút bật
+        });
+
+        // Mở lại chatbox
+        $('#chatboxOpenBtn').click(function() {
+            $('#chatbox').addClass('active'); // Hiển thị chatbox
+            $('#chatboxOpenBtn').hide(); // Ẩn nút bật
+        });
+
+                    // Send Message
+        $('#sendMessage').click(function() {
+            var message = $('#chatInput').val().trim();
+            if (message !== '') {
+                // Thêm tin nhắn người dùng vào chatbox
+                $('#chatboxBody').append(`
+                    <div class="chat-message user">${message}</div>
+                `);
+                $('#chatInput').val('');
+
+                // Gửi yêu cầu đến server
+                $.ajax({
+                    url: '@Url.Action("ChatWithGemini", "Home")',
+                    type: 'POST',
+                    data: { message: message },
+                    success: function(response) {
+                        if (response.success) {
+                            // Phân tích phản hồi để tìm sản phẩm
+                            var responseText = response.response;
+                            var productRegex = /\[PRODUCT\](.*?)\[\/PRODUCT\]/g;
+                            var products = [];
+                            var match;
+
+                            // Tìm tất cả các sản phẩm trong phản hồi
+                            while ((match = productRegex.exec(responseText)) !== null) {
+                                var productData = match[1].split('|');
+                                var product = {};
+                                productData.forEach(function(item) {
+                                    var [key, value] = item.split(':');
+                                    product[key] = value;
+                                });
+                                products.push(product);
+                            }
+
+                            // Loại bỏ các tag [PRODUCT]...[/PRODUCT] khỏi phản hồi
+                            var cleanText = responseText.replace(productRegex, '').trim();
+
+                            // Hiển thị văn bản không liên quan đến sản phẩm (nếu có)
+                            if (cleanText) {
+                                $('#chatboxBody').append(`
+                                    <div class="chat-message bot">${cleanText}</div>
+                                `);
+                            }
+
+                            // Hiển thị thẻ sản phẩm
+                            products.forEach(function(product) {
+                                $('#chatboxBody').append(`
+                                    <div class="chat-product-card">
+                                        <img src="${product.urlAnh}" alt="${product.tenSP}" class="chat-product-img" />
+                                        <div class="chat-product-info">
+                                            <h6 class="chat-product-name">${product.tenSP}</h6>
+                                            <p class="chat-product-category">Danh mục: ${product.danhMuc}</p>
+                                            <p class="chat-product-price">Giá: ${Number(product.gia).toLocaleString()} VND</p>
+                                            <a href="/Home/ChiTietSanPham?id=${product.maSP}" class="btn chat-product-detail-btn">Chi tiết</a>
+                                        </div>
+                                    </div>
+                                `);
+                            });
+
+                            // Cuộn xuống dưới cùng
+                            $('#chatboxBody').scrollTop($('#chatboxBody')[0].scrollHeight);
+                        } else {
+                            $('#chatboxBody').append(`
+                                <div class="chat-message bot">${response.message}</div>
+                            `);
+                            $('#chatboxBody').scrollTop($('#chatboxBody')[0].scrollHeight);
+                        }
+                    },
+                    error: function() {
+                        $('#chatboxBody').append(`
+                            <div class="chat-message bot">Xin lỗi, có lỗi xảy ra. Vui lòng thử lại.</div>
+                        `);
+                        $('#chatboxBody').scrollTop($('#chatboxBody')[0].scrollHeight);
+                    }
+                });
+            }
+        });
+
+            // Gửi tin nhắn khi nhấn Enter
+            $('#chatInput').keypress(function(e) {
+                if (e.which == 13) {
+                    $('#sendMessage').click();
+                }
+            });
+        });
+
+
+                // Tìm kiếm bằng giọng nói
+        $('#micButton').click(function() {
+            // Hiển thị micro phóng to
+            $('#largeMicOverlay').fadeIn(300);
+
+            // Kiểm tra hỗ trợ micro của trình duyệt
+
+            if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+                alert('Trình duyệt của bạn không hỗ trợ nhận diện giọng nói. Vui lòng sử dụng Chrome hoặc Edge.');
+                $('#micButton').prop('disabled', true);
+                return;
+            }
+            // Tạo công cụ nhận diện giọng nói
+            const nhanDien = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            nhanDien.lang = 'vi-VN';
+
+            // Thêm lớp CSS để đổi màu nút mic trong thanh tìm kiếm
+            $(this).addClass('listening');
+
+            // Bắt đầu nghe giọng nói
+            nhanDien.start();
+
+            // Khi nhận được kết quả giọng nói
+            nhanDien.onresult = e => {
+                let vanBan = e.results[0][0].transcript;
+                if (vanBan.endsWith('.')) {
+                    vanBan = vanBan.slice(0, -1);
+                }
+                $('#nhapTuKhoa').val(vanBan);
+                $('#micButton').removeClass('listening');
+                $('#largeMicOverlay').fadeOut(300); // Ẩn micro phóng to
+                $('#searchButton').click();
+            };
+
+            // Khi dừng nghe
+            nhanDien.onend = () => {
+                $(this).removeClass('listening');
+                $('#largeMicOverlay').fadeOut(300); // Ẩn micro phóng to
+            };
+
+            // Khi xảy ra lỗi
+            nhanDien.onerror = () => {
+                $(this).removeClass('listening');
+                $('#largeMicOverlay').fadeOut(300); // Ẩn micro phóng to
+            };
+
+            // Dừng nhận diện giọng nói khi nhấp vào bất kỳ đâu trên màn hình
+            $(document).on('click.speechRecognition', function(e) {
+            // Kiểm tra xem nhấp chuột có phải trên nút mic hay không
+                if (!$(e.target).closest('#micButton').length) {
+                    nhanDien.stop(); // Dừng nhận diện giọng nói
+                    $('#micButton').removeClass('listening');
+                    $('#largeMicOverlay').fadeOut(300); // Ẩn micro phóng to
+                // Gỡ bỏ sự kiện này để tránh lặp lại
+                    $(document).off('click.speechRecognition');
+                }
+            });
+        });
+
+                // Chatbox speech recognition
+        $('#chatMicButton').click(function() {
+            // Hiển thị micro phóng to
+            $('#largeMicOverlay').fadeIn(300);
+
+            // Kiểm tra hỗ trợ micro của trình duyệt
+            if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+                alert('Trình duyệt của bạn không hỗ trợ nhận diện giọng nói. Vui lòng sử dụng Chrome hoặc Edge.');
+                $('#chatMicButton').prop('disabled', true);
+                $('#largeMicOverlay').fadeOut(300);
+                return;
+            }
+
+            // Tạo công cụ nhận diện giọng nói
+            const nhanDien = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            nhanDien.lang = 'vi-VN';
+
+            // Thêm lớp CSS để đổi màu nút mic trong chatbox
+            $(this).addClass('listening');
+
+            // Bắt đầu nghe giọng nói
+            nhanDien.start();
+
+            // Khi nhận được kết quả giọng nói
+            nhanDien.onresult = e => {
+                let vanBan = e.results[0][0].transcript;
+                if (vanBan.endsWith('.')) {
+                    vanBan = vanBan.slice(0, -1);
+                }
+                $('#chatInput').val(vanBan);
+                $('#chatMicButton').removeClass('listening');
+                $('#largeMicOverlay').fadeOut(300);
+                $('#sendMessage').click(); // Gửi tin nhắn tự động
+            };
+
+            // Khi dừng nghe
+            nhanDien.onend = () => {
+                $(this).removeClass('listening');
+                $('#largeMicOverlay').fadeOut(300);
+            };
+
+            // Khi xảy ra lỗi
+            nhanDien.onerror = () => {
+                $(this).removeClass('listening');
+                $('#largeMicOverlay').fadeOut(300);
+            };
+
+            // Dừng nhận diện giọng nói khi nhấp vào bất kỳ đâu trên màn hình
+            $(document).on('click.chatSpeechRecognition', function(e) {
+                if (!$(e.target).closest('#chatMicButton').length) {
+                    nhanDien.stop();
+                    $('#chatMicButton').removeClass('listening');
+                    $('#largeMicOverlay').fadeOut(300);
+                    $(document).off('click.chatSpeechRecognition');
+                }
+            });
+        });
+
+
+
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

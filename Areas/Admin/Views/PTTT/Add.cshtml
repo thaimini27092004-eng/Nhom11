@@ -1,0 +1,47 @@
+﻿@model WebsiteBanHang.Models.PTTT
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Thêm Phương Thức Thanh Toán";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_PTTT.css">
+
+<h2 class="content-title">Thêm Phương Thức Thanh Toán</h2>
+
+<form asp-action="Add" asp-controller="PTTT" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="TenPT" class="form-label">Tên Phương Thức Thanh Toán</label>
+        <input asp-for="TenPT" class="form-input" />
+        <span asp-validation-for="TenPT" class="error-message"></span>
+    </div>
+    <div class="action-bar">
+        <button type="submit" class="action-btn confirm-btn">Thêm</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    TenPT: {
+                        required: true,
+                        minlength: 2
+                    }
+                },
+                messages: {
+                    TenPT: {
+                        required: "Vui lòng nhập tên phương thức thanh toán.",
+                        minlength: "Tên phương thức thanh toán phải có ít nhất 2 ký tự."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+        });
+    </script>
+}

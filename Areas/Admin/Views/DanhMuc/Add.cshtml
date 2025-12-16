@@ -1,0 +1,48 @@
+﻿@*DanhMuc/Add.cshtml*@
+@model WebsiteBanHang.Models.DanhMuc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Thêm Danh Mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_DanhMuc.css">
+
+<h2 class="content-title">Thêm Danh Mục</h2>
+
+<form asp-action="Add" asp-controller="DanhMuc" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="TenDM" class="form-label">Tên Danh Mục</label>
+        <input asp-for="TenDM" class="form-input" />
+        <span asp-validation-for="TenDM" class="error-message"></span>
+    </div>
+    <div class="action-bar">
+        <button type="submit" class="action-btn confirm-btn">Thêm</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    TenDM: {
+                        required: true,
+                        minlength: 2
+                    }
+                },
+                messages: {
+                    TenDM: {
+                        required: "Vui lòng nhập tên danh mục.",
+                        minlength: "Tên danh mục phải có ít nhất 2 ký tự."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+        });
+    </script>
+}

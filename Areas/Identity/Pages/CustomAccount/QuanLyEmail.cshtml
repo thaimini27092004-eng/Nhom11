@@ -1,0 +1,50 @@
+﻿@*Areas/Identity/Pages/CustomAccount/QuanLyEmail.cshtml*@
+
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.CustomAccount.QuanLyEmailModel
+
+@{
+    ViewData["Title"] = "Quản lý email";
+
+}
+
+<style>
+    .manage-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+        .manage-card:hover {
+            transform: translateY(-5px);
+        }
+</style>
+
+<h1 class="text-center mb-4" style="color: #343a40;">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="manage-card">
+            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <div class="alert alert-success">@Model.StatusMessage</div>
+            }
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Input.NewEmail">Email mới</label>
+                    <input asp-for="Input.NewEmail" class="form-control" placeholder="Nhập email mới" />
+                    <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Cập nhật email</button>
+            </form>
+            <p class="mt-3">Email hiện tại: <strong>@Model.CurrentEmail</strong></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

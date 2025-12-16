@@ -1,0 +1,8 @@
+﻿@model WebsiteBanHang.Models.TrangThai
+
+<h2>Xóa Trạng Thái</h2>
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="MaTT" />
+    <p>Bạn có chắc chắn muốn xóa @Model.TenTT?</p>
+    <button type="submit" class="btn btn-danger">Xóa</button>
+</form>

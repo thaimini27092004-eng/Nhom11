@@ -1,0 +1,185 @@
+﻿@*Ảeas/Admin/Views/BannerQuangCao/Add.cshtml*@
+
+@model WebsiteBanHang.Models.QuanLyBanner.BannerQuangCao
+@{
+    ViewData["Title"] = "Thêm Banner Quảng Cáo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_BannerQuangCao.css">
+
+<h2 class="content-title">Thêm Banner Quảng Cáo</h2>
+<div class="form-scroll-container">
+    <div class="form-container">
+        <form id="addForm" asp-action="Add" asp-controller="BannerQuangCao" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="MoTa" class="form-label">Mô Tả</label>
+                <div class="custom-editor">
+                    <div class="toolbar">
+                        <button type="button" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
+                        <button type="button" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
+                        <button type="button" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+                        <button type="button" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                        <select onchange="execCmd('fontName', this.value)" title="Font Family">
+                            <option value="">Font</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <select onchange="execCmd('fontSize', this.value)" title="Font Size">
+                            <option value="">Size</option>
+                            <option value="2">10pt</option>
+                            <option value="3">12pt</option>
+                            <option value="4">14pt</option>
+                            <option value="5">18pt</option>
+                        </select>
+                        <input type="color" onchange="execCmd('foreColor', this.value)" title="Text Color">
+                        <button type="button" onclick="execCmd('insertUnorderedList')" title="Bullet List">•</button>
+                        <button type="button" onclick="execCmd('insertOrderedList')" title="Numbered List">1.</button>
+                        <button type="button" onclick="insertTable()" title="Insert Table">📋</button>
+                        <button type="button" onclick="insertImage()" title="Insert Image">🖼️</button>
+                        <button type="button" onclick="insertLink()" title="Insert Link">🔗</button>
+                    </div>
+                    <div id="descriptionEditor" contenteditable="true">@Html.Raw(Model?.MoTa ?? "")</div>
+                    <input type="hidden" asp-for="MoTa" id="descriptionHidden" />
+                </div>
+                <span asp-validation-for="MoTa" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlDichDen" class="form-label">URL Đích Đến</label>
+                <input asp-for="UrlDichDen" class="form-input" placeholder="/url" />
+                <span asp-validation-for="UrlDichDen" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlAnh" class="form-label">Ảnh Banner</label>
+                <input type="file" name="urlAnh" class="form-input" accept="image/*" />
+                <span asp-validation-for="UrlAnh" class="error-message"></span>
+                <img id="previewImage" src="" alt="Preview Image" class="preview-image" style="display: none;" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="action-bar-centered">
+    <button type="submit" form="addForm" class="action-btn confirm-btn">Đăng Tải</button>
+    <form asp-action="Index" asp-controller="BannerQuangCao" method="get" style="display: inline;">
+        <button type="submit" class="action-btn cancel-btn">Hủy</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        // Hàm toàn cục cho trình soạn thảo
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            $('#descriptionEditor').focus();
+        }
+
+        function insertTable() {
+            const table = $('<table>').css({
+                border: '1px solid #ccc'
+            });
+            const tbody = $('<tbody>');
+            for (let i = 0; i < 2; i++) {
+                const tr = $('<tr>');
+                for (let j = 0; j < 2; j++) {
+                    const td = $('<td>').css({
+                        border: '1px solid #ccc',
+                        padding: '5px'
+                    }).html(' ');
+                    tr.append(td);
+                }
+                tbody.append(tr);
+            }
+            table.append(tbody);
+            $('#descriptionEditor').append(table);
+        }
+
+        function insertImage() {
+            const input = $('<input>').attr({
+                type: 'file',
+                accept: 'image/*'
+            });
+            input.on('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $('<img>').attr({
+                            src: e.target.result,
+                            style: 'max-width: 100%'
+                        });
+                        $('#descriptionEditor').append(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            input.click();
+        }
+
+        function insertLink() {
+            const url = prompt('Nhập URL:');
+            if (url) {
+                const a = $('<a>').attr('href', url).text(url);
+                $('#descriptionEditor').append(a);
+            }
+        }
+
+        $(document).ready(function () {
+            // Validation
+            $("form").validate({
+                rules: {
+                    MoTa: {
+                        required: true
+                    },
+                    UrlDichDen: {
+                        required: true,
+                        pattern: /^\/[a-zA-Z0-9\/\-_]*$/
+                    },
+                    urlAnh: {
+                        required: true,
+                        accept: "image/*"
+                    }
+                },
+                messages: {
+                    MoTa: {
+                        required: "Vui lòng nhập mô tả banner."
+                    },
+                    UrlDichDen: {
+                        required: "Vui lòng nhập URL đích đến.",
+                        pattern: "URL phải bắt đầu bằng '/' và chỉ chứa chữ cái, số, '/', '-', '_'."
+                    },
+                    urlAnh: {
+                        required: "Vui lòng chọn ảnh banner.",
+                        accept: "Vui lòng chọn file ảnh hợp lệ."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+
+            // Preview ảnh
+            $('input[name="urlAnh"]').on('change', function (event) {
+                const file = event.target.files[0];
+                console.log('File selected:', file);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $("#previewImage");
+                        img.attr('src', e.target.result);
+                        img.show();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Submit nội dung trình soạn thảo
+            $('form').on('submit', function () {
+                var content = $('#descriptionEditor').html();
+                $('#descriptionHidden').val(content);
+            });
+        });
+    </script>
+}

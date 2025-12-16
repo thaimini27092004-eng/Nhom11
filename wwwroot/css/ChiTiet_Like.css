@@ -1,0 +1,33 @@
+﻿
+/*ChiTiet_Like.css*/
+.comment-item .comment-actions .like-link,
+.reply-item .reply-actions .like-link {
+    cursor: pointer;
+    color: #6c757d ; /* Màu xám khi chưa thích */
+    margin-right: 15px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt */
+}
+
+    .comment-item .comment-actions .like-link.liked,
+    .reply-item .reply-actions .like-link.liked {
+        color: #dc3545 ; /* Màu đỏ khi được thích */
+        font-weight: bold;
+    }
+
+    .comment-item .comment-actions .like-link .like-count,
+    .reply-item .reply-actions .like-link .like-count {
+        margin-left: 5px;
+    }
+
+    .comment-item .comment-actions .like-link:hover,
+    .reply-item .reply-actions .like-link:hover {
+        text-decoration: underline;
+    }
+
+.reply-actions {
+    margin-top: 5px;
+    font-size: 0.9em;
+}

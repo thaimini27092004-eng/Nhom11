@@ -1,0 +1,53 @@
+﻿@*Ảeas/Admin/Views/BannerQuangCao/Display.cshtml*@
+
+@model WebsiteBanHang.Models.QuanLyBanner.BannerQuangCao
+@{
+    ViewData["Title"] = "Chi tiết Banner Quảng Cáo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_BannerQuangCao.css">
+
+<h2 class="content-title">Chi tiết Banner Quảng Cáo</h2>
+<hr class="content-divider" />
+
+<div class="form-container">
+    <div class="banner-details">
+        <div class="banner-image-container">
+            @if (!string.IsNullOrEmpty(Model.UrlAnh))
+            {
+                <img src="@Model.UrlAnh" alt="Banner Image" class="preview-image" />
+            }
+            else
+            {
+                <p class="error-message">Chưa có ảnh banner.</p>
+            }
+        </div>
+
+        <div class="banner-info">
+            <table class="info-table">
+                <tr>
+                    <td class="label-cell"><strong>Mã Banner:</strong></td>
+                    <td>@Model.MaAQC</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Mô tả:</strong></td>
+                    <td>@Html.Raw(Model.MoTa)</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>URL Đích Đến:</strong></td>
+                    <td>@Model.UrlDichDen</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Trạng Thái Hiển Thị:</strong></td>
+                    <td>@(Model.TTHienThi ? "Bật" : "Tắt")</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button type="button" class="action-btn edit-btn" onclick="window.location.href='@Url.Action("Update", "BannerQuangCao", new { id = Model.MaAQC })'">Chỉnh sửa</button>
+        <button type="button" class="action-btn cancel-btn" onclick="window.location.href='@Url.Action("Index", "BannerQuangCao")'">Quay Lại</button>
+    </div>
+</div>

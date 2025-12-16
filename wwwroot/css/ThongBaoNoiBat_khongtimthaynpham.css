@@ -1,0 +1,108 @@
+﻿/* ThongBaoNoiBat_khongtimthaynpham.css */
+
+/* Tùy chỉnh giao diện của alert */
+.custom-alert {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Gradient xanh đen đậm, sang trọng */
+    border: 2px solid transparent; /* Chuẩn bị cho viền neon */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Thêm bóng nhẹ */
+    padding: 1rem 2rem; /* Khoảng cách bên trong */
+    font-size: 1.1rem; /* Kích thước chữ lớn hơn một chút */
+    font-weight: 500; /* Chữ đậm nhẹ */
+    color: #ffffff; /* Màu chữ mặc định (sẽ bị ghi đè bởi gradient) */
+    margin-bottom: 1.5rem; /* Khoảng cách dưới */
+    position: relative; /* Để đảm bảo z-index hoạt động */
+    z-index: 1000; /* Đảm bảo không bị che khuất bởi các phần tử khác */
+    transition: all 0.4s ease; /* Hiệu ứng chuyển đổi mượt mà */
+    overflow: hidden; /* Đảm bảo các hiệu ứng không tràn ra ngoài */
+}
+
+    /* Tùy chỉnh chữ bên trong alert */
+    .custom-alert span {
+        display: inline-block; /* Đảm bảo chữ hiển thị đúng với gradient */
+        background: linear-gradient(90deg, #ffcc33, #ffffff); /* Gradient từ vàng nhạt đến trắng */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent; /* Đảm bảo tương thích với các trình duyệt */
+        transition: all 0.4s ease; /* Hiệu ứng chuyển đổi mượt mà */
+        position: relative; /* Để thêm hiệu ứng sóng lan tỏa */
+        z-index: 2; /* Đảm bảo chữ ở trên các pseudo element */
+    }
+
+    /* Hiệu ứng khi hover vào alert */
+    .custom-alert:hover {
+        transform: scale(1.02); /* Phóng to nhẹ khi hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5), 0 0 15px #00ddeb, 0 0 30px #00ddeb; /* Hiệu ứng bóng và ánh sáng neon xanh cyan */
+        border: 2px solid #00ddeb; /* Viền neon xanh cyan */
+    }
+
+        /* Hiệu ứng ánh sáng neon cho chữ khi hover */
+        .custom-alert:hover span {
+            text-shadow: 0 0 8px #ffcc33, 0 0 15px #ffcc33, 0 0 25px #ffcc33; /* Ánh sáng neon vàng nhạt */
+        }
+
+    /* Thêm hiệu ứng sóng lan tỏa phía sau chữ khi hover */
+    .custom-alert span::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 204, 51, 0.2); /* Màu vàng nhạt mờ để đồng bộ với ánh sáng chữ */
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+        z-index: -1; /* Đặt phía sau chữ */
+    }
+
+    .custom-alert:hover span::after {
+        width: 150px; /* Kích thước sóng lan tỏa */
+        height: 150px;
+        opacity: 0;
+    }
+
+    /* Thêm hiệu ứng ánh sáng nhẹ bằng pseudo element cho container */
+    .custom-alert::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        z-index: 0;
+        opacity: 0.5;
+        transition: opacity 0.4s ease;
+    }
+
+    .custom-alert:hover::before {
+        opacity: 1;
+    }
+
+    /* Thêm hiệu ứng sóng lan tỏa cho container khi hover */
+    .custom-alert::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(0, 221, 235, 0.2); /* Màu xanh cyan mờ */
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+        z-index: 0;
+    }
+
+    .custom-alert:hover::after {
+        width: 200px; /* Kích thước sóng lan tỏa */
+        height: 200px;
+        opacity: 0;
+    }
+
+    /* Đảm bảo nội dung không bị che bởi các pseudo element */
+    .custom-alert.alert-warning {
+        position: relative;
+        z-index: 1;
+    }

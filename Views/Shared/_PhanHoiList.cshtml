@@ -1,0 +1,112 @@
+﻿
+@*Shared/_PhanHoiList.cshtml*@
+
+@using WebsiteBanHang.Models.ViewModel
+
+@model IEnumerable<WebsiteBanHang.Models.QLDanhGia_PhanHoi.ViewModel.PhanHoiViewModel>
+
+<div id="phanHoiList" class="comment-list-new">
+    @{
+        bool coBinhLuan = false;
+        var user = Context.User;
+        var khachHang = ViewData["KhachHang"] as WebsiteBanHang.Models.KhachHang;
+        int trangHienTai = Model.Any() ? Model.First().TrangHienTai : 1;
+        int tongSoTrang = Model.Any() ? Model.First().TongSoTrang : 1;
+        int maSP = Model.Any() ? Model.First().BinhLuan.MaSP : 0;
+        foreach (var item in Model)
+        {
+            coBinhLuan = true;
+            <div class="comment-item" data-maph="@item.BinhLuan.MaBL">
+                <div class="comment-header">
+                    <div class="user-info">
+                        @if (!string.IsNullOrEmpty(item.BinhLuan.KhachHang?.AvatarUrl))
+                        {
+                            <img src="@item.BinhLuan.KhachHang.AvatarUrl" alt="Avatar" class="avatar-img" />
+                        }
+                        else
+                        {
+                            <img src="/images/avatars/default.jpg" alt="Default Avatar" class="avatar-img" />
+                        }
+                        <strong>@item.BinhLuan.KhachHang?.TenKH</strong>
+                        @if (item.DaMuaSanPham)
+                        {
+                            <span class="da-mua-label">Đã Mua Sản Phẩm</span>
+                        }
+                    </div>
+                    <span>@item.BinhLuan.NgayBL?.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <div class="comment-content" id="content-@item.BinhLuan.MaBL">
+                    <span class="comment-text" id="commentText-@item.BinhLuan.MaBL">@item.BinhLuan.NoiDungBL</span>
+                    <button class="read-more-comment-btn" id="readMoreCommentBtn-@item.BinhLuan.MaBL" onclick="CommentManager.toggleCommentContent(@item.BinhLuan.MaBL)" style="display: none;">Xem thêm</button>
+                    <button class="read-less-comment-btn" id="readLessCommentBtn-@item.BinhLuan.MaBL" onclick="CommentManager.toggleCommentContent(@item.BinhLuan.MaBL)" style="display: none;">Thu gọn</button>
+                </div>
+                <div class="comment-actions">
+                    <a class="like-link comment-like-link @(item.DaThich ? "liked" : "")" onclick="CommentManager.likePhanHoi(@item.BinhLuan.MaBL)" data-maph="@item.BinhLuan.MaBL">
+                        <i class="fas fa-thumbs-up"></i> <span class="like-count">@(item.SoLuotThich > 0 ? item.SoLuotThich : "")</span>
+                    </a>
+                    <a class="reply-link" onclick="CommentManager.showReplyInput(@item.BinhLuan.MaBL)">Trả lời</a>
+                    @if (item.SoLuongTraLoi > 0)
+                    {
+                        <a class="view-replies"
+                           onclick="CommentManager.showReplies(@item.BinhLuan.MaBL)"
+                           data-maph="@item.BinhLuan.MaBL"
+                           data-so-luong-traloi="@item.SoLuongTraLoi">
+                            Xem @item.SoLuongTraLoi câu trả lời
+                        </a>
+                        <a class="hide-replies"
+                           onclick="CommentManager.hideReplies(@item.BinhLuan.MaBL)"
+                           data-maph="@item.BinhLuan.MaBL"
+                           style="display: none;">
+                            Ẩn trả lời
+                        </a>
+                    }
+                    @if (user.Identity.IsAuthenticated && khachHang != null && item.BinhLuan.MaKH == khachHang.MaKH)
+                    {
+                        <a class="edit-link" onclick="CommentManager.editPhanHoi(@item.BinhLuan.MaBL)">Chỉnh sửa</a>
+                        <a class="delete-link" onclick="CommentManager.deletePhanHoi(@item.BinhLuan.MaBL)">Xóa</a>
+                    }
+                </div>
+                <div class="reply-input" id="replyInput-@item.BinhLuan.MaBL" style="display: none;">
+                    @if (user.Identity.IsAuthenticated)
+                    {
+                        <textarea id="replyInputText-@item.BinhLuan.MaBL" placeholder="Viết câu trả lời..." rows="2" class="form-control" maxlength="500"></textarea>
+                    }
+                    else
+                    {
+                        <textarea id="replyInputText-@item.BinhLuan.MaBL" placeholder="Vui lòng đăng nhập để viết câu trả lời..." rows="2" class="form-control" maxlength="500"></textarea>
+                    }
+                    <span id="replyCharCount-@item.BinhLuan.MaBL" class="char-count">Còn 500 ký tự</span>
+                    <button class="btn btn-primary-new mt-2 submit-reply" onclick="CommentManager.submitTraLoi(@item.BinhLuan.MaBL)" data-maph="@item.BinhLuan.MaBL">Gửi</button>
+                </div>
+                @if (user.Identity.IsAuthenticated)
+                {
+                    <div class="edit-input edit-input-phanhoi" id="editInput-@item.BinhLuan.MaBL" style="display: none;">
+                        <textarea id="editInputText-@item.BinhLuan.MaBL" placeholder="Chỉnh sửa bình luận..." rows="3" class="form-control" maxlength="500">@item.BinhLuan.NoiDungBL</textarea>
+                        <span id="editCharCount-@item.BinhLuan.MaBL" class="char-count">Còn 500 ký tự</span>
+                        <div>
+                            <button class="btn btn-primary-new mt-2 submit-edit" onclick="CommentManager.submitEditPhanHoi(@item.BinhLuan.MaBL)" data-maph="@item.BinhLuan.MaBL">Lưu</button>
+                            <button class="btn btn-secondary mt-2" onclick="CommentManager.cancelEditPhanHoi(@item.BinhLuan.MaBL)">Hủy</button>
+                        </div>
+                    </div>
+                }
+                <div class="reply-list" id="replyList-@item.BinhLuan.MaBL" style="display: none;"></div>
+            </div>
+        }
+        if (!coBinhLuan)
+        {
+            <div id="noPhanHoiMessage" class="no-comment-message-new">
+                <p>Chưa có bình luận nào? Hãy là người đầu tiên bình luận!</p>
+            </div>
+        }
+        else
+        {
+            var moHinhPhanTrang = new PhanTrangViewModel();
+            moHinhPhanTrang.TrangHienTai = trangHienTai;
+            moHinhPhanTrang.TongSoTrang = tongSoTrang;
+            moHinhPhanTrang.DuongDan = "/Home/GetPhanHoiByMaSP";
+            moHinhPhanTrang.MaDoiTuong = maSP;
+            moHinhPhanTrang.ThamSoDoiTuong = "maSP";
+            @await Html.PartialAsync("_PhanTrang", moHinhPhanTrang)
+        }
+    }
+</div>

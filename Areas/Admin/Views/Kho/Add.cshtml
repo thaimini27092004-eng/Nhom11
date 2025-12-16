@@ -1,0 +1,60 @@
+﻿@model WebsiteBanHang.Models.QLTonKho.Kho
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Thêm Kho";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_Kho.css">
+
+<h2 class="content-title">Thêm Kho</h2>
+
+<form asp-action="Add" asp-controller="Kho" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="TenKho" class="form-label">Tên Kho</label>
+        <input asp-for="TenKho" class="form-input" />
+        <span asp-validation-for="TenKho" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DCKho" class="form-label">Địa Chỉ Kho</label>
+        <input asp-for="DCKho" class="form-input" />
+        <span asp-validation-for="DCKho" class="error-message"></span>
+    </div>
+    <div class="action-bar">
+        <button type="submit" class="action-btn confirm-btn">Thêm</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").validate({
+                rules: {
+                    TenKho: {
+                        required: true,
+                        minlength: 2
+                    },
+                    DCKho: {
+                        required: true,
+                        minlength: 5
+                    }
+                },
+                messages: {
+                    TenKho: {
+                        required: "Vui lòng nhập tên kho.",
+                        minlength: "Tên kho phải có ít nhất 2 ký tự."
+                    },
+                    DCKho: {
+                        required: "Vui lòng nhập địa chỉ kho.",
+                        minlength: "Địa chỉ kho phải có ít nhất 5 ký tự."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+        });
+    </script>
+}

@@ -1,0 +1,356 @@
+﻿/* mang-xa-hoi.css */
+
+/* Làm đẹp container Social Media */
+.social-media-container {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Gradient xanh đen đậm, sang trọng */
+    padding: 1rem; /* Giảm padding để container nhỏ gọn hơn */
+    border-radius: 15px; /* Bo góc nhẹ hơn */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Giảm bóng để không làm container trông lớn hơn */
+    transition: all 0.4s ease;
+    overflow: hidden;
+    position: relative;
+    Right: -145%;
+    Top: -10%;
+    border: 2px solid transparent; /* Chuẩn bị cho viền neon */
+    width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng của cột */
+    max-height: 700px; /* Đặt chiều cao tối đa để đồng bộ với card sản phẩm */
+}
+
+    /* Hiệu ứng glow khi hover - chỉ sáng viền */
+    .social-media-container:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px #ffcc33, 0 0 30px #ffcc00; /* Giảm hiệu ứng bóng */
+        transform: translateY(-3px) scale(1.01); /* Giảm hiệu ứng phóng to */
+        border: 2px solid #00ddeb; /* Viền neon xanh cyan */
+    }
+
+    /* Thêm hiệu ứng ánh sáng nhẹ bằng pseudo element */
+    .social-media-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        z-index: 0;
+        opacity: 0.5;
+        transition: opacity 0.4s ease;
+    }
+
+    .social-media-container:hover::before {
+        opacity: 1;
+    }
+
+    /* Làm đẹp tiêu đề */
+    .social-media-container h5 {
+        font-weight: 700;
+        font-size: 1.1rem; /* Giảm kích thước chữ */
+        letter-spacing: 1px; /* Giảm khoảng cách chữ */
+        text-transform: uppercase;
+        color: #ffffff;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 1rem; /* Giảm khoảng cách dưới */
+        padding-bottom: 0.3rem; /* Giảm padding dưới */
+        border-bottom: 2px solid #00ddeb; /* Viền màu xanh cyan sáng */
+        transition: all 0.4s ease;
+    }
+
+    .social-media-container:hover h5 {
+        color: #00ddeb; /* Đổi màu tiêu đề khi hover */
+        border-bottom-color: #ffffff;
+    }
+
+/* Làm đẹp danh sách liên kết */
+.social-links li {
+    margin-bottom: 0.8rem; /* Giảm khoảng cách giữa các liên kết */
+    position: relative;
+    z-index: 1;
+}
+
+.social-link {
+    color: #d1d1d1; /* Màu xám nhạt */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem; /* Giảm padding để liên kết nhỏ gọn hơn */
+    border-radius: 10px; /* Bo góc nhẹ hơn */
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    width: 100%; /* Đảm bảo liên kết chiếm toàn bộ chiều rộng */
+}
+
+    /* Thêm hiệu ứng gradient cho liên kết khi hover */
+    .social-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 221, 235, 0.3), transparent);
+        transition: all 0.5s ease;
+        z-index: -1;
+    }
+
+    .social-link:hover::before {
+        left: 100%;
+    }
+
+    /* Thêm hiệu ứng sóng lan tỏa khi hover */
+    .social-link::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+        z-index: -1;
+    }
+
+    .social-link:hover::after {
+        width: 150px; /* Giảm kích thước sóng lan tỏa */
+        height: 150px;
+        opacity: 0;
+    }
+
+    /* Gán màu cho từng icon dựa trên class của Font Awesome */
+    .social-link .fa-facebook-f {
+        color: #1877F2; /* Màu xanh dương của Facebook */
+    }
+
+    .social-link .fa-twitter {
+        color: #1DA1F2; /* Màu xanh nhạt của Twitter */
+    }
+
+    .social-link .fa-instagram {
+        color: #E1306C; /* Màu hồng của Instagram */
+    }
+
+    .social-link .fa-linkedin-in {
+        color: #0A66C2; /* Màu xanh đậm của LinkedIn */
+    }
+
+    .social-link .fa-whatsapp {
+        color: #00C73C; /* Màu xanh lá cây của Zalo */
+    }
+
+    .social-link i {
+        font-size: 1.1rem; /* Giảm kích thước icon */
+        margin-right: 0.6rem; /* Giảm khoảng cách với chữ */
+        transition: all 0.4s ease, transform 4s linear; /* Thêm transition cho xoay */
+        position: relative; /* Để thêm hiệu ứng ánh sáng */
+        display: inline-block; /* Đảm bảo icon hiển thị đúng */
+        z-index: 3; /* Đặt logo gốc lên trên cùng */
+    }
+
+    /* Thêm hiệu ứng phát sáng nhẹ cho icon khi không hover */
+    .social-link i {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Thêm hiệu ứng phát sáng mạnh hơn khi hover */
+    .social-link:hover .fa-facebook-f {
+        text-shadow: 0 0 8px #1877F2, 0 0 15px #1877F2, 0 0 25px #1877F2; /* Giảm hiệu ứng phát sáng */
+    }
+
+    .social-link:hover .fa-twitter {
+        text-shadow: 0 0 8px #1DA1F2, 0 0 15px #1DA1F2, 0 0 25px #1DA1F2;
+    }
+
+    .social-link:hover .fa-instagram {
+        text-shadow: 0 0 8px #E1306C, 0 0 15px #E1306C, 0 0 25px #E1306C;
+    }
+
+    .social-link:hover .fa-linkedin-in {
+        text-shadow: 0 0 8px #0A66C2, 0 0 15px #0A66C2, 0 0 25px #0A66C2;
+    }
+
+    .social-link:hover .fa-whatsapp {
+        text-shadow: 0 0 8px #00C73C, 0 0 15px #00C73C, 0 0 25px #00C73C;
+    }
+
+    /* Hiệu ứng hover cho liên kết */
+    .social-link:hover {
+        color: #ffffff;
+        background: rgba(0, 221, 235, 0.15); /* Nền mờ xanh cyan */
+        transform: translateX(5px) scale(1.03); /* Giảm hiệu ứng phóng to */
+        box-shadow: 0 5px 15px rgba(0, 221, 235, 0.3);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: visible;
+    }
+
+        /* Thêm viền động với màu tương ứng từng icon */
+        .social-link:hover:has(.fa-facebook-f) {
+            border-image: linear-gradient(90deg, #1877F2, transparent) 1;
+        }
+
+        .social-link:hover:has(.fa-twitter) {
+            border-image: linear-gradient(90deg, #1DA1F2, transparent) 1;
+        }
+
+        .social-link:hover:has(.fa-instagram) {
+            border-image: linear-gradient(90deg, #E1306C, transparent) 1;
+        }
+
+        .social-link:hover:has(.fa-linkedin-in) {
+            border-image: linear-gradient(90deg, #0A66C2, transparent) 1;
+        }
+
+        .social-link:hover:has(.fa-whatsapp) {
+            border-image: linear-gradient(90deg, #00C73C, transparent) 1;
+        }
+
+        /* Thêm hiệu ứng xoay tròn khi hover */
+        .social-link:hover i {
+            color: #ffffff; /* Icon đổi màu trắng khi hover */
+            transform: scale(1.3) translateX(-5px) rotateY(3600deg); /* Xoay 10 vòng */
+            transition: all 0.2s ease, transform 4s linear; /* Xoay chậm */
+        }
+
+/* Đảm bảo text không bị che bởi overlay */
+.social-links a, .social-media-container h5 {
+    position: relative;
+    z-index: 2;
+}
+
+/* Thay ánh sáng hình tròn thành ánh sáng hình logo với hiệu ứng tỏa sáng màu sắc */
+.social-link i::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-family: "Font Awesome 5 Brands"; /* Sử dụng font của Font Awesome */
+    font-size: 2.5rem;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 1; /* Đặt phía sau logo gốc */
+    pointer-events: none; /* Ngăn chặn tương tác để tránh xung đột */
+}
+
+.social-link:hover i::after {
+    transform: translate(-50%, -50%) scale(2); /* Tăng kích thước lớn hơn */
+    opacity: 0.6; /* Độ sáng vừa phải */
+}
+
+/* Thêm hiệu ứng tỏa sáng màu sắc cho từng logo */
+.social-link:hover:has(.fa-facebook-f) i::after {
+    content: '\f39e'; /* Unicode của fa-facebook-f */
+    color: rgba(24, 119, 242, 0.7); /* Màu xanh dương */
+    text-shadow: 0 0 10px rgba(24, 119, 242, 0.8), 0 0 20px rgba(24, 119, 242, 0.6), 0 0 30px rgba(24, 119, 242, 0.4); /* Tỏa sáng gradient xanh dương */
+    box-shadow: 0 0 15px rgba(24, 119, 242, 0.5), 0 0 30px rgba(24, 119, 242, 0.3); /* Hiệu ứng tỏa sáng xung quanh */
+}
+
+.social-link:hover:has(.fa-twitter) i::after {
+    content: '\f099'; /* Unicode của fa-twitter */
+    color: rgba(29, 161, 242, 0.7); /* Màu xanh nhạt */
+    text-shadow: 0 0 10px rgba(29, 161, 242, 0.8), 0 0 20px rgba(29, 161, 242, 0.6), 0 0 30px rgba(29, 161, 242, 0.4); /* Tỏa sáng gradient xanh nhạt */
+    box-shadow: 0 0 15px rgba(29, 161, 242, 0.5), 0 0 30px rgba(29, 161, 242, 0.3); /* Hiệu ứng tỏa sáng xung quanh */
+}
+
+.social-link:hover:has(.fa-instagram) i::after {
+    content: '\f16d'; /* Unicode của fa-instagram */
+    color: rgba(225, 48, 108, 0.7); /* Màu hồng */
+    text-shadow: 0 0 10px rgba(225, 48, 108, 0.8), 0 0 20px rgba(225, 48, 108, 0.6), 0 0 30px rgba(225, 48, 108, 0.4); /* Tỏa sáng gradient hồng */
+    box-shadow: 0 0 15px rgba(225, 48, 108, 0.5), 0 0 30px rgba(225, 48, 108, 0.3); /* Hiệu ứng tỏa sáng xung quanh */
+}
+
+.social-link:hover:has(.fa-linkedin-in) i::after {
+    content: '\f0e1'; /* Unicode của fa-linkedin-in */
+    color: rgba(10, 102, 194, 0.7); /* Màu xanh đậm */
+    text-shadow: 0 0 10px rgba(10, 102, 194, 0.8), 0 0 20px rgba(10, 102, 194, 0.6), 0 0 30px rgba(10, 102, 194, 0.4); /* Tỏa sáng gradient xanh đậm */
+    box-shadow: 0 0 15px rgba(10, 102, 194, 0.5), 0 0 30px rgba(10, 102, 194, 0.3); /* Hiệu ứng tỏa sáng xung quanh */
+}
+
+.social-link:hover:has(.fa-whatsapp) i::after {
+    content: '\f232'; /* Unicode của fa-whatsapp */
+    color: rgba(0, 199, 60, 0.7); /* Màu xanh lá */
+    text-shadow: 0 0 10px rgba(0, 199, 60, 0.8), 0 0 20px rgba(0, 199, 60, 0.6), 0 0 30px rgba(0, 199, 60, 0.4); /* Tỏa sáng gradient xanh lá */
+    box-shadow: 0 0 15px rgba(0, 199, 60, 0.5), 0 0 30px rgba(0, 199, 60, 0.3); /* Hiệu ứng tỏa sáng xung quanh */
+}
+
+/* Thêm hiệu ứng phản chiếu 3D cho liên kết */
+.social-link::before {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+    filter: blur(20px);
+    z-index: -1;
+    transition: height 0.5s ease, opacity 0.5s ease;
+}
+
+.social-link:hover::before {
+    height: 50px;
+    opacity: 0.5;
+}
+
+/* Thêm hiệu ứng gradient chữ nâng cấp */
+.social-link span {
+    transition: color 0.4s ease, background 0.4s ease;
+}
+
+.social-link:hover:has(.fa-facebook-f) span {
+    background: linear-gradient(90deg, #1877F2, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.social-link:hover:has(.fa-twitter) span {
+    background: linear-gradient(90deg, #1DA1F2, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.social-link:hover:has(.fa-instagram) span {
+    background: linear-gradient(90deg, #E1306C, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.social-link:hover:has(.fa-linkedin-in) span {
+    background: linear-gradient(90deg, #0A66C2, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.social-link:hover:has(.fa-whatsapp) span {
+    background: linear-gradient(90deg, #00C73C, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* Thêm hiệu ứng ánh sáng nền kính vạn hoa */
+.social-media-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 40% 40%, rgba(0, 221, 235, 0.2) 0%, transparent 70%);
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.social-media-container:hover::after {
+    opacity: 0.7;
+    transform: scale(1.2);
+}

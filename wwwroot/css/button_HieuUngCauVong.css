@@ -1,0 +1,101 @@
+﻿/* button_HieuUngCauVong.css */
+
+/* Định nghĩa hiệu ứng đổi màu liên tục */
+@keyframes rainbow-border {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+    }
+
+    16% {
+        box-shadow: 0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.3);
+    }
+
+    32% {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5), 0 0 20px rgba(255, 255, 0, 0.3);
+    }
+
+    48% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    64% {
+        box-shadow: 0 0 10px rgba(0, 0, 255, 0.5), 0 0 20px rgba(0, 0, 255, 0.3);
+    }
+
+    80% {
+        box-shadow: 0 0 10px rgba(128, 0, 128, 0.5), 0 0 20px rgba(128, 0, 128, 0.3);
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+    }
+}
+
+/* Class cho hiệu ứng cầu vồng (bao gồm đổi màu, phóng to, và ripple) */
+.button-cau-vong {
+    background: linear-gradient(90deg, #2c5364, #203a43);
+    border: none;
+    padding: .75rem 1.5rem;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    width: 100%;
+    transition: all .4s ease;
+    position: relative;
+    z-index: 3;
+    margin-top: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    animation: rainbow-border 5s infinite;
+}
+
+    .button-cau-vong::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3), transparent);
+        transition: left .5s ease;
+        z-index: -1;
+    }
+
+    .button-cau-vong:hover::before {
+        left: 100%;
+    }
+
+    .button-cau-vong::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, .2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width .6s ease, height .6s ease;
+        z-index: -1;
+    }
+
+    .button-cau-vong:hover::after {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+    }
+
+    .button-cau-vong:hover {
+        background: linear-gradient(90deg, #00ddeb, #2c5364);
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 5px 15px rgba(0, 221, 235, .2);
+    }
+
+
+/* Điều chỉnh nút giỏ hàng trong navbar */
+.navbar .button-cau-vong {
+    width: auto; /* Không full-width trong navbar */
+    margin-top: 0; /* Loại bỏ margin-top */
+    padding: 0.5rem 1rem; /* Giảm padding để gọn hơn */
+}

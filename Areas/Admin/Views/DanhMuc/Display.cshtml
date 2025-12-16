@@ -1,0 +1,13 @@
+﻿@model WebsiteBanHang.Models.DanhMuc
+@{
+    ViewData["Title"] = "Chi tiết Danh Mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_DanhMuc.css">
+
+<h2 class="content-title">@Model.TenDM</h2>
+<p class="sub-text">Chi tiết về danh mục.</p>
+<div class="action-bar">
+    <a asp-action="Index" asp-controller="DanhMuc" class="action-link view-link">Quay lại danh sách</a>
+</div>

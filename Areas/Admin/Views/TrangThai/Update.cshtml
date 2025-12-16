@@ -1,0 +1,147 @@
+﻿@model WebsiteBanHang.Models.TrangThai
+@{
+    ViewData["Title"] = "Chỉnh sửa Trạng Thái";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_TrangThai.css">
+
+<h2 class="content-title">Chỉnh sửa Trạng Thái</h2>
+<div class="form-scroll-container">
+    <div class="form-container">
+        <form asp-action="Update" asp-controller="TrangThai" method="post" enctype="multipart/form-data" id="updateForm">
+            <input type="hidden" asp-for="MaTT" />
+            <div class="form-group">
+                <label asp-for="TenTT" class="form-label">Tên Trạng Thái</label>
+                <input asp-for="TenTT" class="form-input" />
+                <span asp-validation-for="TenTT" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ảnh Trạng Thái</label>
+                <input type="file" name="urlAnh" class="form-input" id="nhapHinh" accept="image/*" />
+                <label class="form-label sub-label">Xem Trước Ảnh:</label>
+                <div class="thumbnail-preview">
+                    @if (!string.IsNullOrEmpty(Model.UrlAnh))
+                    {
+                        <img src="@Model.UrlAnh" alt="Trạng Thái" id="xemTruocHinh" class="preview-image" />
+                    }
+                    else
+                    {
+                        <p class="error-message">Chưa có ảnh.</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="TTHienThi" class="form-label">Trạng Thái Hiển Thị</label>
+                <select asp-for="TTHienThi" class="filter-select">
+                    <option value="true">Bật</option>
+                    <option value="false">Tắt</option>
+                </select>
+                <span asp-validation-for="TTHienThi" class="error-message"></span>
+            </div>
+            <div class="error-message">
+                @Html.ValidationSummary(true, "", new { @class = "error-message" })
+            </div>
+            <!-- Modal xác nhận lưu -->
+            <div class="modal" id="saveConfirmModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác Nhận</h5>
+                            <button type="button" class="modal-close" id="cancelSaveBtn" data-modal-close>×</button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn có chắc lưu thay đổi?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="modal-btn cancel-btn" id="cancelSaveBtn" data-modal-close>Hủy</button>
+                            <button type="button" class="modal-btn confirm-btn" id="confirmSaveBtn">Xác Nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="action-bar-centered">
+    <button type="button" form="updateForm" class="action-btn confirm-btn" id="saveButton">Lưu</button>
+    <form asp-action="Index" asp-controller="TrangThai" method="get" style="display: inline;">
+        <button type="submit" class="action-btn cancel-btn">Hủy</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#updateForm").validate({
+                rules: {
+                    TenTT: {
+                        required: true,
+                        minlength: 2
+                    },
+                    urlAnh: {
+                        accept: "image/*"
+                    }
+                },
+                messages: {
+                    TenTT: {
+                        required: "Vui lòng nhập tên trạng thái.",
+                        minlength: "Tên trạng thái phải có ít nhất 2 ký tự."
+                    },
+                    urlAnh: {
+                        accept: "Vui lòng chọn file ảnh hợp lệ."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+
+            // Preview ảnh
+            $('#nhapHinh').on('change', function () {
+                var tep = this.files[0];
+                if (tep) {
+                    var docTep = new FileReader();
+                    docTep.onload = function (e) {
+                        $('#xemTruocHinh').attr('src', e.target.result);
+                    };
+                    docTep.readAsDataURL(tep);
+                }
+            });
+
+            // Xác nhận lưu
+            let isConfirmed = false;
+            $('#updateForm').on('submit', function (e) {
+                if (!isConfirmed) {
+                    e.preventDefault();
+                    $('#saveConfirmModal').addClass('show');
+                    return false;
+                }
+            });
+
+            $('#confirmSaveBtn').on('click', function () {
+                isConfirmed = true;
+                $('#saveConfirmModal').removeClass('show');
+                $('#updateForm').submit();
+            });
+
+            $('#cancelSaveBtn, .modal-close').on('click', function () {
+                $('#saveConfirmModal').removeClass('show');
+                isConfirmed = false;
+            });
+
+            $('#saveConfirmModal').on('click', function (e) {
+                if ($(e.target).hasClass('modal')) {
+                    $(this).removeClass('show');
+                    isConfirmed = false;
+                }
+            });
+
+            $('#saveButton').on('click', function () {
+                $('#saveConfirmModal').addClass('show');
+            });
+        });
+    </script>
+}

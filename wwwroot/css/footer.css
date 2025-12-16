@@ -1,0 +1,15 @@
+﻿/* footer.css */
+
+/* Định vị footer cố định dưới cùng */
+footer {
+    position: fixed !important; /* Cố định, không cuộn, ưu tiên */
+    bottom: 0; /* Dưới cùng màn hình */
+    left: 0; /* Trái màn hình */
+    width: 100%; /* Chiều rộng toàn màn hình */
+    background-color: #f8f9fa; /* Nền xám nhạt */
+    text-align: center; /* Căn giữa nội dung */
+   
+    padding: 0px 0; /* Khoảng cách trên/dưới */
+    
+    z-index: 1000; /* Hiển thị trên các phần khác */
+}

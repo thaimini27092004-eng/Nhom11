@@ -1,0 +1,34 @@
+﻿@*Areas/Admin/Views/Admin/index.cshtml*@
+@{
+    ViewData["Title"] = "Trang Chủ Quản Trị";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/css/Admin_Index.css" asp-append-version="true" />
+
+<div class="admin-index">
+    <h2>Chào mừng đến với Trang Quản Trị</h2>
+    <p class="sub-text">Quản lý danh mục, sản phẩm, kho, phương thức thanh toán và hóa đơn một cách dễ dàng.</p>
+
+    <div class="dashboard-cards">
+        <div class="card">
+            <h4>Danh Mục</h4>
+            <p>10 danh mục</p>
+            <a href="/Admin/Admin/DanhMuc" class="custom-link">Xem chi tiết</a>
+        </div>
+        <div class="card">
+            <h4>Sản Phẩm</h4>
+            <p>150 sản phẩm</p>
+            <a href="/Admin/Admin/SanPham" class="custom-link">Xem chi tiết</a>
+        </div>
+        <div class="card">
+            <h4>Kho</h4>
+            <p>500 sản phẩm tồn kho</p>
+            <a href="/Admin/Admin/Kho" class="custom-link">Xem chi tiết</a>
+        </div>
+        <div class="card">
+            <h4>Hóa Đơn</h4>
+            <p>30 hóa đơn mới</p>
+            <a href="/Admin/Admin/HoaDon" class="custom-link">Xem chi tiết</a>
+        </div>
+    </div>
+</div>

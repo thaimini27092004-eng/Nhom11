@@ -1,0 +1,503 @@
+﻿@*Areas/Identity/Pages/Account/Register.cshtml*@
+
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Đăng ký";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/css/GiaoDien_DangNhap.css" rel="stylesheet">
+    <link href="/css/GiaoDien_Modal_XacNhan.css" rel="stylesheet">
+    <link href="/css/Logo_Load.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Hiệu ứng tải -->
+        <div id="loading" style="display: none;">
+            <div class="loading-wrapper">
+                <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="loading-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Form đăng ký -->
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="display: block;">
+            @Html.AntiForgeryToken()
+            <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="logo">
+            <h3>Đăng ký</h3>
+            <p class="sub-text">Xin chào! thành viên mới, hãy đăng ký để trải nghiệm nhé!</p>
+
+            <!-- Vùng hiển thị lỗi chung từ server -->
+            <div id="server-error" class="text-danger" style="margin-bottom: 10px;"></div>
+
+
+            <input asp-for="Input.FullName" placeholder="Tên của bạn là?" id="Input_FullName" autocomplete="new-fullname" required />
+            <span asp-validation-for="Input.FullName" class="text-danger"></span>
+            <div id="fullname-error" class="error-message"></div>
+
+            <input asp-for="Input.UserName" placeholder="Tên đăng nhập?" id="Input_UserName" autocomplete="new-username" type="text" required />
+            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            <div id="username-error" class="error-message"></div>
+
+            <input asp-for="Input.Email" placeholder="Email đăng nhập của bạn" id="Input_Email" autocomplete="new-email" type="email" required />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div id="email-error" class="error-message"></div>
+
+            <input asp-for="Input.Password" placeholder="Tạo mật khẩu đăng nhập" id="Input_Password" autocomplete="new-password" type="password" required />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div id="password-error" class="error-message"></div>
+
+            <input asp-for="Input.ConfirmPassword" placeholder="Nhập lại mật khẩu" id="Input_ConfirmPassword" autocomplete="new-ConfirmPassword" type="password" required />
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <div id="confirm-error" class="error-message"></div>
+
+            <button id="registerSubmit" type="button" class="login-btn">Đăng ký</button>
+
+            <p class="social-text">Đăng nhập bằng</p>
+            <div class="social-icons">
+                <button type="button" class="social-icon google"><i class="fab fa-google"></i> Google</button>
+                <button type="button" class="social-icon facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+            </div>
+
+            <div class="additional-links">
+                <a asp-page="./Login" class="custom-link">Đăng nhập</a>
+                <span class="separator">|</span>
+                <a asp-page="./DoiMatKhau" class="custom-link">Quên mật khẩu?</a>
+            </div>
+        </form>
+
+        <!-- Form nhập mã xác nhận -->
+        <form id="codeForm" method="post" style="display: none;">
+            @Html.AntiForgeryToken()
+            <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="logo">
+            <h3>Nhập Mã Xác Nhận</h3>
+            <p class="sub-text">Vui lòng nhập mã xác nhận đã được gửi đến email của bạn</p>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" id="Input_Email_Hidden" name="Email" value="@Model.Input?.Email" />
+            <input type="hidden" id="Input_FullName_Hidden" name="FullName" value="@Model.Input?.FullName" />
+            <input type="hidden" id="Input_UserName_Hidden" name="UserName" value="@Model.Input?.UserName" />
+            <input type="hidden" id="Input_Password_Hidden" name="Password" value="@Model.Input?.Password" />
+            <input type="hidden" id="Input_ConfirmPassword_Hidden" name="ConfirmPassword" value="@Model.Input?.ConfirmPassword" />
+            <input id="Input_Code" name="Code" placeholder="Nhập mã xác nhận" aria-required="true" required />
+            <div class="timer" id="timer-display"></div>
+            <span id="code-error" class="text-danger"></span>
+            <div class="additional-links">
+                <a href="#" id="resendCode" class="custom-link">Gửi lại mã xác nhận</a>
+                <span class="separator">|</span>
+                <a href="#" id="reenterInfo" class="custom-link">Nhập lại thông tin đăng ký</a>
+            </div>
+            <button type="button" id="verifyCodeBtn" class="login-btn" disabled>Gửi mã xác nhận</button>
+        </form>
+
+        <!-- Modal xác nhận đăng ký -->
+        <div class="modal" id="confirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Xác nhận</h5>
+                    </div>
+                    <div class="modal-body">
+                        Bạn có chắc chắn muốn đăng ký không?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="modal-btn" id="confirmYes">Có</button>
+                        <button type="button" class="modal-btn" id="confirmNo">Không</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal thông báo lỗi -->
+        <div class="modal" id="errorModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thông báo</h5>
+                    </div>
+                    <div class="modal-body">
+                        Đăng ký không thành công! Hãy thử lại!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="modal-btn" id="closeModal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.validation.unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Lấy ô input và chỗ hiển thị lỗi
+            var fullName = $("#Input_FullName");
+            var userName = $("#Input_UserName");
+            var email = $("#Input_Email");
+            var password = $("#Input_Password");
+            var confirmPassword = $("#Input_ConfirmPassword");
+            var fullNameError = $("#fullname-error");
+            var userNameError = $("#username-error");
+            var emailError = $("#email-error");
+            var passwordError = $("#password-error");
+            var confirmError = $("#confirm-error");
+            var serverError = $("#server-error");
+
+            // Khởi tạo modal
+            var errorModal = $("#errorModal");
+            var confirmModal = $("#confirmModal");
+
+            // Biến cờ để kiểm tra lần đầu click vào màn hình
+            var isFirstClick = true;
+
+            // Biến toàn cục cho bộ đếm thời gian
+            let timer;
+            let timeLeft = 0;
+
+            // Hàm bắt đầu bộ đếm ngược
+            function startTimer() {
+                if (timer) {
+                    clearInterval(timer);
+                }
+
+                timeLeft = 180; // 3 phút
+                $("#verifyCodeBtn").prop("disabled", false);
+                $("#timer-display").text("Mã xác nhận hết hạn sau: 3:00");
+                timer = setInterval(function () {
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        $("#timer-display").text("Mã xác nhận đã hết hạn. Vui lòng yêu cầu mã mới.");
+                        $("#verifyCodeBtn").prop("disabled", true);
+                        $("#resendCode").show();
+                    } else {
+                        $("#timer-display").text(
+                            "Mã xác nhận hết hạn sau: " +
+                            Math.floor(timeLeft / 60) + ":" +
+                            (timeLeft % 60).toString().padStart(2, '0')
+                        );
+                    }
+                    timeLeft--;
+                }, 1000);
+            }
+
+            // Hàm hiển thị/ẩn hiệu ứng tải
+            function toggleLoading(show) {
+                if (show) {
+                    $("#loading").show();
+                    $("#registerForm, #codeForm").css("opacity", "0.5");
+                } else {
+                    $("#loading").hide();
+                    $("#registerForm, #codeForm").css("opacity", "1");
+                }
+            }
+
+            // Hàm kiểm tra lỗi
+            function checkErrors() {
+                var fullNameVal = fullName.val().trim();
+                var userNameVal = userName.val().trim();
+                var emailVal = email.val().trim();
+                var pass = password.val().trim();
+                var confirm = confirmPassword.val().trim();
+                var hasError = false;
+
+                // Kiểm tra Họ và tên
+                if (isFirstClick && fullNameVal === "") {
+                    fullNameError.text("");
+                } else if (fullNameVal === "") {
+                    fullNameError.text("Họ và tên không được trống");
+                    hasError = true;
+                } else if (fullNameVal.length < 6) {
+                    fullNameError.text("Họ và tên phải có ít nhất 6 ký tự");
+                    hasError = true;
+                } else if (fullNameVal.length > 100) {
+                    fullNameError.text("Họ và tên không quá 100 ký tự");
+                    hasError = true;
+                } else {
+                    fullNameError.text("");
+                }
+
+                // Kiểm tra mật khẩu
+                if (pass != "") {
+                    if (pass.length < 6) {
+                        passwordError.text("Mật khẩu phải có ít nhất 6 ký tự");
+                        hasError = true;
+                    } else if (pass.length > 100) {
+                        passwordError.text("Mật khẩu không quá 100 ký tự");
+                        hasError = true;
+                    } else if (!/[A-Z]/.test(pass)) {
+                        passwordError.text("Mật khẩu phải chứa ký tự in hoa");
+                        hasError = true;
+                    } else if (!/[0-9]/.test(pass)) {
+                        passwordError.text("Mật khẩu phải có ít nhất một số (0-9)");
+                        hasError = true;
+                    } else if (!/[!@@#$%^&*+=?_]/.test(pass)) {
+                        passwordError.text("Mật khẩu phải có ký tự đặc biệt");
+                        hasError = true;
+                    } else {
+                        passwordError.text("");
+                    }
+                } else {
+                    passwordError.text("");
+                    hasError = true;
+                }
+
+                // Kiểm tra xác nhận mật khẩu
+                if (pass != "" && confirm != "") {
+                    if (pass != confirm) {
+                        confirmError.text("Mật khẩu không khớp");
+                        hasError = true;
+                    } else {
+                        confirmError.text("");
+                    }
+                } else if (confirm == "") {
+                    confirmError.text("");
+                    hasError = true;
+                }
+
+                 // Kiểm tra tên đăng nhập
+                if (userNameVal != "") {
+                    if (userNameVal.length < 3 || userNameVal.length > 50) {
+                        userNameError.text("Tên đăng nhập phải từ 3 đến 50 ký tự");
+                        hasError = true;
+                    } else if (/\s/.test(userNameVal)) {
+                        userNameError.text("Tên đăng nhập không được chứa khoảng trắng");
+                        hasError = true;
+                    } else if (!/^[a-zA-Z0-9_-]+$/.test(userNameVal)) {
+                        userNameError.text("Tên đăng nhập chỉ được chứa chữ cái, số, gạch dưới hoặc gạch nối");
+                        hasError = true;
+                    } else {
+                        userNameError.text("");
+                    }
+                } else {
+                    userNameError.text("");
+                    hasError = true;
+                }
+                // Kiểm tra Email
+                if (emailVal != "") {
+                    if (!email[0].checkValidity()) {
+                        emailError.text("Email phải là gmail hoặc icloud");
+                        hasError = true;
+                    } else {
+                        emailError.text("");
+                    }
+                } else {
+                    emailError.text("");
+                    hasError = true;
+                }
+
+                return hasError;
+            }
+
+            // Xử lý lần đầu click vào màn hình
+            $(document).on("click", function (e) {
+                if (isFirstClick) {
+                    isFirstClick = false;
+                    checkErrors();
+                }
+            });
+
+            // Kiểm tra khi nhập
+            fullName.on("input", checkErrors);
+            userName.on("input", checkErrors);
+            email.on("input", checkErrors);
+            password.on("input", checkErrors);
+            confirmPassword.on("input", checkErrors);
+
+            // Xóa thông báo lỗi server khi click vào input
+            $("#registerForm input").on("click", function () {
+                serverError.text("");
+            });
+
+            // Khi nhấn "Đăng ký"
+            $("#registerSubmit").on("click", function (event) {
+                if (!checkErrors()) {
+                    event.preventDefault();
+                    confirmModal.show();
+                } else {
+                    event.preventDefault();
+                    if (!errorModal.is(":visible")) {
+                        errorModal.show();
+                    }
+                }
+            });
+
+            // Xử lý nút "Có" trong hộp thoại xác nhận
+            $("#confirmYes").on("click", function () {
+                confirmModal.hide();
+                var fullName = $("#Input_FullName").val();
+                var userName = $("#Input_UserName").val();
+                var email = $("#Input_Email").val();
+                var password = $("#Input_Password").val();
+                var confirmPassword = $("#Input_ConfirmPassword").val();
+
+                toggleLoading(true);
+
+                $.ajax({
+                    url: "/Identity/Account/Register?handler=SendCode",
+                    method: "POST",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: {
+                        Input: {
+                            FullName: fullName,
+                            UserName: userName,
+                            Email: email,
+                            Password: password,
+                            ConfirmPassword: confirmPassword
+                        }
+                    },
+                    success: function (response) {
+                        toggleLoading(false);
+                        if (response.success) {
+                            $("#registerForm").hide();
+                            $("#codeForm").show();
+                            $("#Input_Email_Hidden").val(email);
+                            $("#Input_FullName_Hidden").val(fullName);
+                            $("#Input_UserName_Hidden").val(userName);
+                            $("#Input_Password_Hidden").val(password);
+                            $("#Input_ConfirmPassword_Hidden").val(confirmPassword);
+                            $("#code-error").text("");
+                            startTimer();
+                        } else {
+                            $("#registerForm").show();
+                            serverError.text(response.message || "Có lỗi xảy ra khi gửi mã xác nhận.");
+                        }
+                    },
+                    error: function () {
+                        toggleLoading(false);
+                        $("#registerForm").show();
+                       serverError.text("Có lỗi xảy ra khi gửi mã xác nhận.");
+                    }
+                });
+            });
+
+            // Xử lý nút "Không" trong hộp thoại xác nhận
+            $("#confirmNo").on("click", function () {
+                confirmModal.hide();
+            });
+
+            // Đóng modal khi nhấn "OK"
+            $("#closeModal").on("click", function () {
+                errorModal.hide();
+            });
+
+            // Xử lý khi nhấn "Gửi lại mã xác nhận"
+            $("#resendCode").on("click", function (e) {
+                e.preventDefault();
+                var email = $("#Input_Email_Hidden").val();
+                var fullName = $("#Input_FullName_Hidden").val();
+                var userName = $("#Input_UserName_Hidden").val();
+                var password = $("#Input_Password_Hidden").val();
+                var confirmPassword = $("#Input_ConfirmPassword_Hidden").val();
+
+                toggleLoading(true);
+
+                $.ajax({
+                    url: "/Identity/Account/Register?handler=SendCode",
+                    method: "POST",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: {
+                        Input: {
+                            FullName: fullName,
+                            UserName: userName,
+                            Email: email,
+                            Password: password,
+                            ConfirmPassword: confirmPassword
+                        }
+                    },
+                    success: function (response) {
+                        toggleLoading(false);
+                        if (response.success) {
+                            $("#codeForm").show();
+                            $("#code-error").text("Mã xác nhận mới đã được gửi!");
+                            startTimer();
+                        } else {
+                            $("#codeForm").show();
+                            $("#code-error").text(response.message || "Có lỗi xảy ra khi gửi mã xác nhận.");
+                        }
+                    },
+                    error: function () {
+                        toggleLoading(false);
+                        $("#codeForm").show();
+                        $("#code-error").text("Có lỗi xảy ra khi gửi mã xác nhận.");
+                    }
+                });
+            });
+
+            // Xử lý khi nhấn "Nhập lại thông tin đăng ký"
+            $("#reenterInfo").on("click", function (e) {
+                e.preventDefault();
+                $("#codeForm").hide();
+                $("#registerForm").show();
+                $("#Input_FullName").val("");
+                $("#Input_UserName").val("");
+                $("#Input_Email").val("");
+                $("#Input_Password").val("");
+                $("#Input_ConfirmPassword").val("");
+                $("#registerForm .text-danger").text("");
+            });
+
+            // Xử lý khi nhấn "Gửi mã xác nhận"
+            $("#verifyCodeBtn").on("click", function (e) {
+                e.preventDefault();
+                var email = $("#Input_Email_Hidden").val();
+                var fullName = $("#Input_FullName_Hidden").val();
+                var userName = $("#Input_UserName_Hidden").val();
+                var password = $("#Input_Password_Hidden").val();
+                var confirmPassword = $("#Input_ConfirmPassword_Hidden").val();
+                var code = $("#Input_Code").val();
+
+                if (!$("#codeForm").valid()) {
+                    return;
+                }
+
+                toggleLoading(true);
+
+                $.ajax({
+                    url: "/Identity/Account/Register?handler=VerifyCode",
+                    method: "POST",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: {
+                        Email: email,
+                        Code: code,
+                        Input: {
+                            FullName: fullName,
+                            UserName: userName,
+                            Email: email,
+                            Password: password,
+                            ConfirmPassword: confirmPassword
+                        }
+                    },
+                    success: function (response) {
+                        toggleLoading(false);
+                        if (response.success) {
+                            window.location.href = response.redirectUrl || "/";
+                        } else {
+                            $("#codeForm").show();
+                            $("#code-error").text(response.message || "Mã xác nhận không hợp lệ hoặc đã hết hạn.");
+                        }
+                    },
+                    error: function () {
+                        toggleLoading(false);
+                        $("#codeForm").show();
+                        $("#code-error").text("Có lỗi xảy ra khi xác nhận mã.");
+                    }
+                });
+            });
+
+            // Kiểm tra ban đầu
+            checkErrors();
+        });
+    </script>
+</body>
+</html>

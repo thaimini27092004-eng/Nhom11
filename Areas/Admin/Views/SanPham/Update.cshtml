@@ -1,0 +1,471 @@
+﻿@*SanPham/Update.cshtml*@
+
+@model WebsiteBanHang.Models.SanPham
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Sửa Sản Phẩm";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_SanPham.css">
+
+<h2 class="content-title">Sửa Sản Phẩm</h2>
+<div class="form-scroll-container">
+    <div class="form-container">
+        <form asp-action="Update" asp-controller="SanPham" method="post" enctype="multipart/form-data" id="productForm">
+            <input type="hidden" asp-for="MaSP" />
+
+            <!-- Tên sản phẩm -->
+            <div class="form-group">
+                <label asp-for="TenSP" class="form-label">Tên Sản Phẩm</label>
+                <input asp-for="TenSP" class="form-input" />
+                <span asp-validation-for="TenSP" class="error-message"></span>
+            </div>
+
+            <!-- Giá sản phẩm -->
+            <div class="form-group">
+                <label asp-for="Gia" class="form-label">Giá Sản Phẩm</label>
+                <input asp-for="Gia" class="form-input" type="number" step="0.01" />
+                <span asp-validation-for="Gia" class="error-message"></span>
+            </div>
+
+            <!-- Mô tả sản phẩm -->
+            <div class="form-group">
+                <label asp-for="MoTa" class="form-label">Mô Tả Sản Phẩm</label>
+                <div id="descriptionInput" class="form-input update-description-input" contenteditable="true">@Html.Raw(Model?.MoTa ?? "")</div>
+                <input type="hidden" asp-for="MoTa" id="descriptionHidden" />
+                <span asp-validation-for="MoTa" class="error-message"></span>
+            </div>
+
+            <!-- Danh mục sản phẩm -->
+            <div class="form-group">
+                <label asp-for="MaDM" class="form-label">Danh Mục</label>
+                <select asp-for="MaDM" asp-items="@ViewBag.danhmucs" class="filter-select">
+                    <option value="">-- Chọn danh mục --</option>
+                </select>
+                <span class="error-message" data-valmsg-for="MaDM"></span>
+            </div>
+
+            <!-- Kho cần cập nhật số lượng -->
+            <div class="form-group">
+                <label class="form-label">Kho Cần Cập Nhật Số Lượng</label>
+                <select id="chonKho" class="filter-select" onchange="capNhatSLTontai()">
+                    <option value="">-- Chọn kho --</option>
+                    @foreach (var tonKho in ViewBag.tonKhos)
+                    {
+                        <option value="@tonKho.MaKho" data-slton="@tonKho.SLTon">@tonKho.Kho.TenKho</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Số lượng tồn kho -->
+            <div class="form-group">
+                <label for="slTonKho" class="form-label">Số Lượng Tồn Kho</label>
+                <input id="slTonKho" name="slTonKho" class="form-input" type="number" min="0" value="" disabled />
+                <input type="hidden" id="maKho" name="maKho" />
+                <span id="slTonKhoError" class="error-message"></span>
+            </div>
+
+            <!-- Ảnh đại diện -->
+            <div class="form-group">
+                <label class="form-label">Ảnh Đại Diện</label>
+                <input type="file" name="urlAnh" class="form-input" id="nhapHinhThuNho" accept="image/*" />
+                <label class="form-label sub-label">Xem Trước Ảnh Đại Diện:</label>
+                <div class="thumbnail-preview">
+                    @if (!string.IsNullOrEmpty(Model.UrlAnh))
+                    {
+                        <img src="@Model.UrlAnh" alt="Ảnh Sản Phẩm" id="xemTruocHinhThuNho" class="preview-image" />
+                    }
+                    else
+                    {
+                        <p class="error-message">Chưa có ảnh đại diện.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Danh sách ảnh bổ sung -->
+            <div class="form-group">
+                <label class="form-label">Danh Sách Ảnh Bổ Sung</label>
+                <input type="file" name="additionalImages" class="form-input" id="nhapThuVienAnh" multiple accept="image/*" />
+                <small class="sub-text">Chọn nhiều ảnh bằng cách giữ Ctrl (hoặc Cmd) và click vào ảnh.</small>
+                <label class="form-label sub-label">Xem Trước Danh Sách:</label>
+                <div class="update-gallery-preview" id="xemTruocThuVienAnh">
+                    @if (Model.DSAnh != null && Model.DSAnh.Any())
+                    {
+                        foreach (var image in Model.DSAnh)
+                        {
+                            <div class="update-gallery-preview-item">
+                                <img src="@image.UrlAnh" alt="Ảnh Sản Phẩm" class="preview-additional-image" />
+                                <button type="button" class="update-delete-btn" onclick="xoaAnh(this, '@image.MaAnh', true)">×</button>
+                            </div>
+                        }
+                    }
+                    <p id="khongCoAnh" style="@(Model.DSAnh != null && Model.DSAnh.Any() ? "display: none;" : "display: block;")">
+                        Không có ảnh nào trong danh sách ảnh.
+                    </p>
+                </div>
+                <button type="button" class="view-more-btn" id="viewMoreBtn">Xem thêm</button>
+            </div>
+
+            <div class="error-message">
+                @Html.ValidationSummary(true, "", new { @class = "error-message" })
+            </div>
+
+            <!-- Modal xác nhận lưu -->
+            <div class="modal" id="saveConfirmModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác Nhận</h5>
+                            <button type="button" class="modal-close"  id="cancelSaveBtn" data-modal-close > ×</button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn có chắc lưu thay đổi?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="modal-btn cancel-btn" id="cancelSaveBtn" data-modal-close>Hủy</button>
+                            <button type="button" class="modal-btn confirm-btn" id="confirmSaveBtn">Xác Nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Nút gửi -->
+<div class="action-bar-centered">
+    <button type="button" form="UpdateForm" class="action-btn confirm-btn" id="saveButton">Lưu</button>
+    <form asp-action="Index" asp-controller="SanPham" method="get" style="display: inline;">
+        <button type="submit" class="action-btn cancel-btn">Hủy</button>
+    </form>
+</div>
+
+<!-- Modal chứa trình soạn thảo -->
+<div class="modal update-description-modal" id="descriptionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chỉnh Sửa Mô Tả</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="custom-editor">
+                    <div class="toolbar">
+                        <button type="button" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
+                        <button type="button" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
+                        <button type="button" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+                        <button type="button" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                        <select onchange="execCmd('fontName', this.value)" title="Font Family">
+                            <option value="">Font</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <select onchange="execCmd('fontSize', this.value)" title="Font Size">
+                            <option value="">Size</option>
+                            <option value="2">10pt</option>
+                            <option value="3">12pt</option>
+                            <option value="4">14pt</option>
+                            <option value="5">18pt</option>
+                        </select>
+                        <input type="color" onchange="execCmd('foreColor', this.value)" title="Text Color">
+                        <button type="button" onclick="execCmd('insertUnorderedList')" title="Bullet List">•</button>
+                        <button type="button" onclick="execCmd('insertOrderedList')" title="Numbered List">1.</button>
+                        <button type="button" onclick="insertTable()" title="Insert Table">📋</button>
+                        <button type="button" onclick="insertImage()" title="Insert Image">🖼️</button>
+                        <button type="button" onclick="insertLink()" title="Insert Link">🔗</button>
+                    </div>
+                    <div id="descriptionEditor" contenteditable="true"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- Hàm toàn cục cho trình soạn thảo -->
+    <script>
+            function execCmd(command, value = null) {
+                document.execCommand(command, false, value);
+                $('#descriptionEditor').focus();
+            }
+
+            function insertTable() {
+                const table = $('<table>').css({
+                    border: '1px solid #ccc'
+                });
+                const tbody = $('<tbody>');
+                for (let i = 0; i < 2; i++) {
+                    const tr = $('<tr>');
+                    for (let j = 0; j < 2; j++) {
+                        const td = $('<td>').css({
+                            border: '1px solid #ccc',
+                            padding: '5px'
+                        }).html(' ');
+                        tr.append(td);
+                    }
+                    tbody.append(tr);
+                }
+                table.append(tbody);
+                $('#descriptionEditor').append(table);
+            }
+
+            function insertImage() {
+                const input = $('<input>').attr({
+                    type: 'file',
+                    accept: 'image/*'
+                });
+                input.on('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = $('<img>').attr({
+                                src: e.target.result,
+                                style: 'max-width: 100%'
+                            });
+                            $('#descriptionEditor').append(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+                input.click();
+            }
+
+            function insertLink() {
+                const url = prompt('Nhập URL:');
+                if (url) {
+                    const a = $('<a>').attr('href', url).text(url);
+                    $('#descriptionEditor').append(a);
+                }
+            }
+
+            $(document).ready(function () {
+                // Validation
+                $("#productForm").validate({
+                    rules: {
+                        TenSP: {
+                            required: true,
+                            minlength: 2
+                        },
+                        Gia: {
+                            required: true,
+                            number: true,
+                            min: 0
+                        },
+                        MoTa: {
+                            required: true
+                        },
+                        MaDM: {
+                            required: true
+                        },
+                        slTonKho: {
+                            number: true,
+                            min: 0
+                        },
+                        urlAnh: {
+                            accept: "image/*"
+                        },
+                        additionalImages: {
+                            accept: "image/*"
+                        }
+                    },
+                    messages: {
+                        TenSP: {
+                            required: "Vui lòng nhập tên sản phẩm.",
+                            minlength: "Tên sản phẩm phải có ít nhất 2 ký tự."
+                        },
+                        Gia: {
+                            required: "Vui lòng nhập giá sản phẩm.",
+                            number: "Giá phải là số.",
+                            min: "Giá không được nhỏ hơn 0."
+                        },
+                        MoTa: {
+                            required: "Vui lòng nhập mô tả sản phẩm."
+                        },
+                        MaDM: {
+                            required: "Vui lòng chọn danh mục."
+                        },
+                        slTonKho: {
+                            number: "Số lượng phải là số.",
+                            min: "Số lượng không được nhỏ hơn 0."
+                        },
+                        urlAnh: {
+                            accept: "Vui lòng chọn file ảnh hợp lệ."
+                        },
+                        additionalImages: {
+                            accept: "Vui lòng chọn file ảnh hợp lệ."
+                        }
+                    },
+                    errorElement: "span",
+                    errorClass: "error-message"
+                });
+
+                // Mở modal mô tả
+                $('#descriptionInput').on('click', function () {
+                    var inputContent = $(this).html();
+                    $('#descriptionEditor').html(inputContent || '');
+                    $('#descriptionModal').addClass('show');
+                });
+
+                // Khi modal đóng, sao chép nội dung từ editor về descriptionInput và hidden
+                $('.modal-btn[data-modal-close], .modal-close').on('click', function () {
+                    $('#descriptionModal').removeClass('show');
+                    var editorContent = $('#descriptionEditor').html();
+                    $('#descriptionInput').html(editorContent);
+                    $('#descriptionHidden').val(editorContent);
+                });
+
+                // Đóng modal khi click bên ngoài
+                $('#descriptionModal').on('click', function (e) {
+                    if ($(e.target).hasClass('modal')) {
+                        $(this).removeClass('show');
+                    }
+                });
+
+                // Khi người dùng chỉnh sửa trực tiếp trong descriptionInput, cập nhật hidden
+                $('#descriptionInput').on('input', function () {
+                    var inputContent = $(this).html();
+                    $('#descriptionHidden').val(inputContent);
+                });
+
+                // Cập nhật trạng thái không có ảnh
+                capNhatTrangThaiKhongCoAnh();
+
+                // Preview ảnh đại diện
+                $('#nhapHinhThuNho').on('change', function () {
+                    var tep = this.files[0];
+                    if (tep) {
+                        var docTep = new FileReader();
+                        docTep.onload = function (e) {
+                            $('#xemTruocHinhThuNho').attr('src', e.target.result);
+                        };
+                        docTep.readAsDataURL(tep);
+                    }
+                });
+
+                // Preview danh sách ảnh bổ sung
+                $('#nhapThuVienAnh').on('change', function () {
+                    var cacTep = this.files;
+                    var xemThuVien = $('#xemTruocThuVienAnh');
+                    for (var i = 0; i < cacTep.length; i++) {
+                        var tep = cacTep[i];
+                        var docTep = new FileReader();
+                        docTep.onload = function (e) {
+                            var div = $('<div>').addClass('update-gallery-preview-item');
+                            div.html(`
+                                <img src="${e.target.result}" alt="Ảnh Sản Phẩm" class="preview-additional-image" />
+                                <button type="button" class="update-delete-btn" onclick="xoaAnh(this, '', false)">×</button>
+                            `);
+                            xemThuVien[0].insertBefore(div[0], xemThuVien.find('#khongCoAnh')[0]);
+                            capNhatTrangThaiKhongCoAnh();
+                        };
+                        docTep.readAsDataURL(tep);
+                    }
+                });
+
+                // Xóa ảnh
+                window.xoaAnh = function (nut, maAnh, laTuCSDL) {
+                    var phanTuCha = nut.parentElement;
+                    var xemThuVien = $('#xemTruocThuVienAnh')[0];
+                    if (laTuCSDL) {
+                        var oNhapAn = $('<input>').attr({
+                            type: 'hidden',
+                            name: 'DSAnhToDelete',
+                            value: maAnh
+                        });
+                        xemThuVien.appendChild(oNhapAn[0]);
+                        console.log('Đánh dấu xóa ảnh: ' + maAnh);
+                    }
+                    phanTuCha.remove();
+                    capNhatTrangThaiKhongCoAnh();
+                };
+
+                // Xác nhận lưu
+                let isConfirmed = false;
+                $('#productForm').on('submit', function (e) {
+                    if (!isConfirmed) {
+                        e.preventDefault();
+                        $('#saveConfirmModal').addClass('show');
+                        return false;
+                    }
+                });
+
+                $('#confirmSaveBtn').on('click', function () {
+                    isConfirmed = true;
+                    $('#saveConfirmModal').removeClass('show');
+                    $('#productForm').submit();
+                });
+
+                $('#cancelSaveBtn, .modal-close').on('click', function () {
+                    $('#saveConfirmModal').removeClass('show');
+                    isConfirmed = false;
+                });
+
+                $('#saveConfirmModal').on('click', function (e) {
+                    if ($(e.target).hasClass('modal')) {
+                        $(this).removeClass('show');
+                        isConfirmed = false;
+                    }
+                });
+
+                $('#viewMoreBtn').on('click', function () {
+                    var gallery = $('#xemTruocThuVienAnh');
+                    if (gallery.hasClass('show-all')) {
+                        gallery.removeClass('show-all');
+                        $(this).text('Xem thêm');
+                    } else {
+                        gallery.addClass('show-all');
+                        $(this).text('Thu gọn');
+                    }
+                });
+                    // Gọi hàm khởi tạo trạng thái ban đầu
+                capNhatTrangThaiKhongCoAnh();
+
+                // Mở modal xác nhận lưu
+                $('#saveButton').on('click', function () {
+                    $('#saveConfirmModal').addClass('show');
+                });
+            });
+
+            function capNhatTrangThaiKhongCoAnh() {
+                var xemThuVien = $('#xemTruocThuVienAnh');
+                var khongCoAnh = $('#khongCoAnh');
+                var soLuongAnh = xemThuVien.find('div.update-gallery-preview-item').length;
+                khongCoAnh.css('display', soLuongAnh > 0 ? 'none' : 'block');
+                    // Hiển thị nút Xem thêm nếu có hơn 10 ảnh
+                if (soLuongAnh > 10) {
+                    $('#viewMoreBtn').addClass('show');
+                } else {
+                    $('#viewMoreBtn').removeClass('show');
+                }
+            }
+
+            function capNhatSLTontai() {
+                var chonKho = $('#chonKho');
+                var slTonKhoInput = $('#slTonKho');
+                var maKhoInput = $('#maKho');
+                var slTonKhoError = $('#slTonKhoError');
+
+                if (chonKho.val() === '') {
+                    slTonKhoInput.val('');
+                    slTonKhoInput.prop('disabled', true);
+                    maKhoInput.val('');
+                    slTonKhoError.text('');
+                } else {
+                    var selectedOption = chonKho.find('option:selected');
+                    slTonKhoInput.val(selectedOption.attr('data-slton'));
+                    slTonKhoInput.prop('disabled', false);
+                    maKhoInput.val(chonKho.val());
+                    slTonKhoError.text('');
+                }
+            }
+    </script>
+}

@@ -1,0 +1,37 @@
+﻿/* thanh-tim-kiem.css */
+
+/* Style cho thanh tìm kiếm */
+.search-bar .input-group {
+    width: 100%;
+}
+
+/* Style cho ô nhập từ khóa */
+#nhapTuKhoa {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Style cho nút Tìm */
+.search-bar .btn-primary {
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+/* Style cho danh sách gợi ý tìm kiếm */
+#danhSachGoiY.show {
+    z-index: 10000; /* Hiển thị trên cùng */
+    width: 880px; /* Rộng */
+    max-width: 100%; /* Không vượt quá cha */
+    max-height: 12rem;
+    overflow-y: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+    /* Hiệu ứng hover cho gợi ý tìm kiếm */
+    #danhSachGoiY .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }

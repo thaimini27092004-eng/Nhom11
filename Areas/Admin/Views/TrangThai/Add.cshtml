@@ -1,0 +1,82 @@
+﻿@*Ảeas/Admin/TrangThai/Iadd.cshml*@
+@model WebsiteBanHang.Models.TrangThai
+@{
+    ViewData["Title"] = "Thêm Trạng Thái";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_TrangThai.css">
+
+<h2 class="content-title">Thêm Trạng Thái</h2>
+<div class="form-scroll-container">
+    <div class="form-container">
+        <form id="addForm" asp-action="Add" asp-controller="TrangThai" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="TenTT" class="form-label">Tên Trạng Thái</label>
+                <input asp-for="TenTT" class="form-input" />
+                <span asp-validation-for="TenTT" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlAnh" class="form-label">Ảnh Trạng Thái</label>
+                <input type="file" name="urlAnh" class="form-input" accept="image/*" id="nhapHinh" />
+                <span asp-validation-for="UrlAnh" class="error-message"></span>
+                <img id="previewImage" src="" alt="Preview Image" class="preview-image" style="display: none;" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="action-bar-centered">
+    <button type="submit" form="addForm" class="action-btn confirm-btn">Thêm</button>
+    <form asp-action="Index" asp-controller="TrangThai" method="get" style="display: inline;">
+        <button type="submit" class="action-btn cancel-btn">Hủy</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Validation
+            $("#addForm").validate({
+                rules: {
+                    TenTT: {
+                        required: true,
+                        minlength: 2
+                    },
+                    urlAnh: {
+                        required: true,
+                        accept: "image/*"
+                    }
+                },
+                messages: {
+                    TenTT: {
+                        required: "Vui lòng nhập tên trạng thái.",
+                        minlength: "Tên trạng thái phải có ít nhất 2 ký tự."
+                    },
+                    urlAnh: {
+                        required: "Vui lòng chọn ảnh trạng thái.",
+                        accept: "Vui lòng chọn file ảnh hợp lệ."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+
+            // Preview ảnh
+            $('#nhapHinh').on('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $("#previewImage");
+                        img.attr('src', e.target.result);
+                        img.show();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+}

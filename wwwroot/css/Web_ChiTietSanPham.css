@@ -1,0 +1,776 @@
+﻿/* css/Web_ChiTietSanPham.css*/
+
+.user-tag {
+    color: #007bff; /* Màu xanh */
+    font-weight: bold;
+}
+
+.product-detail-section {
+    padding: 60px 0;
+    background-color: transparent;
+}
+
+    .product-detail-section .container-fluid {
+        max-width: 1600px;
+    }
+
+/* Cột 1: Ảnh sản phẩm (cố định) */
+.image-column {
+    position: sticky;
+    top: 80px; /* Khoảng cách từ header */
+    height: fit-content; /* Giữ chiều cao tự nhiên */
+}
+
+.image-section {
+    background-color: var(--background-gray);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+.main-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+    .main-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #1e0033, #4b0082, #00b7eb, #1e0033);
+        background-size: 200% 200%;
+        animation: galaxyAnimation 6s ease infinite, fadeAnimation 12s ease infinite;
+        z-index: 1;
+    }
+
+    .main-image::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #330000, #8b0000, #ff4500, #330000);
+        background-size: 200% 200%;
+        animation: galaxyAnimation 6s ease infinite, fadeAnimation 12s ease infinite reverse;
+        z-index: 1;
+    }
+
+    .main-image img {
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: contain;
+        object-position: center;
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .main-image:hover img {
+        transform: scale(1.15);
+    }
+
+.image-nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 3; /* Đặt z-index cao hơn ::before và ::after */
+}
+
+    .image-nav .nav-btn {
+        background-color: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: var(--text-light);
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .image-nav .nav-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+/* Hiệu ứng loang màu */
+@keyframes galaxyAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Hiệu ứng chuyển đổi opacity */
+@keyframes fadeAnimation {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.thumbnail-list {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.thumbnail-item {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: border-color 0.3s;
+}
+
+    .thumbnail-item:hover,
+    .thumbnail-item.active {
+        border-color: var(--primary-color);
+    }
+
+    .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+/* Cột 2 và 3: Cuộn độc lập */
+.scrollable-column {
+    max-height: calc(100vh - 100px); /* Chiều cao tối đa trừ header */
+    overflow-y: auto; /* Cuộn dọc */
+    scrollbar-width: thin; /* Thanh cuộn mỏng */
+    scrollbar-color: var(--primary-color) var(--background-gray);
+}
+
+    .scrollable-column::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollable-column::-webkit-scrollbar-track {
+        background: var(--background-gray);
+    }
+
+    .scrollable-column::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 4px;
+    }
+
+/* Product Info Card */
+.product-info-card {
+    background-color: var(--background-gray);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.product-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.product-price {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.description-container {
+    margin-bottom: 20px;
+}
+
+.description-text {
+    color: #E0E0E0; /* Tăng độ sáng để tránh chìm */
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.read-more-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    display: none;
+}
+
+    .read-more-btn:hover {
+        text-decoration: underline;
+    }
+
+.product-category {
+    color: #E0E0E0;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+    .quantity-selector .form-label {
+        color: var(--text-light);
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .quantity-selector .form-control {
+        width: 100px;
+        background-color: var(--background-dark);
+        color: var(--text-light);
+        border: 1px solid var(--text-muted);
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Nút Mua Ngay - Gradient Galaxy với tông tím xanh */
+.btn-buy-now {
+    background: linear-gradient(45deg, #1e0033, #4b0082, #00b7eb, #1e0033);
+    background-size: 200% 200%;
+    color: var(--text-light);
+    padding: 12px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    animation: galaxyAnimation 6s ease infinite;
+    transition: transform 0.3s ease;
+}
+
+    .btn-buy-now:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 183, 235, 0.5);
+    }
+
+/* Nút Thêm vào giỏ - Gradient Galaxy với tông đỏ cam */
+.btn-add-to-cart {
+    background: linear-gradient(45deg, #330000, #8b0000, #ff4500, #330000);
+    background-size: 200% 200%;
+    color: var(--text-light);
+    padding: 12px 30px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1.1rem;
+    position: relative;
+    overflow: hidden;
+    animation: galaxyAnimation 6s ease infinite;
+    transition: transform 0.3s ease;
+}
+
+    .btn-add-to-cart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 69, 0, 0.5);
+    }
+
+/* Keyframes cho hiệu ứng loang màu galaxy */
+@keyframes galaxyAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Comment Card */
+.comment-card {
+    background-color: var(--background-gray);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.comment-overview {
+    margin-bottom: 20px;
+    color: #E0E0E0; /* Tăng độ sáng */
+    font-size: 1rem;
+}
+
+.comment-input {
+    margin-bottom: 25px;
+}
+
+    .comment-input .form-control {
+        background-color: var(--background-dark);
+        color: var(--text-light);
+        border: 1px solid var(--text-muted);
+        border-radius: 6px;
+        resize: none;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .comment-input .char-count {
+        font-size: 0.9rem;
+        color: #E0E0E0;
+        display: block;
+        margin-top: 8px;
+    }
+
+    .comment-input .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+
+        .comment-input .btn-primary:hover {
+            background-color: darken(var(--primary-color), 10%);
+        }
+
+.comment-list-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* Rating Card */
+.rating-card {
+    background-color: var(--background-gray);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.rating-input {
+    margin-bottom: 25px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+    .star-rating .fas.fa-star {
+        font-size: 1.4rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+        .star-rating .fas.fa-star:hover,
+        .star-rating .fas.fa-star.selected {
+            color: #FFD700;
+        }
+
+.rating-input .form-control {
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    border: 1px solid var(--text-muted);
+    border-radius: 6px;
+    resize: none;
+    font-size: 1rem;
+    padding: 12px;
+}
+
+.rating-input .char-count {
+    font-size: 0.9rem;
+    color: #E0E0E0;
+    display: block;
+    margin-top: 8px;
+}
+
+.rating-input .btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+    .rating-input .btn-primary:hover {
+        background-color: darken(var(--primary-color), 10%);
+    }
+
+.rating-list-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* Comment and Rating Lists */
+.comment-list-new,
+.danhgia-list-new {
+    margin-top: 25px;
+}
+
+.comment-item,
+.danhgia-item,
+.reply-item,
+.phanhoi-item {
+    background-color: var(--background-dark);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.comment-header,
+.danhgia-header,
+.reply-header,
+.phanhoi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info strong {
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.da-mua-label,
+.so-hoa-don-label {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    margin-left: 12px;
+}
+
+.comment-content,
+.danhgia-content,
+.reply-content,
+.phanhoi-content {
+    color: #E0E0E0; /* Tăng độ sáng để tránh chìm */
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.star-display .fas.fa-star {
+    color: #FFD700;
+    font-size: 1.2rem;
+}
+
+    .star-display .fas.fa-star.empty {
+        color: var(--text-muted);
+    }
+
+.comment-actions,
+.danhgia-actions,
+.reply-actions,
+.phanhoi-actions {
+    display: flex;
+    gap: 20px;
+}
+
+.like-link,
+.reply-link,
+.edit-link,
+.delete-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+    .like-link:hover,
+    .reply-link:hover,
+    .edit-link:hover,
+    .delete-link:hover {
+        color: darken(var(--primary-color), 10%);
+    }
+
+    .like-link.liked .fas.fa-thumbs-up {
+        color: #60ff00; /* Đổi sang xanh lá để dễ phân biệt */
+    }
+
+.reply-input,
+.edit-input,
+.phanhoi-input {
+    margin-top: 20px;
+}
+
+    .reply-input .form-control,
+    .edit-input .form-control,
+    .phanhoi-input .form-control {
+        background-color: var(--background-dark);
+        color: var(--text-light);
+        border-color: var(--text-muted);
+        border-radius: 6px;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+/* Định dạng nút Lưu */
+    .edit-input .submit-edit,
+    .reply-input .submit-reply {
+        background-color: #ffd300;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+    }
+
+        .edit-input .submit-edit:hover,
+        .reply-input .submit-reply:hover {
+            background-color: #0056b3;
+        }
+
+
+.form-control::placeholder {
+    color: #cccccc; /* Màu xám nhạt để nổi bật trên nền tối */
+    opacity: 1; /* Đảm bảo placeholder rõ ràng */
+}
+
+    .reply-input .btn-primary,
+    .edit-input .btn-primary,
+    .phanhoi-input .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+        .reply-input .btn-primary:hover,
+        .edit-input .btn-primary:hover,
+        .phanhoi-input .btn-primary:hover {
+            background-color: darken(var(--primary-color), 10%);
+        }
+
+.reply-list,
+.phanhoi-list {
+    margin-left: 30px;
+    margin-top: 15px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 10060;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+.modal-dialog {
+    background-color: var(--background-gray);
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+.modal.show .modal-dialog {
+    transform: translateY(0);
+}
+.modal-content {
+    padding: 30px;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: var(--text-light);
+    margin: 0;
+}
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+.modal-close:hover {
+    color: var(--primary-color);
+}
+.modal-body {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: #E0E0E0;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+.modal-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.cancel-btn {
+    background-color: var(--text-muted);
+    color: var(--text-light);
+}
+.cancel-btn:hover {
+    background-color: #808080;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.page-link {
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+    .page-link:hover {
+        background-color: var(--primary-color);
+    }
+
+    .page-link.active {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+    }
+
+
+/* Comment and Reply Content Buttons */
+.read-more-comment-btn,
+.read-less-comment-btn,
+.read-more-reply-btn,
+.read-less-reply-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 5px;
+    display: none;
+}
+
+    .read-more-comment-btn:hover,
+    .read-less-comment-btn:hover,
+    .read-more-reply-btn:hover,
+    .read-less-reply-btn:hover {
+        text-decoration: underline;
+    }
+
+/* DanhGia and PhanHoi Content Buttons */
+.read-more-danhgia-btn,
+.read-less-danhgia-btn,
+.read-more-phanhoi-btn,
+.read-less-phanhoi-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 5px;
+    display: none;
+}
+
+    .read-more-danhgia-btn:hover,
+    .read-less-danhgia-btn:hover,
+    .read-more-phanhoi-btn:hover,
+    .read-less-phanhoi-btn:hover {
+        text-decoration: underline;
+    }
+

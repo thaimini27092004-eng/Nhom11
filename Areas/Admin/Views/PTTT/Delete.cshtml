@@ -1,0 +1,8 @@
+﻿@model WebsiteBanHang.Models.PTTT
+
+<h2>Xóa Phương Thức Thanh Toán</h2>
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="MaPT" />
+    <p>Bạn có chắc chắn muốn xóa @Model.TenPT?</p>
+    <button type="submit" class="btn btn-danger">Xóa</button>
+</form>

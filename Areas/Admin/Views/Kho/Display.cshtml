@@ -1,0 +1,15 @@
+﻿
+@model WebsiteBanHang.Models.QLTonKho.Kho
+@{
+    ViewData["Title"] = "Chi tiết Kho";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_Kho.css">
+
+<h2 class="content-title">@Model.TenKho</h2>
+<p class="sub-text"><strong>Địa chỉ:</strong> @Model.DCKho</p>
+<p class="sub-text"><strong>Trạng thái:</strong> @(Model.TTHienThi ? "Bật" : "Tắt")</p>
+<div class="action-bar">
+    <a asp-action="Index" asp-controller="Kho" class="action-link view-link">Quay lại danh sách kho</a>
+</div>

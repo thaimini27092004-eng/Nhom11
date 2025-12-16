@@ -1,0 +1,87 @@
+﻿/* hop-thoai-dang-xuat.css */
+
+/* Thiết kế Modal với phong cách mới */
+.custom-modal {
+    --bs-modal-width: 350px;
+}
+
+.custom-modal-content {
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #e9ecef 100%); /* Gradient đậm hơn */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-modal-header {
+    border-bottom: none;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.custom-modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.custom-modal-body {
+    padding: 20px;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.custom-modal-footer {
+    border-top: none;
+    padding: 10px 15px 15px;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-custom-modal {
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+
+#confirmBtn {
+    background-color: #ff6b6b; /* Màu đỏ hồng */
+    color: white;
+    border: none;
+}
+
+    #confirmBtn:hover {
+        background-color: #ff4040; /* Đỏ đậm hơn */
+    }
+
+#cancelBtn {
+    background-color: #6c757d; /* Màu xám */
+    color: white;
+    border: none;
+}
+
+    #cancelBtn:hover {
+        background-color: #5a6268; /* Xám đậm hơn */
+    }
+/* Thêm style cho nút Xóa trong giỏ hàng */
+#confirmDeleteBtn {
+    background-color: #ff6b6b; /* Màu đỏ hồng giống #confirmBtn */
+    color: white;
+    border: none;
+}
+
+    #confirmDeleteBtn:hover {
+        background-color: #ff4040; /* Đỏ đậm hơn khi hover */
+    }
+
+#confirmDeleteBtn1SP {
+    background-color: #ff6b6b; /* Màu đỏ hồng giống #confirmBtn */
+    color: white;
+    border: none;
+}
+
+    #confirmDeleteBtn1SP:hover {
+        background-color: #ff4040; /* Đỏ đậm hơn khi hover */
+    }

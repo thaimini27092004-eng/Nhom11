@@ -1,0 +1,281 @@
+﻿@model WebsiteBanHang.Models.SanPham
+@{
+    ViewData["Title"] = "Chi Tiết Sản Phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Web_ChiTietSanPham.css" asp-append-version="true" />
+
+<section class="product-detail-section">
+    <div class="container-fluid">
+        <div class="row g-5">
+            <!-- Cột 1: Ảnh sản phẩm (cố định) -->
+            <div class="col-lg-4 image-column">
+                <div class="image-section">
+                    <div class="main-image">
+                        <img src="@Model.UrlAnh" alt="@Model.TenSP" id="anhChinh" class="img-fluid" />
+                        <div class="image-nav" id="dieuHuongAnh">
+                            <button onclick="sangTrai()" class="nav-btn"><i class="bi bi-chevron-left"></i></button>
+                            <button onclick="sangPhai()" class="nav-btn"><i class="bi bi-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="thumbnail-list" id="danhSachAnhNho">
+                        @if (Model.DSAnh != null && Model.DSAnh.Any())
+                        {
+                            @foreach (var dsAnh in Model.DSAnh)
+                            {
+                                <div class="thumbnail-item" onclick="doiAnhChinh('@dsAnh.UrlAnh')">
+                                    <img src="@dsAnh.UrlAnh" alt="Thumbnail" class="img-fluid" />
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted">Không có ảnh bổ sung.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột 2: Thông tin sản phẩm và bình luận (cuộn độc lập) -->
+            <div class="col-lg-4 scrollable-column">
+                <div class="product-info-card">
+                    <h2 class="product-title">@Model.TenSP</h2>
+                    <p class="product-price">@Model.Gia.ToString("N0") VND</p>
+                    <div class="description-container">
+                        <span class="description-text" id="descriptionText"></span>
+                        <button class="read-more-btn" id="readMoreBtn">Xem thêm</button>
+                    </div>
+                    <p class="product-category">Danh mục: @Model.DanhMuc?.TenDM</p>
+                    <div class="quantity-selector">
+                        <label for="soLuong" class="form-label">Số lượng:</label>
+                        <input type="number" value="1" min="1" max="10" id="soLuong" class="form-control" />
+                    </div>
+                    <div class="action-buttons">
+                        <a href="@Url.Action("ThanhToanChung", "HoaDon", new { maSP = Model.MaSP })" class="btn btn-buy-now">Mua Ngay</a>
+                        <button class="btn btn-add-to-cart add-to-cart" data-product-id="@Model.MaSP">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="comment-card">
+                    <h3 class="card-title">Bình luận sản phẩm</h3>
+                    <div class="comment-overview">
+                        <span><strong>@ViewData["TongSoPhanHoi"] bình luận • Trung bình @ViewData["TrungBinhLuotThich"] lượt thích/bình luận</strong></span>
+                    </div>
+                    <div class="comment-input">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <textarea id="phanHoiInput" placeholder="Viết bình luận..." rows="3" class="form-control" maxlength="500"></textarea>
+                        }
+                        else
+                        {
+                            <textarea id="phanHoiInput" placeholder="Vui lòng đăng nhập để thảo luận..." rows="3" class="form-control" maxlength="500" disabled></textarea>
+                        }
+                        <span id="phanHoiCharCount" class="char-count">Còn 500 ký tự</span>
+                        <button id="submitPhanHoi" class="btn btn-primary mt-2" onclick="CommentManager.submitPhanHoi(@Model.MaSP)">Gửi bình luận</button>
+                    </div>
+                    <div class="comment-list-title">
+                        <strong>Tất cả bình luận</strong>
+                    </div>
+                    <partial name="_PhanHoiList" model="@((IEnumerable<WebsiteBanHang.Models.QLDanhGia_PhanHoi.ViewModel.PhanHoiViewModel>)ViewData["PhanHoiList"])" view-data="@ViewData" />
+                </div>
+            </div>
+
+            <!-- Cột 3: Đánh giá (cuộn độc lập) -->
+            <div class="col-lg-4 scrollable-column">
+                <div class="rating-card">
+                    <h3 class="card-title">Đánh giá sản phẩm</h3>
+                    <div class="rating-input">
+                        @if (User.Identity.IsAuthenticated && ViewData["DaMuaSanPham"] != null && (bool)ViewData["DaMuaSanPham"])
+                        {
+                            <div class="star-rating" id="starRating">
+                                <i class="fas fa-star" data-value="1"></i>
+                                <i class="fas fa-star" data-value="2"></i>
+                                <i class="fas fa-star" data-value="3"></i>
+                                <i class="fas fa-star" data-value="4"></i>
+                                <i class="fas fa-star selected" data-value="5"></i>
+                            </div>
+                            <textarea id="danhGiaInput" placeholder="Viết đánh giá..." rows="3" class="form-control" maxlength="300"></textarea>
+                            <span id="danhGiaCharCount" class="char-count">Còn 300 ký tự</span>
+                            <button id="submitDanhGia" class="btn btn-primary mt-2" onclick="DanhGiaManager.submitDanhGia(@Model.MaSP)">Gửi đánh giá</button>
+                        }
+                        else
+                        {
+                            <textarea id="danhGiaInput" placeholder="Mua sản phẩm để có thể đánh giá..." rows="3" class="form-control" disabled></textarea>
+                        }
+                    </div>
+                    <div class="rating-list-title">
+                        <strong>Tất cả đánh giá</strong>
+                    </div>
+                    <partial name="_DanhGiaList" model="@((IEnumerable<WebsiteBanHang.Models.QLDanhGia_PhanHoi.ViewModel.DanhGiaViewModel>)ViewData["DanhGiaList"])" view-data="@ViewData" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal hiển thị toàn bộ mô tả -->
+<div class="modal" id="descriptionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mô tả sản phẩm</h5>
+                <button type="button" class="modal-close" data-modal-close>×</button>
+            </div>
+            <div class="modal-body" id="fullDescription"></div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="~/js/comment.js"></script>
+    <script src="~/js/danhgia.js"></script>
+    <script src="~/js/site_DuLieuPhanTrang.js"></script>
+
+    <script>
+        // Danh sách ảnh
+        var danhSachAnh = ["@Model.UrlAnh"];
+        @if (Model.DSAnh != null && Model.DSAnh.Any())
+        {
+            foreach (var image in Model.DSAnh)
+            {
+                <text>danhSachAnh.push("@image.UrlAnh");</text>
+            }
+        }
+
+        var viTriHienTai = 0;
+
+        function doiAnhChinh(linkAnh) {
+            var anhChinh = document.getElementById("anhChinh");
+            anhChinh.src = linkAnh;
+            viTriHienTai = danhSachAnh.indexOf(linkAnh);
+            kiemTraDieuHuong();
+        }
+
+        function sangTrai() {
+            viTriHienTai = viTriHienTai - 1;
+            if (viTriHienTai < 0) {
+                viTriHienTai = danhSachAnh.length - 1;
+            }
+            var anhChinh = document.getElementById("anhChinh");
+            anhChinh.src = danhSachAnh[viTriHienTai];
+            kiemTraDieuHuong();
+        }
+
+        function sangPhai() {
+            viTriHienTai = viTriHienTai + 1;
+            if (viTriHienTai >= danhSachAnh.length) {
+                viTriHienTai = 0;
+            }
+            var anhChinh = document.getElementById("anhChinh");
+            anhChinh.src = danhSachAnh[viTriHienTai];
+            kiemTraDieuHuong();
+        }
+
+        function kiemTraDieuHuong() {
+            var dieuHuong = document.getElementById("dieuHuongAnh");
+            if (danhSachAnh.length > 1) {
+                dieuHuong.style.display = "flex";
+            } else {
+                dieuHuong.style.display = "none";
+            }
+        }
+
+        $(document).ready(function () {
+            // Xử lý mô tả sản phẩm
+            function truncateDescription() {
+                const descriptionText = document.getElementById('descriptionText');
+                const readMoreBtn = document.getElementById('readMoreBtn');
+                const fullDescription = document.getElementById('fullDescription');
+                let fullText = '@(Model.MoTa != null ? System.Text.Json.JsonSerializer.Serialize(Model.MoTa).Trim('"').Replace("\\n", "\n").Replace("\\t", "\t") : "Không có mô tả")';
+                const words = fullText.split(/\s+/).filter(word => word.length > 0);
+
+                if (words.length > 27) {
+                    const truncatedText = words.slice(0, 27).join(' ') + '…';
+                    descriptionText.innerHTML = truncatedText;
+                    readMoreBtn.style.display = 'inline-block';
+                } else {
+                    descriptionText.innerHTML = fullText;
+                    readMoreBtn.style.display = 'none';
+                }
+
+                fullDescription.innerHTML = fullText;
+            }
+
+                // Xử lý modal mô tả
+        const readMoreBtn = document.getElementById('readMoreBtn');
+        const descriptionModal = document.getElementById('descriptionModal');
+
+        if (readMoreBtn) {
+            readMoreBtn.addEventListener('click', function () {
+                descriptionModal.classList.add('show'); // Hiển thị modal
+            });
+        }
+
+        // Đóng modal khi nhấp vào nút đóng hoặc bên ngoài
+        $(descriptionModal).on('click', function (e) {
+            if (e.target === descriptionModal || $(e.target).hasClass('modal-close') || $(e.target).hasClass('cancel-btn')) {
+                descriptionModal.classList.remove('show'); // Ẩn modal
+            }
+        });
+
+            // Đếm ký tự bình luận
+            $("#phanHoiInput").on("input", function () {
+                CommentManager.updateCharCount("phanHoiInput", "phanHoiCharCount", 500);
+            });
+
+            $(document).on("input", ".reply-input textarea", function () {
+                const maPH = $(this).closest(".reply-input").attr("id").replace("replyInput-", "");
+                CommentManager.updateCharCount(this.id, `replyCharCount-${maPH}`, 500);
+            });
+
+            $(document).on("input", ".edit-input-phanhoi textarea, .edit-input-reply textarea", function () {
+                const id = $(this).closest(".edit-input").attr("id");
+                if (id.startsWith("edit-reply-input-")) {
+                    const maTL = id.replace("edit-reply-input-", "");
+                    CommentManager.updateCharCount(this.id, `edit-reply-char-count-${maTL}`, 500);
+                } else if (id.startsWith("editInput-")) {
+                    const maPH = id.replace("editInput-", "");
+                    CommentManager.updateCharCount(this.id, `editCharCount-${maPH}`, 500);
+                }
+            });
+
+            // Khởi tạo
+            kiemTraDieuHuong();
+            truncateDescription();
+
+            // Thêm giỏ hàng
+            $(document).on('click', '.add-to-cart', function (e) {
+                e.preventDefault();
+                var productId = $(this).data('product-id');
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    url: '@Url.Action("AddToCart", "ShoppingCart")',
+                    type: 'POST',
+                    data: {
+                        productId: productId,
+                        quantity: $('#soLuong').val(),
+                        '__RequestVerificationToken': token
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#successNotification').fadeIn(500).delay(2000).fadeOut(500);
+                            $('.cart-count').text(response.cartCount).show();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+                    }
+                });
+            });
+        });
+
+
+    </script>
+}

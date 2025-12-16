@@ -1,0 +1,177 @@
+﻿@*Shared/_LayoutAdmin.cshtml*@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Trang Quản Trị</title>
+    <link rel="stylesheet" href="~/css/Layout_Admin.css">
+    <link rel="stylesheet" href="~/css/GiaoDien_Modal_XacNhan.css">
+    <link href="/css/Logo_Load.css" rel="stylesheet">
+    @RenderSection("Styles", required: false)
+    <!-- Hiển thị loading ngay khi trang bắt đầu tải -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/loading.js"></script>
+    <script>
+        // Hiển thị loading ngay khi trang bắt đầu tải
+        $(document).ready(function () {
+            toggleLoading(true, '.content');
+        });
+    </script>
+</head>
+<body>
+    @await Html.PartialAsync("_Loading") 
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+   
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/Admin/Admin/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "")"><strong>Trang Chủ</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/quanlynguoidung/phanquyen" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "QuanLyNguoiDung" ? "active" : "")"><strong>Phân quyền tài khoản</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/QuanLyHoaDon/DanhSachHoaDon" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "QuanLyHoaDon" ? "active" : "")"><strong>Danh sách đơn hàng</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/DanhMuc/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "DanhMuc" ? "active" : "")"><strong>Danh Mục</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/SanPham/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "SanPham" ? "active" : "")"><strong>Sản Phẩm</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/Kho/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Kho" ? "active" : "")"><strong>Kho hàng</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/PTTT/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PTTT" ? "active" : "")"><strong>Phương thức thanh toán</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/TrangThai/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "TrangThai" ? "active" : "")"><strong>Trạng thái</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/ThongKe/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ThongKe" ? "active" : "")"><strong>Thống kê</strong></a>
+                    </li>
+                    <li>
+                        <a href="/Admin/BannerQuangCao/Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "BannerQuangCao" ? "active" : "")"><strong>Banner Quảng Cáo</strong></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-container">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="hamburger">☰</div>
+                <div class="top-bar-user">
+                    <span>Xin chào, <strong> Admin </strong> </span>
+                    <button class="logout-btn" id="logoutButton">Đăng Xuất</button>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    
+
+    <!-- Modal Xác Nhận Đăng Xuất -->
+    <div class="modal" id="logoutModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác Nhận Đăng Xuất</h5>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn đăng xuất không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn" id="confirmLogoutBtn">Xác Nhận</button>
+                    <button type="button" class="modal-btn" id="cancelLogoutBtn">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form ẩn để gửi yêu cầu đăng xuất -->
+    <form id="logoutForm" method="post" action="/Identity/Account/Logout" style="display: none;">
+        @Html.AntiForgeryToken()
+    </form>
+
+    <script>
+        $(document).ready(function () {
+
+            // Ẩn loading khi trang tải xong
+            toggleLoading(false, '.content');
+
+            // JavaScript để xử lý menu responsive (hamburger)
+            const hamburger = $('.hamburger');
+            const sidebar = $('.sidebar');
+            const mainContainer = $('.main-container');
+
+            // Toggle sidebar khi nhấn vào hamburger
+            hamburger.on('click', function () {
+                sidebar.toggleClass('active');
+            });
+
+            // Đóng sidebar khi nhấn ra ngoài (vào main-container)
+            mainContainer.on('click', function (event) {
+                console.log('Clicked on main-container', event.target);
+                if (sidebar.hasClass('active') && !sidebar.is(event.target) && !sidebar.has(event.target).length && !hamburger.is(event.target)) {
+                    sidebar.removeClass('active');
+                }
+            });
+
+            // Xử lý modal đăng xuất
+            const logoutButton = $('#logoutButton');
+            const logoutModal = $('#logoutModal');
+            const confirmLogoutBtn = $('#confirmLogoutBtn');
+            const cancelLogoutBtn = $('#cancelLogoutBtn');
+
+            // Hiển thị modal khi nhấn nút Đăng Xuất
+            logoutButton.on('click', function (event) {
+                event.preventDefault();
+                logoutModal.addClass('show');
+            });
+
+            // Xác nhận đăng xuất
+            confirmLogoutBtn.on('click', function () {
+                const form = $('#logoutForm');
+                toggleLoading(true, '.admin-layout'); // Hiển thị loading, làm mờ .admin-layout
+                $.ajax({
+                    url: '/Identity/Account/Logout',
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        toggleLoading(false, '.admin-layout'); // Ẩn loading
+                        if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            location.reload(); // Làm mới trang sau khi đăng xuất
+                        }
+                    },
+                    error: function (error) {
+                        toggleLoading(false, '.admin-layout'); // Ẩn loading
+                        console.error('Lỗi khi đăng xuất:', error);
+                        alert('Có lỗi xảy ra khi đăng xuất. Vui lòng thử lại.');
+                    }
+                });
+                logoutModal.removeClass('show'); // Đóng modal
+            });
+
+            // Hủy đăng xuất
+            cancelLogoutBtn.on('click', function () {
+                logoutModal.removeClass('show'); // Đóng modal
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

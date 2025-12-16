@@ -1,0 +1,38 @@
+﻿/* css/CHiTiet_SaoDnhGia.cshtml Định dạng ngôi sao đánh giá */
+.star-rating {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+    .star-rating i {
+        font-size: 1.5rem;
+        color: #ccc; /* Màu xám cho sao chưa chọn */
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+        .star-rating i.selected {
+            color: #ffc107; /* Màu vàng cho sao được chọn */
+        }
+
+        .star-rating i:hover,
+        .star-rating i:hover ~ i {
+            color: #ffeb3b; /* Màu vàng nhạt khi hover */
+        }
+
+/* Hiển thị sao trong danh sách đánh giá */
+.danhgia-item .star-display {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+}
+
+    .danhgia-item .star-display i {
+        font-size: 1.2rem;
+        color: #ffc107; /* Màu vàng cho sao được đánh giá */
+    }
+
+        .danhgia-item .star-display i.empty {
+            color: #ccc; /* Màu xám cho sao không được chọn */
+        }

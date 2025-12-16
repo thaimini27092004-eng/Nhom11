@@ -1,0 +1,28 @@
+﻿/* Bo_Cuc.css */
+
+/* Loại bỏ khoảng trống, làm trang rộng hết màn hình */
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    padding-bottom: 60px; /* Đẩy nội dung lên để tránh bị che bởi footer */
+}
+
+/* Loại bỏ lề trái phải để nội dung đầy màn hình, chỉ áp dụng cho nội dung chính */
+main .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 60px;
+}
+
+/* Xóa khoảng cách, căn chỉnh card */
+.row {
+    margin: 0;
+    padding: 0;
+    align-items: stretch; /* Card cùng hàng có chiều cao bằng nhau */
+}
+
+/* Cột chính và sidebar, dùng rem để linh hoạt */
+.col-md-10, .col-md-2 {
+    padding: 0 0.3rem; /* Khoảng cách nhỏ giữa cột */
+}

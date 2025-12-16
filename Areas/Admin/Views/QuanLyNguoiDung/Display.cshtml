@@ -1,0 +1,79 @@
+﻿@* Views/QuanLyNguoiDung/Display.cshtml *@
+@model WebsiteBanHang.Areas.Admin.Controllers.UserDetailsViewModel
+@{
+    ViewData["Title"] = "Chi Tiết Người Dùng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_SanPham.css">
+
+<h2 class="content-title">Chi Tiết Người Dùng</h2>
+<hr class="content-divider" />
+
+<div class="form-container">
+    <div class="product-details">
+        <div class="product-image-container">
+            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+            {
+                <img src="@Model.AvatarUrl" alt="@Model.HoTen" class="preview-image" />
+            }
+            else
+            {
+                <span>Không có ảnh</span>
+            }
+        </div>
+
+        <div class="product-info">
+            <table class="info-table">
+                <tr>
+                    <td class="label-cell"><strong>User ID:</strong></td>
+                    <td>@Model.UserId</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Email:</strong></td>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Họ Tên:</strong></td>
+                    <td>@Model.HoTen</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Mã KH:</strong></td>
+                    <td>@(Model.MaKH != 0 ? Model.MaKH.ToString() : "Chưa có")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Tên KH:</strong></td>
+                    <td>@(Model.TenKH ?? "Chưa cập nhật")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Ngày Sinh:</strong></td>
+                    <td>@(Model.NgaySinhKH.HasValue ? Model.NgaySinhKH.Value.ToString("dd/MM/yyyy") : "Chưa cập nhật")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Địa Chỉ:</strong></td>
+                    <td>@(Model.DiaChiKH ?? "Chưa cập nhật")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Số Điện Thoại:</strong></td>
+                    <td>@(Model.DTKH ?? "Chưa cập nhật")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Email KH:</strong></td>
+                    <td>@(Model.EmailKH ?? "Chưa cập nhật")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Trạng Thái:</strong></td>
+                    <td>@(Model.IsLocked ? "Khóa" : "Hoạt động")</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Vai Trò:</strong></td>
+                    <td>@(Model.Roles.Any() ? string.Join(", ", Model.Roles) : "Không có")</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button type="button" class="action-btn cancel-btn" onclick="window.location.href='@Url.Action("PhanQuyen", "QuanLyNguoiDung")'">Quay Lại</button>
+    </div>
+</div>

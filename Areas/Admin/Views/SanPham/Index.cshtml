@@ -1,0 +1,621 @@
+﻿
+@*SanPham/Index.cshtml*@
+@model IEnumerable<WebsiteBanHang.Models.SanPham>
+@{
+    ViewData["Title"] = "Danh Sách Sản Phẩm";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_SanPham.css">
+
+<h2 class="content-title">Danh Sách Sản Phẩm</h2>
+
+<!-- Khu vực tìm kiếm -->
+<div class="search-container">
+    <form asp-action="Index" asp-controller="SanPham" method="get">
+        <div class="search-wrapper">
+            <input type="text" id="nhapTuKhoa" name="tuKhoaTimKiem" class="search-input" placeholder="Tìm kiếm sản phẩm hoặc nhập mã (ID) cách nhau bởi dấu phẩy..." value="@ViewData["tuKhoaTimKiem"]" autocomplete="off" />
+            <input type="hidden" name="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+            <button type="submit" class="search-btn">Tìm</button>
+        </div>
+        <div id="danhSachGoiY" class="suggestions"></div>
+    </form>
+</div>
+
+<!-- Thông báo -->
+@if (ViewBag.KetQuaTimKiem != null)
+{
+    <p class="alert alert-error">@ViewBag.KetQuaTimKiem</p>
+    <h4 class="sub-text">Gợi ý sản phẩm</h4>
+}
+@if (TempData["Message"] != null)
+{
+    <p class="alert alert-success">@TempData["Message"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p class="alert alert-error">@TempData["Error"]</p>
+}
+
+<!-- Nút Thêm -->
+<div class="action-bar">
+    <form asp-action="Add" asp-controller="SanPham" method="get">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="action-btn add-btn">Thêm sản phẩm mới</button>
+    </form>
+</div>
+
+<!-- Bảng danh sách sản phẩm -->
+<div class="table-container">
+    <form asp-action="XoaNhieuSanPham" asp-controller="SanPham" method="post" id="sanphamForm">
+        @Html.AntiForgeryToken()
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>Mã Sản Phẩm</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng Tồn</th>
+                    <th>Giá</th>
+                    <th>Mô Tả</th>
+                    <th>Ảnh</th>
+                    <th>Danh Mục</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sanpham in Model)
+                {
+                    <tr data-product-id="@sanpham.MaSP">
+                        <td>
+                            <input type="checkbox" class="select-item" name="selectedSanPhamMaSP" value="@sanpham.MaSP" />
+                        </td>
+                        <td>@sanpham.MaSP</td>
+                        <td>@sanpham.TenSP</td>
+                        <td>
+                            @{
+                                var tonKhoList = ViewBag.TonKhoDict != null && ViewBag.TonKhoDict.ContainsKey(sanpham.MaSP)
+                                ? ViewBag.TonKhoDict[sanpham.MaSP] as List<(int MaKho, string TenKho, int SLTon)>
+                                : new List<(int MaKho, string TenKho, int SLTon)>();
+                            }
+                            @if (tonKhoList.Any())
+                            {
+                                foreach (var tonKho in tonKhoList)
+                                {
+                                    <div class="stock-item">Kho @tonKho.TenKho: @tonKho.SLTon</div>
+                                }
+                            }
+                            else
+                            {
+                                <span>Chưa có tồn kho</span>
+                            }
+                        </td>
+                        <td>@sanpham.Gia</td>
+                        <td>
+                            <div class="description-container">
+                                <span class="description-text" data-product-id="@sanpham.MaSP"></span>
+                                <button type="button" class="read-more-btn" data-product-id="@sanpham.MaSP" style="display: none;">Xem thêm</button>
+                            </div>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(sanpham.UrlAnh))
+                            {
+                                <img src="@sanpham.UrlAnh" alt="@sanpham.TenSP" class="product-image" />
+                            }
+                            else
+                            {
+                                <span>Không có ảnh</span>
+                            }
+                        </td>
+                        <td>@sanpham.DanhMuc?.TenDM</td>
+                        <td>
+                            <a href="#" class="status-link @(sanpham.TTHienThi ? "status-on" : "status-off")" data-id="@sanpham.MaSP" data-status="@sanpham.TTHienThi">
+                                @(sanpham.TTHienThi ? "Bật" : "Tắt")
+                            </a>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a asp-action="Display" asp-controller="SanPham" asp-route-id="@sanpham.MaSP" class="action-link view-link">Xem</a>
+                                <a asp-action="Update" asp-controller="SanPham" asp-route-id="@sanpham.MaSP" class="action-link edit-link">Sửa</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+    <!-- Thanh cố định -->
+    <div class="fixed-bar">
+        <form asp-action="Index" asp-controller="SanPham" method="get" id="filterForm">
+            <input type="hidden" name="tuKhoaTimKiem" value="@Html.Encode(ViewData["tuKhoaTimKiem"])" />
+            <select name="chonTrangThai" onchange="this.form.submit()" class="filter-select">
+                <option value="batHienThi" selected="@(ViewData["chonTrangThai"]?.ToString() == "batHienThi" ? "selected" : null)">Sản phẩm bật hiển thị</option>
+                <option value="tatHienThi" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatHienThi" ? "selected" : null)">Sản phẩm tắt hiển thị</option>
+                <option value="tatCa" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatCa" ? "selected" : null)">Tất cả sản phẩm</option>
+            </select>
+
+            <select name="sapXepGia" onchange="this.form.submit()" class="filter-select">
+                <option value="macDinh" selected="@(ViewData["sapXepGia"]?.ToString() == "macDinh" ? "selected" : null)">Sắp xếp giá: Mặc định</option>
+                <option value="thapDenCao" selected="@(ViewData["sapXepGia"]?.ToString() == "thapDenCao" ? "selected" : null)">Từ thấp đến cao</option>
+                <option value="caoDenThap" selected="@(ViewData["sapXepGia"]?.ToString() == "caoDenThap" ? "selected" : null)">Từ cao đến thấp</option>
+            </select>
+
+            <select name="chonDanhMuc" onchange="this.form.submit()" class="filter-select">
+                <option value="" selected="@(ViewData["chonDanhMuc"] == null ? "selected" : null)">Tất cả danh mục</option>
+                @foreach (var danhmuc in ViewBag.danhmucs)
+                {
+                    <option value="@danhmuc.MaDM" selected="@(ViewData["chonDanhMuc"]?.ToString() == danhmuc.MaDM.ToString() ? "selected" : null)">@danhmuc.TenDM</option>
+                }
+            </select>
+
+            <select name="chonKho" onchange="this.form.submit()" class="filter-select">
+                <option value="" selected="@(ViewData["chonKho"] == null ? "selected" : null)">Tất cả kho</option>
+                @foreach (var kho in ViewBag.khos)
+                {
+                    <option value="@kho.MaKho" selected="@(ViewData["chonKho"]?.ToString() == kho.MaKho.ToString() ? "selected" : null)">@kho.TenKho</option>
+                }
+            </select>
+
+        </form>
+        <button type="button" class="action-btn update-btn" id="updateTrangThaiBtn" disabled>Cập nhật trạng thái</button>
+        <button type="button" class="action-btn update-btn" id="updateDanhMucBtn" disabled>Cập nhật danh mục</button>
+        <!-- <button type="button" class="action-btn process-btn" id="processSelectedBtn" disabled>Xử lý</button>-->
+        <button type="button" class="action-btn delete-btn" id="deleteSelectedBtn" disabled>Xóa/Ẩn</button>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xử lý</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xử lý các sản phẩm sau không?</p>
+                <h6>Các sản phẩm sẽ bị xóa (không có hóa đơn):</h6>
+                <ul id="sanphamToDelete"></ul>
+                <h6>Các sản phẩm sẽ bị ẩn (có hóa đơn):</h6>
+                <ul id="sanphamToHide"></ul>
+                @if (TempData["Warning"] != null)
+                {
+                    <p class="alert alert-warning">@TempData["Warning"]</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="sanphamForm" formaction="@Url.Action("XoaNhieuSanPham", "SanPham")" class="modal-btn hide-btn">Ẩn</button>
+                <button type="submit" form="sanphamForm" formaction="@Url.Action("XoaNhieuSanPham", "SanPham", new { isDelete = true })" class="modal-btn delete-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo xóa -->
+<div class="modal" id="thongBaoXoaModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xử Lý Sản Phẩm Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoXoaTinNhan"></p>
+                <h6>Danh sách sản phẩm đã xóa:</h6>
+                <ul id="danhSachXoa"></ul>
+                <h6>Danh sách sản phẩm đã ẩn:</h6>
+                <ul id="danhSachAn"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thay đổi trạng thái -->
+<div class="modal" id="statusModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thay đổi trạng thái</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="statusForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="statusId" />
+                    <input type="hidden" name="chonTrangThai" id="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+                    <p>Trạng thái hiện tại: <span id="currentStatus"></span></p>
+                    <label for="statusSelect">Chọn trạng thái mới:</label>
+                    <select name="status" id="statusSelect" class="filter-select">
+                        <option value="true">Bật</option>
+                        <option value="false">Tắt</option>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="button" id="updateStatusBtn" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cập nhật trạng thái -->
+<div class="modal" id="updateTrangThaiModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật trạng thái</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="updateTrangThaiForm" method="post" asp-action="CapNhatTrangThai" asp-controller="SanPham">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="selectedSanPhamMaSP" id="selectedSanPhamMaSPTrangThai" />
+                    <p>Các sản phẩm được chọn sẽ được cập nhật sang trạng thái mới.</p>
+                    <label for="newTrangThai">Chọn trạng thái mới:</label>
+                    <select name="newTrangThai" id="newTrangThai" class="filter-select">
+                        <option value="true">Bật</option>
+                        <option value="false">Tắt</option>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="updateTrangThaiForm" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cập nhật danh mục -->
+<div class="modal" id="updateDanhMucModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật danh mục</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="updateDanhMucForm" method="post" asp-action="CapNhatDanhMuc" asp-controller="SanPham">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="selectedSanPhamMaSP" id="selectedSanPhamMaSP" />
+                    <p>Các sản phẩm được chọn sẽ được cập nhật sang danh mục mới.</p>
+                    <label for="newDanhMucMaDM">Chọn danh mục mới:</label>
+                    <select name="newDanhMucMaDM" id="newDanhMucMaDM" class="filter-select"></select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="updateDanhMucForm" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo cập nhật danh mục -->
+<div class="modal" id="thongBaoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập Nhật Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoTinNhan"></p>
+                <ul id="danhSachCapNhat"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal mô tả -->
+<div class="modal" id="descriptionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mô tả sản phẩm</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="fullDescription"></div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                $(document).ready(function () {
+                    const nhapTuKhoa = $("#nhapTuKhoa");
+                    const danhSachGoiY = $("#danhSachGoiY");
+
+                    // Tìm kiếm gợi ý
+                    nhapTuKhoa.on("input", function () {
+                        const tuKhoa = $(this).val().trim();
+                        const filter = "@ViewData["chonTrangThai"]";
+                        const chonKho = "@ViewData["chonKho"]";
+                        if (tuKhoa.length > 0) {
+                            $.ajax({
+                                url: "@Url.Action("SearchSuggestions", "SanPham")",
+                                type: "GET",
+                                data: { term: tuKhoa, chonTrangThai: filter, chonKho: chonKho },
+                                success: function (danhSach) {
+                                    danhSachGoiY.empty();
+                                    if (danhSach.length > 0) {
+                                        danhSach.forEach(sanpham => {
+                                            danhSachGoiY.append(`
+                                                <div class="suggestion-item d-flex align-items-center">
+                                                    <img src="${sanpham.urlAnh}" alt="${sanpham.tenSP}" class="suggestion-image" />
+                                                    <div>
+                                                        <strong>${sanpham.tenSP}</strong><br/>
+                                                        <small>${sanpham.gia.toLocaleString()} VND</small>
+                                                    </div>
+                                                </div>
+                                            `);
+                                        });
+                                        danhSachGoiY.addClass("show");
+                                    } else {
+                                        danhSachGoiY.removeClass("show");
+                                    }
+                                },
+                                error: function () {
+                                    danhSachGoiY.empty().removeClass("show");
+                                }
+                            });
+                        } else {
+                            danhSachGoiY.empty().removeClass("show");
+                        }
+                    });
+
+                    $(document).click(function (e) {
+                        if (!nhapTuKhoa.is(e.target) && !danhSachGoiY.is(e.target) && danhSachGoiY.has(e.target).length === 0) {
+                            danhSachGoiY.removeClass("show");
+                        }
+                    });
+
+                    // Xử lý mô tả
+                    const descriptions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(p => new { p.MaSP, p.MoTa })));
+                    descriptions.forEach(item => {
+                        const descriptionText = $(`.description-text[data-product-id="${item.MaSP}"]`);
+                        const readMoreBtn = $(`.read-more-btn[data-product-id="${item.MaSP}"]`);
+                        const fullText = (item.MoTa || "Không có mô tả").replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+                        const words = fullText.split(/\s+/).filter(word => word.length > 0);
+
+                        if (words.length > 27) {
+                            const truncatedText = words.slice(0, 27).join(' ') + '…';
+                            descriptionText.html(truncatedText);
+                            readMoreBtn.show();
+                        } else {
+                            descriptionText.html(fullText);
+                            readMoreBtn.hide();
+                        }
+
+                        readMoreBtn.on('click', function () {
+                            event.stopPropagation();
+                            $("#fullDescription").html(fullText);
+                            $("#descriptionModal").addClass("show");
+                        });
+                    });
+
+                    // Chọn tất cả
+                    $("#selectAll").on("change", function () {
+                        $(".select-item").prop("checked", this.checked);
+                        toggleButtons();
+                    });
+
+                    // Chọn từng sản phẩm
+                    $(".select-item").on("change", function () {
+                        toggleButtons();
+                    });
+
+                    // Kích hoạt/vô hiệu hóa nút
+                    function toggleButtons() {
+                        const anyChecked = $(".select-item:checked").length > 0;
+                        $("#processSelectedBtn").prop("disabled", !anyChecked);
+                        $("#deleteSelectedBtn").prop("disabled", !anyChecked);
+                        $("#updateDanhMucBtn").prop("disabled", !anyChecked);
+                        $("#updateTrangThaiBtn").prop("disabled", !anyChecked);
+                    }
+
+                    // Xử lý xóa nhiều
+                    $("#deleteSelectedBtn").on("click", function () {
+                        $("#confirmDeleteModal").addClass("show");
+                        const selectedItems = $(".select-item:checked");
+                        const sanphamToDelete = $("#sanphamToDelete");
+                        const sanphamToHide = $("#sanphamToHide");
+                        sanphamToDelete.empty();
+                        sanphamToHide.empty();
+
+                        const selectedIds = [];
+                        selectedItems.each(function () {
+                            selectedIds.push($(this).val());
+                        });
+
+                        $.ajax({
+                            url: "@Url.Action("CheckSanPhamInCTHD", "SanPham")",
+                            type: "POST",
+                            data: { selectedSanPhamMaSP: selectedIds },
+                            success: function (result) {
+                                result.forEach(sanpham => {
+                                    const li = `<li>ID: ${sanpham.maSP} - Tên: ${sanpham.tenSP}</li>`;
+                                    if (sanpham.hasOrder) {
+                                        sanphamToHide.append(li);
+                                    } else {
+                                        sanphamToDelete.append(li);
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                    // Modal trạng thái
+                    $(".status-link").on("click", function (e) {
+                        e.preventDefault();
+                        const maSP = $(this).data("id");
+                        const status = $(this).data("status");
+                        $("#statusId").val(maSP);
+                        $("#currentStatus").text(status ? "Bật" : "Tắt");
+                        $("#statusSelect").val(status ? "true" : "false");
+                        $("#statusModal").addClass("show");
+                    });
+
+                    $("#updateStatusBtn").on("click", function () {
+                        const formData = $("#statusForm").serialize();
+                        const maSP = $("#statusId").val();
+                        const newStatus = $("#statusSelect").val() === "true";
+
+                        $.ajax({
+                            url: "@Url.Action("ChangeStatus", "SanPham")",
+                            type: "POST",
+                            data: formData,
+                            success: function (response) {
+                                if (response.success) {
+                                    const statusLink = $(`a[data-id="${maSP}"]`);
+                                    statusLink.text(newStatus ? "Bật" : "Tắt");
+                                    statusLink.removeClass("status-on status-off").addClass(newStatus ? "status-on" : "status-off");
+                                    statusLink.attr("data-status", newStatus);
+                                    $("#statusModal").removeClass("show");
+                                } else {
+                                    alert("Có lỗi xảy ra: " + response.message);
+                                }
+                            },
+                            error: function () {
+                                alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                            }
+                        });
+                    });
+
+                    // Cập nhật danh mục
+                    $("#updateDanhMucBtn").on("click", function () {
+                        $("#updateDanhMucModal").addClass("show");
+                        const selectedItems = $(".select-item:checked");
+                        const selectedIds = [];
+                        selectedItems.each(function () {
+                            selectedIds.push($(this).val());
+                        });
+                        $("#selectedSanPhamMaSP").val(selectedIds.join(","));
+
+                        $.ajax({
+                            url: "@Url.Action("LayDanhMucHienThi", "SanPham")",
+                            type: "GET",
+                            success: function (danhmucs) {
+                                const select = $("#newDanhMucMaDM");
+                                select.empty();
+                                danhmucs.forEach(danhmuc => {
+                                    select.append(`<option value="${danhmuc.maDM}">${danhmuc.tenDM}</option>`);
+                                });
+                            },
+                            error: function () {
+                                alert("Không thể tải danh sách danh mục.");
+                            }
+                        });
+                    });
+
+                    $("#updateDanhMucForm").on("submit", function (e) {
+                        e.preventDefault();
+                        const formData = $(this).serialize();
+
+                        $.ajax({
+                            url: "@Url.Action("CapNhatDanhMuc", "SanPham")",
+                            type: "POST",
+                            data: formData,
+                            success: function (response) {
+                                if (response.success) {
+                                    response.updatedSanPham.forEach(sanpham => {
+                                        const row = $(`tr[data-product-id="${sanpham.maSP}"]`);
+                                        row.find("td:nth-child(8)").text(sanpham.danhMucMoi);
+                                    });
+                                    $("#updateDanhMucModal").removeClass("show");
+                                    $("#thongBaoTinNhan").text(response.message);
+                                    const danhSach = $("#danhSachCapNhat");
+                                    danhSach.empty();
+                                    response.updatedSanPham.forEach(sanpham => {
+                                        danhSach.append(`
+                                            <li>ID: ${sanpham.maSP} - ${sanpham.tenSP}: ${sanpham.danhMucCu} → ${sanpham.danhMucMoi}</li>
+                                        `);
+                                    });
+                                    $("#thongBaoModal").addClass("show");
+                                } else {
+                                    alert("Có lỗi xảy ra: " + response.message);
+                                }
+                            },
+                            error: function () {
+                                alert("Lỗi khi gửi yêu cầu cập nhật danh mục.");
+                            }
+                        });
+                    });
+
+
+                    // Cập nhật trạng thái
+        $("#updateTrangThaiBtn").on("click", function () {
+            $("#updateTrangThaiModal").addClass("show");
+            const selectedItems = $(".select-item:checked");
+            const selectedIds = [];
+            selectedItems.each(function () {
+                selectedIds.push($(this).val());
+            });
+            $("#selectedSanPhamMaSPTrangThai").val(selectedIds.join(","));
+        });
+
+        $("#updateTrangThaiForm").on("submit", function (e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+
+            $.ajax({
+                url: "@Url.Action("CapNhatTrangThai", "SanPham")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        response.updatedSanPham.forEach(sanpham => {
+                            const row = $(`tr[data-product-id="${sanpham.maSP}"]`);
+                            const statusLink = row.find(".status-link");
+                            statusLink.text(sanpham.trangThaiMoi);
+                            statusLink.removeClass("status-on status-off").addClass(sanpham.trangThaiMoi === "Bật" ? "status-on" : "status-off");
+                            statusLink.attr("data-status", sanpham.trangThaiMoi === "Bật");
+                        });
+                        $("#updateTrangThaiModal").removeClass("show");
+                        $("#thongBaoTinNhan").text(response.message);
+                        const danhSach = $("#danhSachCapNhat");
+                        danhSach.empty();
+                        response.updatedSanPham.forEach(sanpham => {
+                            danhSach.append(`
+                                <li>ID: ${sanpham.maSP} - ${sanpham.tenSP}: ${sanpham.trangThaiCu} → ${sanpham.trangThaiMoi}</li>
+                            `);
+                        });
+                        $("#thongBaoModal").addClass("show");
+                    } else {
+                        alert("Có lỗi xảy ra: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                }
+            });
+        });
+
+                    // Đóng modal
+                    $("[data-modal-close]").on("click", function () {
+                        $(this).closest(".modal").removeClass("show");
+                    });
+
+                    // Đóng modal khi click bên ngoài
+                    $(".modal").on("click", function (e) {
+                        if ($(e.target).hasClass("modal")) {
+                            $(this).removeClass("show");
+                        }
+                    });
+                });
+    </script>
+}

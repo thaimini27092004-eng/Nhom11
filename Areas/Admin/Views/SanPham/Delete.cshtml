@@ -1,0 +1,8 @@
+﻿@*SanPham/Delete.cshtml*@
+@model WebsiteBanHang.Models.SanPham
+<h2>Delete Product</h2>
+<form asp-action="DeleteConfirmed" method="post">
+	<input type="hidden" asp-for="MaSP" />
+	<p>Are you sure you want to delete @Model.TenSP?</p>
+	<button type="submit" class="btn btn-danger">Delete</button>
+</form>

@@ -1,0 +1,82 @@
+﻿/*ChiTiet_BoCucChiTietSanPham.css
+
+/* CSS cho layout chung */
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    padding-bottom: 60px;
+    overflow: hidden; /* Ngăn cuộn toàn bộ trang trong desktop */
+}
+
+.full-width {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.fixed-top-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1100;
+    background: #f8f9fa;
+}
+
+.content-spacer {
+    padding-top: 130px;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 60px;
+}
+
+/* Điều chỉnh khoảng cách giữa các cột và thêm vùng cuộn độc lập */
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+.col-md-4 {
+    padding: 0 15px; /* Khoảng cách giữa các cột */
+    max-height: calc(100vh - 130px - 30px); /* Chiều cao tối đa = chiều cao màn hình - header - footer */
+    overflow-y: auto; /* Tạo vùng cuộn độc lập cho mỗi cột */
+}
+
+/* Tắt vùng cuộn độc lập trong mobile */
+@media (max-width: 767.98px) {
+    body {
+        overflow: auto; /* Cho phép cuộn toàn bộ trang trong mobile */
+    }
+
+    .col-md-4 {
+        max-height: none; /* Bỏ giới hạn chiều cao */
+        overflow-y: visible; /* Bỏ vùng cuộn độc lập */
+    }
+}
+.col-md-4::-webkit-scrollbar {
+    width: 8px;
+}
+
+.col-md-4::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.col-md-4::-webkit-scrollbar-thumb {
+    background: #00b894;
+    border-radius: 4px;
+}
+
+    .col-md-4::-webkit-scrollbar-thumb:hover {
+        background: #009e7f;
+    }
+
+.fixed-top-section {
+    /* Nền trong suốt hoàn toàn */
+    background: transparent;
+    /* Hoặc nền mờ */
+    /* background: rgba(248, 249, 250, 0.8); */
+}

@@ -1,0 +1,34 @@
+﻿
+/*ChiTiet_NutXemThemCuaMoTa.css*/
+/* Kiểu cho phần mô tả và nút "Xem thêm" */
+.description-container {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.description-text {
+    display: inline; /* Đảm bảo nội dung hiển thị inline với nút "Xem thêm" */
+}
+
+.read-more-btn {
+    display: none; /* Ẩn mặc định, sẽ hiển thị bằng JavaScript nếu cần */
+    background: linear-gradient(90deg, #28a745, #ffc107);
+    color: #ffffff;
+    border: none;
+    padding: 0.2rem 0.6rem; /* Giảm padding để nút gọn hơn */
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block; /* Đặt inline-block để nằm ngay sau đoạn chữ */
+    margin-left: 0; /* Xóa margin-left để nút sát với dấu "…" */
+    vertical-align: middle; /* Căn chỉnh với dòng chữ */
+}
+
+    .read-more-btn:hover {
+        background: linear-gradient(90deg, #218838, #e0a800);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        transform: scale(1.05);
+    }

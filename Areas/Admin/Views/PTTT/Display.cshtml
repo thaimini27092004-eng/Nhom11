@@ -1,0 +1,13 @@
+﻿@model WebsiteBanHang.Models.PTTT
+@{
+    ViewData["Title"] = "Chi tiết Phương Thức Thanh Toán";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_PTTT.CSS">
+
+<h2 class="content-title">@Model.TenPT</h2>
+<p class="sub-text"><strong>Trạng thái:</strong> @(Model.TTHienThi ? "Bật" : "Tắt")</p>
+<div class="action-bar">
+    <a asp-action="Index" asp-controller="PTTT" class="action-link view-link">Quay lại danh sách phương thức thanh toán</a>
+</div>

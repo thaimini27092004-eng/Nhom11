@@ -1,0 +1,74 @@
+﻿@*Shared/_PhanHoiDanhGiaList.cshtml*@
+@using System.Web
+@using WebsiteBanHang.Models.ViewModel
+@model IEnumerable<WebsiteBanHang.Models.QLDanhGia_PhanHoi.ViewModel.PhanHoiDanhGiaViewModel>
+
+@{
+    var user = Context.User;
+    var khachHang = ViewData["KhachHang"] as WebsiteBanHang.Models.KhachHang;
+    int trangHienTai = Model.Any() ? Model.First().TrangHienTai : 1;
+    int tongSoTrang = Model.Any() ? Model.First().TongSoTrang : 1;
+    int maDG = Model.Any() ? Model.First().PhanHoiDanhGia.MaDG : 0;
+
+    foreach (var item in Model)
+    {
+        <div class="phanhoi-item" data-maphdg="@item.PhanHoiDanhGia.MaPHDG">
+            <div class="phanhoi-header">
+                <div class="user-info">
+                    @if (!string.IsNullOrEmpty(item.PhanHoiDanhGia.KhachHang?.AvatarUrl))
+                    {
+                        <img src="@item.PhanHoiDanhGia.KhachHang.AvatarUrl" alt="Avatar" class="avatar-img" />
+                    }
+                    else
+                    {
+                        <img src="/images/avatars/default.jpg" alt="Default Avatar" class="avatar-img" />
+                    }
+                    <strong>@item.PhanHoiDanhGia.KhachHang?.TenKH</strong>
+                    @if (item.DaMuaSanPham)
+                    {
+                        <span class="da-mua-label">Đã Mua Sản Phẩm</span>
+                    }
+                </div>
+                <span>@item.PhanHoiDanhGia.NgayPHDG?.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+            <div class="phanhoi-content" id="phanhoi-content-@item.PhanHoiDanhGia.MaPHDG">
+                <span class="phanhoi-text" id="phanHoiText-@item.PhanHoiDanhGia.MaPHDG">@Html.Raw(item.NoiDungHienThi)</span>
+                <button class="read-more-phanhoi-btn" id="readMorePhanHoiBtn-@item.PhanHoiDanhGia.MaPHDG" onclick="DanhGiaManager.togglePhanHoiContent(@item.PhanHoiDanhGia.MaPHDG)" style="display: none;">Xem thêm</button>
+                <button class="read-less-phanhoi-btn" id="readLessPhanHoiBtn-@item.PhanHoiDanhGia.MaPHDG" onclick="DanhGiaManager.togglePhanHoiContent(@item.PhanHoiDanhGia.MaPHDG)" style="display: none;">Thu gọn</button>
+            </div>
+            <div class="phanhoi-actions">
+                <a class="like-link phanhoi-danhgia-like-link @(item.DaThich ? "liked" : "")" onclick="DanhGiaManager.likePhanHoiDanhGia(@item.PhanHoiDanhGia.MaPHDG)" data-maphdg="@item.PhanHoiDanhGia.MaPHDG">
+                    <i class="fas fa-thumbs-up"></i> <span class="like-count">@(item.SoLuotThich > 0 ? item.SoLuotThich : "")</span>
+                </a>
+                <a class="reply-link" onclick="DanhGiaManager.replyToPhanHoiDanhGia(@item.PhanHoiDanhGia.MaDG, @item.PhanHoiDanhGia.MaKH, '@HttpUtility.JavaScriptStringEncode(item.PhanHoiDanhGia.KhachHang?.TenKH)')">Trả lời</a>
+                @if (user.Identity.IsAuthenticated && khachHang != null && item.PhanHoiDanhGia.MaKH == khachHang.MaKH)
+                {
+                    <a class="edit-link" onclick="DanhGiaManager.editPhanHoiDanhGia(@item.PhanHoiDanhGia.MaPHDG)">Chỉnh sửa</a>
+                    <a class="delete-link" onclick="DanhGiaManager.deletePhanHoiDanhGia(@item.PhanHoiDanhGia.MaPHDG)">Xóa</a>
+                }
+            </div>
+            @if (user.Identity.IsAuthenticated && khachHang != null && item.PhanHoiDanhGia.MaKH == khachHang.MaKH)
+            {
+                <div class="edit-input edit-input-phanhoi-danhgia" id="edit-phanhoi-input-@item.PhanHoiDanhGia.MaPHDG" style="display: none;">
+                    <textarea id="edit-phanhoi-input-text-@item.PhanHoiDanhGia.MaPHDG" placeholder="Chỉnh sửa phản hồi..." rows="2" class="form-control" maxlength="500">@item.PhanHoiDanhGia.NoiDungPHDG</textarea>
+                    <span id="edit-phanhoi-char-count-@item.PhanHoiDanhGia.MaPHDG" class="char-count">Còn 500 ký tự</span>
+                    <div>
+                        <button class="btn btn-primary-new mt-2 submit-edit" onclick="DanhGiaManager.submitEditPhanHoiDanhGia(@item.PhanHoiDanhGia.MaPHDG)" data-maphdg="@item.PhanHoiDanhGia.MaPHDG">Lưu</button>
+                        <button class="btn btn-secondary mt-2" onclick="DanhGiaManager.cancelEditPhanHoiDanhGia(@item.PhanHoiDanhGia.MaPHDG)">Hủy</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        var moHinhPhanTrang = new PhanTrangViewModel();
+        moHinhPhanTrang.TrangHienTai = trangHienTai;
+        moHinhPhanTrang.TongSoTrang = tongSoTrang;
+        moHinhPhanTrang.DuongDan = "/Home/GetPhanHoiDanhGiaByMaDG";
+        moHinhPhanTrang.MaDoiTuong = maDG;
+        moHinhPhanTrang.ThamSoDoiTuong = "maDG";
+        @await Html.PartialAsync("_PhanTrang", moHinhPhanTrang)
+    }
+}

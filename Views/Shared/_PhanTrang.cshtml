@@ -1,0 +1,22 @@
+﻿
+@*Shared/_PhanTrang.cshtml*@
+
+@model WebsiteBanHang.Models.ViewModel.PhanTrangViewModel
+
+@if (Model.TongSoTrang > 1)
+{
+    <div class="pagination">
+        @if (Model.TrangHienTai > 1)
+        {
+            <a class="page-link" onclick="taiThemDuLieu('@Model.DuongDan', '@Model.ThamSoDoiTuong', @Model.MaDoiTuong, @(Model.TrangHienTai - 1))">« Trang trước</a>
+        }
+        @for (int i = 1; i <= Model.TongSoTrang; i++)
+        {
+            <a class="page-link @(i == Model.TrangHienTai ? "active" : "")" onclick="taiThemDuLieu('@Model.DuongDan', '@Model.ThamSoDoiTuong', @Model.MaDoiTuong, @i)">@i</a>
+        }
+        @if (Model.TrangHienTai < Model.TongSoTrang)
+        {
+            <a class="page-link" onclick="taiThemDuLieu('@Model.DuongDan', '@Model.ThamSoDoiTuong', @Model.MaDoiTuong, @(Model.TrangHienTai + 1))">Trang sau »</a>
+        }
+    </div>
+}

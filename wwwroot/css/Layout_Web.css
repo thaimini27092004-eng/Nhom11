@@ -1,0 +1,536 @@
+﻿/*/css/layout_web.css*/
+
+/* Root Variables */
+:root {
+    --primary-color: #F28C38; /* Cam đậm */
+    --secondary-color: #007BFF; /* Xanh dương */
+    --background-dark: #1A1A1A; /* Đen */
+    --background-gray: #2D2D2D; /* Xám đậm */
+    --text-light: #FFFFFF; /* Trắng */
+    --text-muted: #A0A0A0; /* Xám nhạt */
+    --font-primary: 'Inter', sans-serif;
+    --font-heading: 'Montserrat', sans-serif;
+    --header-height: 80px;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Header */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--background-gray);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-light);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+}
+
+    .logo img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+.search-bar {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 20px;
+}
+
+    .search-bar .input-group {
+        border-radius: 25px;
+        overflow: hidden;
+        background-color: var(--text-light);
+    }
+
+    .search-bar input {
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .search-bar .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 10px 20px;
+    }
+
+    .search-bar .dropdown-menu {
+        width: 100%;
+        border-radius: 10px;
+        margin-top: 5px;
+        background-color: var(--background-gray);
+        color: var(--text-light);
+    }
+
+    .search-bar .dropdown-item {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        color: var(--text-light);
+    }
+
+        .search-bar .dropdown-item:hover {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+/* Navigation */
+.main-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+}
+
+    .nav-list li {
+        margin-left: 20px;
+    }
+
+.nav-link {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+    .nav-link:hover,
+    .nav-link.active {
+        background-color: var(--primary-color);
+    }
+
+/* Auth and Cart */
+.auth-cart {
+    display: flex;
+    list-style: none;
+    margin-left: 20px;
+}
+
+.auth-item {
+    margin-left: 15px;
+}
+
+.auth-link {
+    color: var(--text-light);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+    .auth-link:hover {
+        background-color: var(--primary-color);
+    }
+
+    .auth-link .avatar-img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+.cart-link {
+    position: relative;
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 8px;
+}
+
+    .cart-link .bi-cart-fill {
+        font-size: 1.5rem;
+    }
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.5rem;
+}
+
+/* Main Content */
+.site-main {
+    margin-top: calc(var(--header-height) - 50px);
+    min-height: calc(100vh - var(--header-height) - 60px + 50px); /* Adjust for footer */
+    padding: 20px 0;
+    position: relative;
+    overflow: hidden; /* Ngăn hình ảnh tràn ra ngoài */
+}
+    .site-main.has-bg .main-bg {
+        position: fixed; /* Cố định vị trí */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh; /* Chiếm toàn bộ chiều cao viewport */
+        z-index: 1;
+    }
+
+.main-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Phủ toàn bộ khu vực */
+    filter: brightness(0.7); /* Làm tối nhẹ như banner */
+}
+
+.main-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ đen nhẹ */
+    backdrop-filter: blur(5px); /* Hiệu ứng mờ */
+    -webkit-backdrop-filter: blur(5px); /* Hỗ trợ Safari */
+    z-index: 0 ;
+}
+
+.site-main .container-fluid {
+    position: relative;
+    z-index: 3; /* Nội dung nằm trên lớp phủ */
+}
+/* Social Sidebar */
+.social-sidebar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+}
+
+.social-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.social-link {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: var(--background-gray);
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+    .social-link:hover {
+        background-color: var(--primary-color);
+    }
+
+/* Footer */
+.site-footer {
+    background-color: var(--background-gray);
+    padding:  2px 0; /* Tăng padding để footer cao hơn (trước là 20px) */
+    text-align: center;
+    position: relative;
+    z-index: 4;
+}
+
+.footer-content {
+    max-width: 1200px; /* Giảm max-width để footer hẹp hơn (trước là 1400px) */
+    margin: 0 auto;
+    padding: 0 5px; /* Thêm padding ngang để nội dung không sát lề */
+}
+
+    .footer-content p {
+        margin: 0;
+        font-size: 1rem; /* Tăng kích thước chữ (trước là 0.9rem) */
+    }
+
+.footer-social {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Tăng khoảng cách giữa các icon (trước là 15px) */
+    margin-top: 5px; /* Tăng khoảng cách phía trên (trước là 10px) */
+}
+
+    .footer-social a {
+        color: var(--text-light);
+        font-size: 1.3rem; /* Tăng kích thước icon (trước là 1.2rem) */
+    }
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Căn giữa theo cả ngang và dọc */
+    background-color: var(--secondary-color);
+    color: var(--text-light);
+    padding: 15px 30px; /* Tăng padding để thông báo trông rõ ràng hơn */
+    border-radius: 5px;
+    z-index: 2000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng để nổi bật */
+    text-align: center; /* Căn giữa nội dung văn bản */
+}
+
+/* Modal */
+.modal-content {
+    background-color: var(--background-gray);
+    color: var(--text-light);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--text-muted);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+}
+
+.btn-secondary {
+    background-color: var(--text-muted);
+    border: none;
+}
+
+/* Footer Social Icons */
+.footer-social a i.fab.fa-facebook {
+    color: #1877F2; /* Xanh dương Facebook */
+}
+
+.footer-social a i.fab.fa-x-twitter {
+    color: #FFFFFF; /* Đen cho X */
+}
+
+.footer-social a i.fab.fa-instagram-square {
+    color: #E1306C; /* Hồng/tím gần giống Instagram */
+}
+
+/* Social Sidebar Icons */
+.social-link i.fab.fa-facebook {
+    color: #1877F2; /* Xanh dương Facebook */
+}
+
+.social-link i.fab.fa-x-twitter {
+    color: FFFFFF; /* Đen cho X */
+}
+
+.social-link i.fab.fa-instagram-square {
+    color: #E1306C; /* Hồng/tím gần giống Instagram */
+}
+
+.social-link i.fab.fa-linkedin-in {
+    color: #0A66C2; /* Xanh dương LinkedIn */
+}
+
+.social-link i.fab.fa-whatsapp {
+    color: #25D366; /* Xanh lá WhatsApp */
+}
+
+/* Đảm bảo hover không làm mất màu icon */
+.social-link:hover i.fab {
+    color: inherit; /* Giữ màu gốc khi hover */
+}
+/* Responsive */
+@media (max-width: 1270px) {
+    .header-content {
+        flex-wrap: wrap;
+    }
+
+    .search-bar {
+        order: 3;
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .main-nav {
+        display: none;
+        width: 100%;
+        order: 4;
+    }
+
+        .main-nav.active {
+            display: block;
+        }
+
+    .nav-list,
+    .auth-cart {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .nav-list li,
+        .auth-item {
+            margin: 10px 0;
+        }
+
+    .mobile-toggle {
+        display: block;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 1300px) {
+    .logo {
+        font-size: 1.2rem;
+    }
+
+        .logo img {
+            width: 30px;
+            height: 30px;
+        }
+
+    .social-sidebar {
+        display: none;
+    }
+}
+
+
+/* Large Mic Overlay */
+.large-mic-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Lớp phủ tối để làm nổi bật micro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* Đảm bảo hiển thị trên tất cả các phần tử khác */
+    backdrop-filter: blur(5px); /* Hiệu ứng mờ nền */
+    -webkit-backdrop-filter: blur(5px); /* Hỗ trợ Safari */
+}
+
+.large-mic-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff0000, #ff9900, #33cc33, #3399ff, #cc33cc); /* Gradient cầu vồng */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Hiệu ứng sáng */
+    animation: pulse 2s infinite ease-in-out; /* Hiệu ứng nhấp nháy nhẹ */
+}
+
+.large-mic-icon {
+    font-size: 80px; /* Kích thước biểu tượng micro lớn */
+    color: var(--text-light); /* Màu trắng để nổi bật */
+    z-index: 2; /* Đảm bảo biểu tượng ở trên các sóng */
+}
+
+/* Hiệu ứng sóng cầu vồng */
+.ripple-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff0000, #ff9900, #33cc33, #3399ff, #cc33cc, #ff0000); /* Gradient cầu vồng RGB */
+    animation: ripple 2s infinite linear;
+    z-index: 1;
+    opacity: 0.6; /* Độ trong suốt nhẹ để sóng nổi bật */
+}
+
+.ripple-delay-1 {
+    animation-delay: 0.5s;
+}
+
+.ripple-delay-2 {
+    animation-delay: 1s;
+}
+
+/* Keyframes cho hiệu ứng sóng */
+@keyframes ripple {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Keyframes cho hiệu ứng nhấp nháy */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+}
+
+/* Đảm bảo nút micro trong thanh tìm kiếm không bị ảnh hưởng */
+.mic-btn {
+    /* Giữ nguyên kiểu hiện tại */
+    border: none;
+    background-color: var(--text-light);
+    color: var(--background-gray);
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+}
+
+    .mic-btn:hover {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+    }
+
+    .mic-btn.listening {
+        background-color: var(--secondary-color); /* Giữ màu xanh dương khi nghe */
+        color: var(--text-light);
+    }

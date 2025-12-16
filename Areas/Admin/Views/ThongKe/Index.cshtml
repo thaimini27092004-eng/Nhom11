@@ -1,0 +1,275 @@
+﻿@{
+    ViewData["Title"] = "Thống Kê";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<link rel="stylesheet" href="~/css/Admin_ThongKe.css">
+
+<h2 class="content-title">Thống Kê</h2>
+<div class="content-wrapper">
+    <!-- Khối thông tin thống kê -->
+    <div class="card-block">
+        <h3 class="card-title">Tổng quan</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Sản phẩm</div>
+                <div class="info-value">@ViewBag.CountSanPham</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Danh mục</div>
+                <div class="info-value">@ViewBag.CountDanhMuc</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Hóa đơn</div>
+                <div class="info-value">@ViewBag.CountHoaDon</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Khách hàng</div>
+                <div class="info-value">@ViewBag.CountUser</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Kho</div>
+                <div class="info-value">@ViewBag.CountKho</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Phương thức thanh toán</div>
+                <div class="info-value">@ViewBag.ContPTTT</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Vai trò</div>
+                <div class="info-value">@ViewBag.ContVaiTro</div>
+            </div>
+        </div>
+    </div>
+    <div class="filter-container">
+        <h3 class="card-title">Lọc dữ liệu</h3>
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="filter-date" class="filter-label">Thời gian:</label>
+                <select id="filter-date" class="filter-select">
+                    <option value="0">---Toàn thời gian---</option>
+                    <option value="1">---24 giờ qua---</option>
+                    <option value="7">---7 ngày qua---</option>
+                    <option value="30">---1 tháng qua ---</option>
+                    <option value="90">--- 3 tháng qua ---</option>
+                    <option value="360">--- 1 năm qua ---</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-line" class="filter-label">Hiển thị:</label>
+                <select id="filter-line" class="filter-select">
+                    <option value="all">---Tất cả---</option>
+                    <option value="doanhThu">---Doanh thu---</option>
+                    <option value="soluongBan">---Số lượng bán---</option>
+                    <option value="soLuongDonHang">---Số lượng đơn hàng---</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-chart-type" class="filter-label">Kiểu biểu đồ:</label>
+                <select id="filter-chart-type" class="filter-select">
+                    <option value="line">Biểu đồ đường</option>
+                    <option value="bar">Biểu đồ cột</option>
+                    <option value="area">Biểu đồ khu vực</option>
+                    <option value="donut">Biểu đồ tròn</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Biểu đồ -->
+    <div class="chart-container">
+        <h3 class="card-title">Biểu đồ thống kê</h3>
+        <div id="myfirstchart"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var chartData = []; // Lưu dữ liệu biểu đồ để tái sử dụng
+            var CharMorris = null; // Biến lưu đối tượng Morris Chart
+            // Hàm khởi tạo hoặc cập nhật biểu đồ
+            function initializeChart(ykeys, labels) {
+                var chartType = $('#filter-chart-type').val(); // Lấy kiểu biểu đồ từ bộ lọc
+                if (CharMorris) {
+                    // Xóa biểu đồ cũ nếu có
+                    $('#myfirstchart').empty();
+                    CharMorris = null;
+                }
+
+                // Tạo dữ liệu cho biểu đồ tròn nếu cần
+                if (chartType === 'donut') {
+                    // Định dạng dữ liệu cho biểu đồ tròn
+                    var donutData = [];
+                    var selectedLine = $('#filter-line').val();
+
+                    if (selectedLine === 'doanhThu') {
+                        donutData = chartData.map(function (item) {
+                            return { label: item.ngayDatHang, value: item.doanhThu };
+                        });
+                    } else if (selectedLine === 'soluongBan') {
+                        donutData = chartData.map(function (item) {
+                            return { label: item.ngayDatHang, value: item.soluongBan };
+                        });
+                    } else if (selectedLine === 'soLuongDonHang') {
+                        donutData = chartData.map(function (item) {
+                            return { label: item.ngayDatHang, value: item.soLuongDonHang };
+                        });
+                    } else {
+                        // Trường hợp 'all': hiển thị tổng hợp (chỉ lấy một giá trị tổng)
+                        donutData = [
+                            { label: 'Số lượng bán', value: chartData.reduce((sum, item) => sum + item.soluongBan, 0) },
+                            { label: 'Đơn hàng', value: chartData.reduce((sum, item) => sum + item.soLuongDonHang, 0) },
+                            { label: 'Doanh thu', value: (chartData.reduce((sum, item) => sum + item.doanhThu, 0).toFixed(3)) }
+                        ];
+                    }
+
+                    // Tạo biểu đồ tròn
+                    CharMorris = new Morris.Donut({
+                        element: 'myfirstchart',
+                        data: donutData,
+                        resize: true,
+                        parseTime: false
+
+                    });
+                } else {
+                    // Các biểu đồ khác (Line, Bar, Area)
+                    var chartConfig = {
+                        element: 'myfirstchart',
+                        data: chartData,
+                        xkey: 'ngayDatHang',
+                        ykeys: ykeys,
+                        labels: labels,
+                        resize: true,
+                        parseTime: false
+                    };
+
+                    if (chartType === 'bar') {
+                        CharMorris = new Morris.Bar(chartConfig);
+                    } else if (chartType === 'area') {
+                        CharMorris = new Morris.Area(chartConfig);
+                    } else {
+                        CharMorris = new Morris.Line(chartConfig);
+                    }
+                }
+            }
+
+            // Hàm để tải dữ liệu biểu đồ dựa trên bộ lọc ngày
+            function loadChartData(days) {
+                var startDate, endDate;
+                var ajaxData = {};
+
+                if (days != 0) {
+                    endDate = new Date();
+                    if (days === 1) {
+                        startDate = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
+                        ajaxData = {
+                            startDate: startDate.toLocaleString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).replace(' ', 'T'),
+                            endDate: endDate.toLocaleString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).replace(' ', 'T')
+                        };
+                    } else {
+                        startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
+                        ajaxData = {
+                            startDate: startDate.toLocaleString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).split(' ')[0],
+                            endDate: endDate.toLocaleString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).split(' ')[0]
+                        };
+                    }
+                }
+
+                $.ajax({
+                    url: "@Url.Action("GetChartData", "ThongKe")",
+                    type: "POST",
+                    dataType: "json",
+                    data: ajaxData,
+                    success: function (data) {
+                        updateChart(data);
+                    },
+                    error: function (error) {
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            }
+
+            // Hàm cập nhật biểu đồ
+            function updateChart(data) {
+                if (data && data.length > 0) {
+                    chartData = data.map(function (item) {
+                        return {
+                            ngayDatHang: item.ngayDatHang,
+                            soluongBan: parseInt(item.soLuongBan),
+                            soLuongDonHang: parseInt(item.soLuongDonHang),
+                            doanhThu: parseFloat(item.doanhThu)
+                        };
+                    });
+                } else {
+                    console.warn("No data received for Morris chart update.");
+                    chartData = [];
+                }
+
+                // Cập nhật biểu đồ dựa trên bộ lọc đường
+                updateChartLines();
+            }
+
+            // Hàm cập nhật các đường hiển thị dựa trên bộ lọc
+            function updateChartLines() {
+                var selectedLine = $('#filter-line').val();
+                var ykeys, labels;
+
+                switch (selectedLine) {
+                    case 'doanhThu':
+                        ykeys = ['doanhThu'];
+                        labels = ['Doanh thu (Triệu)'];
+                        break;
+                    case 'soluongBan':
+                        ykeys = ['soluongBan'];
+                        labels = ['Số lượng bán'];
+                        break;
+                    case 'soLuongDonHang':
+                        ykeys = ['soLuongDonHang'];
+                        labels = ['Đơn hàng'];
+                        break;
+                    case 'all':
+                    default:
+                        ykeys = ['soluongBan', 'soLuongDonHang', 'doanhThu'];
+                        labels = ['Số lượng bán', 'Đơn hàng', 'Doanh thu (Triệu)'];
+                        break;
+                }
+
+                initializeChart(ykeys, labels);
+            }
+
+            // Lấy giá trị mặc định của bộ lọc ngày và tải dữ liệu
+            var defaultDays = parseInt($('#filter-date').val());
+            loadChartData(defaultDays);
+
+            // Xử lý sự kiện thay đổi bộ lọc ngày
+            $('#filter-date').on('change', function () {
+                var days = parseInt($(this).val());
+                loadChartData(days);
+            });
+
+            // Xử lý sự kiện thay đổi bộ lọc đường
+            $('#filter-line').on('change', function () {
+                updateChartLines();
+            });
+
+            // Xử lý sự kiện thay đổi bộ lọc kiểu biểu đồ
+            $('#filter-chart-type').on('change', function () {
+                updateChartLines(); // Gọi lại để vẽ lại biểu đồ với kiểu mới
+            });
+
+            // Xử lý sự kiện resize cửa sổ
+            $(window).on('resize', function () {
+                if (CharMorris) {
+                    CharMorris.redraw();
+                }
+            });
+        });
+    </script>
+}
+

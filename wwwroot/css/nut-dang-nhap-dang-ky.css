@@ -1,0 +1,35 @@
+﻿/* nut-dang-nhap-dang-ky.css */
+
+/* Style cho nút đăng nhập/đăng ký/xin chào/đăng xuất */
+.auth-button {
+    background: linear-gradient(135deg, #ffffff 0%, #e9ecef 100%); /* Gradient nhẹ */
+    padding: 0.4rem 0.8rem;
+    border: 2px solid transparent; /* Viền trong suốt ban đầu */
+    border-image: linear-gradient(90deg, #28a745, #ffc107) 1; /* Viền gradient */
+    border-radius: 8px; /* Bo góc mềm mại */
+    font-size: 1rem;
+    margin: 0 0.2rem;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* Bóng mềm mại */
+    transition: all 0.3s ease;
+    display: inline-block;
+    min-width: 120px;
+    text-align: center;
+    transform: scale(1); /* Để hỗ trợ hiệu ứng phóng to */
+    color: #212529 !important; /* Màu chữ đen, ưu tiên cao */
+    text-decoration: none; /* Loại bỏ gạch chân */
+}
+
+    /* Hiệu ứng hover */
+    .auth-button:hover {
+        background: linear-gradient(90deg, #28a745, #ffc107); /* Gradient xanh lá-vàng khi hover */
+        color: #ffffff !important;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Bóng đậm hơn */
+        transform: scale(1.05); /* Phóng to nhẹ */
+    }
+
+    /* Tùy chỉnh cho nút Đăng xuất */
+    .auth-button.logout-button:hover {
+        background: linear-gradient(90deg, #ff6b6b, #660000); /* Gradient đỏ hồng-đỏ đậm */
+    }
+
+

@@ -1,0 +1,797 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\WebsiteBanHang.bundle.scp.css",
+      "PackagePath": "staticwebassets\\WebsiteBanHang.arhtti33gg.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_BannerQuangCao.css",
+      "PackagePath": "staticwebassets\\css\\Admin_BannerQuangCao.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_DanhMuc.css",
+      "PackagePath": "staticwebassets\\css\\Admin_DanhMuc.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_Index.css",
+      "PackagePath": "staticwebassets\\css\\Admin_Index.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_Kho.css",
+      "PackagePath": "staticwebassets\\css\\Admin_Kho.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_PTTT.css",
+      "PackagePath": "staticwebassets\\css\\Admin_PTTT.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_PhanQuyen.css",
+      "PackagePath": "staticwebassets\\css\\Admin_PhanQuyen.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_QuanLyHoaDon.css",
+      "PackagePath": "staticwebassets\\css\\Admin_QuanLyHoaDon.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_SanPham.css",
+      "PackagePath": "staticwebassets\\css\\Admin_SanPham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_ThongKe.css",
+      "PackagePath": "staticwebassets\\css\\Admin_ThongKe.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Admin_TrangThai.css",
+      "PackagePath": "staticwebassets\\css\\Admin_TrangThai.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Bo_Cuc.css",
+      "PackagePath": "staticwebassets\\css\\Bo_Cuc.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Button_MuaNgay_ThemGio.css",
+      "PackagePath": "staticwebassets\\css\\Button_MuaNgay_ThemGio.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_AvataBinhLuan.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_AvataBinhLuan.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_BoCucChiTietSanPham.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_BoCucChiTietSanPham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_CardAnhVaDanhSachAnh.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_CardAnhVaDanhSachAnh.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_CardBinhLuan.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_CardBinhLuan.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_CardDanhGia.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_CardDanhGia.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_CardThongTinChiTietSanPham.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_CardThongTinChiTietSanPham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_HopThoaiMoTa.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_HopThoaiMoTa.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_Like.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_Like.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_Like_DanhGia.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_Like_DanhGia.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_NutXemThemCuaMoTa.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_NutXemThemCuaMoTa.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_PhanTrang.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_PhanTrang.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_PhanTrangDanhGia.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_PhanTrangDanhGia.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_SaoDanhGia.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_SaoDanhGia.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ChiTiet_ThuGonNoiDungDanhGia.css",
+      "PackagePath": "staticwebassets\\css\\ChiTiet_ThuGonNoiDungDanhGia.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\GiaoDien_Modal_XacNhan.css",
+      "PackagePath": "staticwebassets\\css\\GiaoDien_Modal_XacNhan.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Giaodien_DangNhap.css",
+      "PackagePath": "staticwebassets\\css\\Giaodien_DangNhap.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\HieuUngKeoRem.css",
+      "PackagePath": "staticwebassets\\css\\HieuUngKeoRem.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Layout_Admin.css",
+      "PackagePath": "staticwebassets\\css\\Layout_Admin.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Layout_Chatbox.css",
+      "PackagePath": "staticwebassets\\css\\Layout_Chatbox.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Layout_Web.css",
+      "PackagePath": "staticwebassets\\css\\Layout_Web.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Logo_Load.css",
+      "PackagePath": "staticwebassets\\css\\Logo_Load.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ThongBaoNoiBat_khongtimthaynpham.css",
+      "PackagePath": "staticwebassets\\css\\ThongBaoNoiBat_khongtimthaynpham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\ThongbaoHienMat.css",
+      "PackagePath": "staticwebassets\\css\\ThongbaoHienMat.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Web_ChiTietSanPham.css",
+      "PackagePath": "staticwebassets\\css\\Web_ChiTietSanPham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Web_HoaDon_ChiTietHoaDon.css",
+      "PackagePath": "staticwebassets\\css\\Web_HoaDon_ChiTietHoaDon.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Web_HoaDon_DanhSachHoaDon.css",
+      "PackagePath": "staticwebassets\\css\\Web_HoaDon_DanhSachHoaDon.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Web_Home.css",
+      "PackagePath": "staticwebassets\\css\\Web_Home.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Web_Home_SanPhams.css",
+      "PackagePath": "staticwebassets\\css\\Web_Home_SanPhams.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\Web_ShoppingCart_Index.css",
+      "PackagePath": "staticwebassets\\css\\Web_ShoppingCart_Index.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\button_HieuUngCauVong.css",
+      "PackagePath": "staticwebassets\\css\\button_HieuUngCauVong.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\button_giohang.css",
+      "PackagePath": "staticwebassets\\css\\button_giohang.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\footer.css",
+      "PackagePath": "staticwebassets\\css\\footer.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\header_Tieu_De.css",
+      "PackagePath": "staticwebassets\\css\\header_Tieu_De.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\hop-thoai-dang-xuat.css",
+      "PackagePath": "staticwebassets\\css\\hop-thoai-dang-xuat.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\mang-xa-hoi.css",
+      "PackagePath": "staticwebassets\\css\\mang-xa-hoi.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\navbar_ThanhDieuHuong.css",
+      "PackagePath": "staticwebassets\\css\\navbar_ThanhDieuHuong.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\nut-dang-nhap-dang-ky.css",
+      "PackagePath": "staticwebassets\\css\\nut-dang-nhap-dang-ky.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\product_CardSanPham.css",
+      "PackagePath": "staticwebassets\\css\\product_CardSanPham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\site_DangNhap_DangKy.css",
+      "PackagePath": "staticwebassets\\css\\site_DangNhap_DangKy.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\site_home_hopthoaixacnhan_navbar_sanpham.css",
+      "PackagePath": "staticwebassets\\css\\site_home_hopthoaixacnhan_navbar_sanpham.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\css\\thanh-tim-kiem.css",
+      "PackagePath": "staticwebassets\\css\\thanh-tim-kiem.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\email_templates\\CapNhatTrangThai.html",
+      "PackagePath": "staticwebassets\\email_templates\\CapNhatTrangThai.html"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\email_templates\\DatHangThanhCong.html",
+      "PackagePath": "staticwebassets\\email_templates\\DatHangThanhCong.html"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\GiaoHang\\IconCuaHang.png",
+      "PackagePath": "staticwebassets\\images\\GiaoHang\\IconCuaHang.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\GiaoHang\\IconNhaO.png",
+      "PackagePath": "staticwebassets\\images\\GiaoHang\\IconNhaO.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\GiaoHang\\LogoGiaoHangIcon.png",
+      "PackagePath": "staticwebassets\\images\\GiaoHang\\LogoGiaoHangIcon.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\3280cbed-d113-4dbe-ad01-dbe0d422640d.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\3280cbed-d113-4dbe-ad01-dbe0d422640d.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\6ca6cfba-286c-4d18-8697-2d35f69f4b6a.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\6ca6cfba-286c-4d18-8697-2d35f69f4b6a.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\74b72fe1-895d-44e6-b604-d9449dd037ab.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\74b72fe1-895d-44e6-b604-d9449dd037ab.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\8bc59adb-91ee-4db5-b396-803c9c02a7c6.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\8bc59adb-91ee-4db5-b396-803c9c02a7c6.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\91d4a6fe-f10e-4402-a7b5-012bd711e26e.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\91d4a6fe-f10e-4402-a7b5-012bd711e26e.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\9b5be423-47e7-4f1d-998b-a049b33f400e.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\9b5be423-47e7-4f1d-998b-a049b33f400e.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\bf96f233-74fe-49e8-bdc3-c81500b066d8.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\bf96f233-74fe-49e8-bdc3-c81500b066d8.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\c0798bf4-f266-4af8-9d68-b3073e8ba93e.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\c0798bf4-f266-4af8-9d68-b3073e8ba93e.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\TrangThai\\e81105b9-b906-4064-a919-c1b028299e7e.png",
+      "PackagePath": "staticwebassets\\images\\TrangThai\\e81105b9-b906-4064-a919-c1b028299e7e.png"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\0c9715d2-a995-4ae3-85ed-925b78765f2a.webp",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\0c9715d2-a995-4ae3-85ed-925b78765f2a.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\149ac79a-cfa1-464b-8dd2-5cca41f1fb8b.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\149ac79a-cfa1-464b-8dd2-5cca41f1fb8b.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\1ab4f3c6-713f-456e-ac7b-8860cd152770.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\1ab4f3c6-713f-456e-ac7b-8860cd152770.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\1c3f620d-9434-4fe9-a12b-247623c71192.webp",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\1c3f620d-9434-4fe9-a12b-247623c71192.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\2945de70-2c1b-4e22-8dbd-5807c049788e.webp",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\2945de70-2c1b-4e22-8dbd-5807c049788e.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\38e2a8d3-018c-48d3-b572-1b719bfd3a78.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\38e2a8d3-018c-48d3-b572-1b719bfd3a78.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\6ccc4c31-9fce-453b-a768-ef06993f8563.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\6ccc4c31-9fce-453b-a768-ef06993f8563.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\7ceeaa5b-db37-407c-b8f7-ad79e20e7062.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\7ceeaa5b-db37-407c-b8f7-ad79e20e7062.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\93d910b9-46e0-460c-8793-34940d154f41.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\93d910b9-46e0-460c-8793-34940d154f41.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\99811f99-e502-493c-9c1e-3d19dccd0075.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\99811f99-e502-493c-9c1e-3d19dccd0075.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\9ffe67cf-49b2-4580-b2e7-5d81572e3b4c.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\9ffe67cf-49b2-4580-b2e7-5d81572e3b4c.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\c9a0e5f9-0dd7-43e6-b7b1-02c0361b7e57.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\c9a0e5f9-0dd7-43e6-b7b1-02c0361b7e57.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\d8b69333-6d59-436b-9f92-58b4eabbc254.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\d8b69333-6d59-436b-9f92-58b4eabbc254.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\de1033ed-cab0-40fd-a6f8-dc346503a936.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\de1033ed-cab0-40fd-a6f8-dc346503a936.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\dfbf4fa5-26fd-47d8-bf49-226588c5ed1d.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\dfbf4fa5-26fd-47d8-bf49-226588c5ed1d.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\anhchinhsanpham\\f4d04ce7-3c62-42a5-a3a7-56a83630cbc8.jpg",
+      "PackagePath": "staticwebassets\\images\\anhchinhsanpham\\f4d04ce7-3c62-42a5-a3a7-56a83630cbc8.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\avatars\\default.jpg",
+      "PackagePath": "staticwebassets\\images\\avatars\\default.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\banner\\34f489b5-03cf-4393-b4d6-d775d06a8cd4.jpg",
+      "PackagePath": "staticwebassets\\images\\banner\\34f489b5-03cf-4393-b4d6-d775d06a8cd4.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\banner\\4f50631c-87c8-429a-9848-ad5bbe8e181a.jpg",
+      "PackagePath": "staticwebassets\\images\\banner\\4f50631c-87c8-429a-9848-ad5bbe8e181a.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\banner\\d36e24b0-6674-4971-b4a5-cc0d429b494b.jpg",
+      "PackagePath": "staticwebassets\\images\\banner\\d36e24b0-6674-4971-b4a5-cc0d429b494b.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\14802880-177c-4190-8734-78e6d440d770.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\14802880-177c-4190-8734-78e6d440d770.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\27d28ad1-bc97-44ff-a6d1-45aa9f220d5f.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\27d28ad1-bc97-44ff-a6d1-45aa9f220d5f.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\2dbb05dd-2895-4ca5-a077-7887f0f5747e.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\2dbb05dd-2895-4ca5-a077-7887f0f5747e.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\30be9214-1b41-40f8-8d41-e55b78264e20.webp",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\30be9214-1b41-40f8-8d41-e55b78264e20.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\4059d4dd-206a-47fc-8360-0edb3a0ed412.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\4059d4dd-206a-47fc-8360-0edb3a0ed412.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\410d3d06-46ae-445c-bda7-412fc5dde663.webp",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\410d3d06-46ae-445c-bda7-412fc5dde663.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\47835f23-12c2-4007-b954-57f63dd44a3a.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\47835f23-12c2-4007-b954-57f63dd44a3a.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\47d44d30-8dee-4630-88ae-32a4f8b14e15.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\47d44d30-8dee-4630-88ae-32a4f8b14e15.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\49d7c420-4cb7-4136-9470-1fd0c86c0b0a.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\49d7c420-4cb7-4136-9470-1fd0c86c0b0a.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\4d700c87-3b5b-4ebc-8352-afd442b0e1bf.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\4d700c87-3b5b-4ebc-8352-afd442b0e1bf.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\5b717a0f-0232-4374-9387-530119935732.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\5b717a0f-0232-4374-9387-530119935732.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\5f9c7026-a96e-4cc3-ae8d-4c65bf4f00bf.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\5f9c7026-a96e-4cc3-ae8d-4c65bf4f00bf.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\6051d212-6cc1-419e-9695-7a8310c9be54.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\6051d212-6cc1-419e-9695-7a8310c9be54.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\63a22144-7ce2-4cb1-8630-a2f9e70aded6.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\63a22144-7ce2-4cb1-8630-a2f9e70aded6.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\63b6c6c2-0cd5-4ae6-b3de-e91c679c7c65.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\63b6c6c2-0cd5-4ae6-b3de-e91c679c7c65.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\687c7737-43c5-4314-9024-2797e9071d80.webp",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\687c7737-43c5-4314-9024-2797e9071d80.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\756afbfb-fc7c-4b28-8554-bad2b49aa24b.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\756afbfb-fc7c-4b28-8554-bad2b49aa24b.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\7669f4e6-71e4-4079-aa2b-be888b3fa7fc.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\7669f4e6-71e4-4079-aa2b-be888b3fa7fc.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\7767a5b0-f8e4-4772-83c1-ef5147d20dc7.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\7767a5b0-f8e4-4772-83c1-ef5147d20dc7.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\808e930c-bec6-4d13-9ae5-fd281a09692d.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\808e930c-bec6-4d13-9ae5-fd281a09692d.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\87b011a8-1db8-4d5d-970a-d0772a633258.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\87b011a8-1db8-4d5d-970a-d0772a633258.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\8d109aeb-1342-4242-bbeb-2f5decbf72d5.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\8d109aeb-1342-4242-bbeb-2f5decbf72d5.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\94601024-d5ef-41d7-891f-c9c3e5294908.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\94601024-d5ef-41d7-891f-c9c3e5294908.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\9a127c26-c87e-414b-8647-49e292b75c4e.webp",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\9a127c26-c87e-414b-8647-49e292b75c4e.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\a16cd7bf-1101-4344-9111-a75fd4d1cdd0.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\a16cd7bf-1101-4344-9111-a75fd4d1cdd0.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\a566c4f5-4bbd-43d7-a2ca-8122be328f13.webp",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\a566c4f5-4bbd-43d7-a2ca-8122be328f13.webp"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\b1187bcb-09e8-4226-b704-c4925239290c.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\b1187bcb-09e8-4226-b704-c4925239290c.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\bd9329c2-6f3b-4bb8-a3a8-a0c8de003153.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\bd9329c2-6f3b-4bb8-a3a8-a0c8de003153.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\c6c8a7a1-3ff0-4ee4-8689-a83ae37bc53b.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\c6c8a7a1-3ff0-4ee4-8689-a83ae37bc53b.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\c7a9df15-8060-47fa-b259-16f94b06f501.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\c7a9df15-8060-47fa-b259-16f94b06f501.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\d178aea4-8950-425b-bfd3-db0abc32dde6.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\d178aea4-8950-425b-bfd3-db0abc32dde6.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\d7187e36-29cd-4486-986a-8511f7c747f8.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\d7187e36-29cd-4486-986a-8511f7c747f8.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\d8569bb7-88f2-4923-89be-0658b6754a8d.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\d8569bb7-88f2-4923-89be-0658b6754a8d.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\e11a7c8c-8197-4121-b422-51dfa3cef04d.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\e11a7c8c-8197-4121-b422-51dfa3cef04d.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\e19c2279-7790-43e6-a837-733e639ca0a5.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\e19c2279-7790-43e6-a837-733e639ca0a5.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\e92a942a-4e5f-41d3-bde4-ea1ea2b01e7a.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\e92a942a-4e5f-41d3-bde4-ea1ea2b01e7a.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\ea378213-08ea-46f2-8648-d32379257bb6.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\ea378213-08ea-46f2-8648-d32379257bb6.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\dsanhsanpham\\f31d1925-7cbc-4df9-9f6c-cedd2e14918c.jpg",
+      "PackagePath": "staticwebassets\\images\\dsanhsanpham\\f31d1925-7cbc-4df9-9f6c-cedd2e14918c.jpg"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\images\\logo\\logo_dangnhap.PNG",
+      "PackagePath": "staticwebassets\\images\\logo\\logo_dangnhap.PNG"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\index.txt",
+      "PackagePath": "staticwebassets\\index.txt"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\js\\aCong.js",
+      "PackagePath": "staticwebassets\\js\\aCong.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\js\\comment.js",
+      "PackagePath": "staticwebassets\\js\\comment.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\js\\danhgia.js",
+      "PackagePath": "staticwebassets\\js\\danhgia.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\js\\loading.js",
+      "PackagePath": "staticwebassets\\js\\loading.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\js\\site_DuLieuPhanTrang.js",
+      "PackagePath": "staticwebassets\\js\\site_DuLieuPhanTrang.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "D:\\DoAn__ThuyetTrinhLTWeb_Nhom11\\WebsiteBanHang\\WebsiteBanHang\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.WebsiteBanHang.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.WebsiteBanHang.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.WebsiteBanHang.props",
+      "PackagePath": "build\\WebsiteBanHang.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.WebsiteBanHang.props",
+      "PackagePath": "buildMultiTargeting\\WebsiteBanHang.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.WebsiteBanHang.props",
+      "PackagePath": "buildTransitive\\WebsiteBanHang.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

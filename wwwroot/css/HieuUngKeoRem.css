@@ -1,0 +1,44 @@
+﻿/*HieuUngKeoRem.css*/
+/* CSS cho rèm chuyển trang */
+.curtain {
+    position: fixed;
+    top: 0;
+    left: -100%; /* Ẩn rèm ở bên trái màn hình */
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #28a745, #ffc107); /* Gradient xanh lá-vàng */
+    z-index: 3000; /* Đặt z-index cao hơn tất cả các phần tử khác */
+    transition: left 0.8s ease-in-out; /* Hiệu ứng lướt ngang mượt mà */
+}
+
+    .curtain.active {
+        left: 0; /* Khi active, rèm lướt từ trái sang phải */
+    }
+
+/* ĐỂ DÙNG HIỆU ỨNG NÀY 
+    B1: THÊM VÀO CUỐI <script>
+    <!-- Lớp phủ rèm cho hiệu ứng chuyển trang -->
+    <div class="curtain"></div>
+
+    B2: THÊM ĐOẠN CODE NÀY VÀO CUỐI CÙNG <script>
+        // JavaScript cho hiệu ứng kéo rèm (sử dụng event delegation)
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('.curtain-link, .auth-button:not(.logout-button)');
+            if (link) {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                const curtain = document.querySelector('.curtain');
+                if (curtain) {
+                    console.log('Kích hoạt hiệu ứng kéo rèm cho:', href);
+                    curtain.classList.add('active');
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 800);
+                } else {
+                    console.error('Không tìm thấy phần tử .curtain');
+                    window.location.href = href;
+                }
+            }
+        });
+    B3: THÊM DÒNG NÀY VÀO NHỮNG NƠI CẦN CÓ HIỆU ỨNG class="curtain-link"
+*/

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\WebsiteBanHang_Phat.props" />
+</Project>

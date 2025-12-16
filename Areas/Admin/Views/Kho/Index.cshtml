@@ -1,0 +1,326 @@
+﻿
+
+@model IEnumerable<WebsiteBanHang.Models.QLTonKho.Kho>
+@{
+    ViewData["Title"] = "Danh Sách Kho";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_Kho.css">
+
+<h2 class="content-title">Danh Sách Kho</h2>
+
+<!-- Khu vực tìm kiếm -->
+<div class="search-container">
+    <form asp-action="Index" asp-controller="Kho" method="get">
+        <div class="search-wrapper">
+            <input type="text" id="nhapTuKhoa" name="tuKhoaTimKiem" class="search-input" placeholder="Tìm kiếm kho..." value="@ViewData["tuKhoaTimKiem"]" autocomplete="off" />
+            <input type="hidden" name="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+            <button type="submit" class="search-btn">Tìm</button>
+        </div>
+        <div id="danhSachGoiY" class="suggestions"></div>
+    </form>
+</div>
+
+<!-- Thông báo -->
+@if (ViewBag.KetQuaTimKiem != null)
+{
+    <p class="alert alert-error">@ViewBag.KetQuaTimKiem</p>
+    <h4 class="sub-text">Gợi ý kho</h4>
+}
+@if (TempData["Message"] != null)
+{
+    <p class="alert alert-success">@TempData["Message"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p class="alert alert-error">@TempData["Error"]</p>
+}
+
+<!-- Nút Thêm -->
+<div class="action-bar">
+    <form asp-action="Add" asp-controller="Kho" asp-area="Admin" method="get">
+        <button type="submit" class="action-btn add-btn">Thêm kho mới</button>
+    </form>
+</div>
+
+<!-- Bảng danh sách kho -->
+<div class="table-container">
+    <form asp-action="DeleteMultiple" asp-controller="Kho" method="post" id="khoForm">
+        @Html.AntiForgeryToken()
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>Mã Kho</th>
+                    <th>Tên Kho</th>
+                    <th>Địa Chỉ</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kho in Model)
+                {
+                    <tr data-warehouse-id="@kho.MaKho">
+                        <td>
+                            <input type="checkbox" class="select-item" name="selectedKhoMaKho" value="@kho.MaKho" />
+                        </td>
+                        <td>@kho.MaKho</td>
+                        <td>@kho.TenKho</td>
+                        <td>@kho.DCKho</td>
+                        <td>
+                            <a href="#" class="status-link @(kho.TTHienThi ? "status-on" : "status-off")" data-id="@kho.MaKho" data-status="@kho.TTHienThi">
+                                @(kho.TTHienThi ? "Bật" : "Tắt")
+                            </a>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a asp-action="Display" asp-controller="Kho" asp-area="Admin" asp-route-maKho="@kho.MaKho" class="action-link view-link">Xem</a>
+                                <a asp-action="Update" asp-controller="Kho" asp-area="Admin" asp-route-maKho="@kho.MaKho" class="action-link edit-link">Sửa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+    <!-- Thanh cố định -->
+    <div class="fixed-bar">
+        <form asp-action="Index" asp-controller="Kho" method="get" id="filterForm">
+            <input type="hidden" name="tuKhoaTimKiem" value="@Html.Encode(ViewData["tuKhoaTimKiem"])" />
+            <select name="chonTrangThai" onchange="this.form.submit()" class="filter-select">
+                <option value="batHienThi" selected="@(ViewData["chonTrangThai"]?.ToString() == "batHienThi" ? "selected" : null)">Kho bật hiển thị</option>
+                <option value="tatHienThi" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatHienThi" ? "selected" : null)">Kho tắt hiển thị</option>
+                <option value="tatCa" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatCa" ? "selected" : null)">Tất cả kho</option>
+            </select>
+        </form>
+        <!-- <button type="button" class="action-btn process-btn" id="processSelectedBtn" disabled>Xử lý</button> -->
+        <button type="button" class="action-btn delete-btn" id="deleteSelectedBtn" disabled>Xóa/Ẩn</button>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xử lý</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xử lý các kho sau không?</p>
+                <h6>Các kho sẽ bị xóa (kho không có tồn kho):</h6>
+                <ul id="khoToDelete"></ul>
+                <h6>Các kho sẽ bị ẩn (kho có tồn kho):</h6>
+                <ul id="khoToHide"></ul>
+                <p class="alert alert-error">Lưu ý: Để xóa kho có tồn kho, chuyển tất cả tồn kho sang kho khác qua "Chi Tiết Tồn Kho".</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="khoForm" formaction="@Url.Action("DeleteMultiple", "Kho")" class="modal-btn hide-btn">Ẩn</button>
+                <button type="submit" form="khoForm" formaction="@Url.Action("DeleteMultiple", "Kho", new { isDelete = true })" class="modal-btn delete-btn">Xóa</button>
+                <button type="submit" form="khoForm" formaction="@Url.Action("XemChiTietTonKhoTheoKho", "Kho")" class="modal-btn detail-btn">Chi Tiết Tồn Kho</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo xóa -->
+<div class="modal" id="thongBaoXoaModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xử Lý Kho Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoXoaTinNhan"></p>
+                <h6>Danh sách kho đã xóa:</h6>
+                <ul id="danhSachXoa"></ul>
+                <h6>Danh sách kho đã ẩn:</h6>
+                <ul id="danhSachAn"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thay đổi trạng thái -->
+<div class="modal" id="statusModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thay đổi trạng thái</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="statusForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="maKho" id="statusId" />
+                    <input type="hidden" name="chonTrangThai" id="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+                    <p>Trạng thái hiện tại: <span id="currentStatus"></span></p>
+                    <label for="statusSelect">Chọn trạng thái mới:</label>
+                    <select name="status" id="statusSelect" class="filter-select">
+                        <option value="true">Bật</option>
+                        <option value="false">Tắt</option>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="button" id="updateStatusBtn" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const nhapTuKhoa = $("#nhapTuKhoa");
+            const danhSachGoiY = $("#danhSachGoiY");
+
+            // Tìm kiếm gợi ý
+            nhapTuKhoa.on("input", function () {
+                const tuKhoa = $(this).val().trim();
+                const filter = "@ViewData["chonTrangThai"]";
+                if (tuKhoa.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("SearchSuggestions", "Kho")",
+                        type: "GET",
+                        data: { term: tuKhoa, chonTrangThai: filter },
+                        success: function (danhSach) {
+                            danhSachGoiY.empty();
+                            if (danhSach.length > 0) {
+                                danhSach.forEach(kho => {
+                                    danhSachGoiY.append(`
+                                        <div class="suggestion-item">
+                                            <strong>${kho.tenKho}</strong>
+                                        </div>
+                                    `);
+                                });
+                                danhSachGoiY.addClass("show");
+                            } else {
+                                danhSachGoiY.removeClass("show");
+                            }
+                        },
+                        error: function () {
+                            danhSachGoiY.empty().removeClass("show");
+                        }
+                    });
+                } else {
+                    danhSachGoiY.empty().removeClass("show");
+                }
+            });
+
+            $(document).click(function (e) {
+                if (!nhapTuKhoa.is(e.target) && !danhSachGoiY.is(e.target) && danhSachGoiY.has(e.target).length === 0) {
+                    danhSachGoiY.removeClass("show");
+                }
+            });
+
+            // Chọn tất cả
+            $("#selectAll").on("change", function () {
+                $(".select-item").prop("checked", this.checked);
+                toggleButtons();
+            });
+
+            // Chọn từng kho
+            $(".select-item").on("change", function () {
+                toggleButtons();
+            });
+
+            // Kích hoạt/vô hiệu hóa nút
+            function toggleButtons() {
+                const anyChecked = $(".select-item:checked").length > 0;
+                $("#processSelectedBtn").prop("disabled", !anyChecked);
+                $("#deleteSelectedBtn").prop("disabled", !anyChecked);
+            }
+
+            // Xử lý nút xóa nhiều
+            $("#deleteSelectedBtn").on("click", function () {
+                $("#confirmDeleteModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const khoToDelete = $("#khoToDelete");
+                const khoToHide = $("#khoToHide");
+                khoToDelete.empty();
+                khoToHide.empty();
+
+                const selectedIds = [];
+                selectedItems.each(function () {
+                    selectedIds.push($(this).val());
+                });
+
+                $.ajax({
+                    url: "@Url.Action("CheckKhoInTonKho", "Kho")",
+                    type: "POST",
+                    data: { selectedKhoMaKho: selectedIds },
+                    success: function (result) {
+                        result.forEach(kho => {
+                            const li = `<li>ID: ${kho.maKho} - Tên: ${kho.tenKho}</li>`;
+                            if (kho.hasTonKho) {
+                                khoToHide.append(li);
+                            } else {
+                                khoToDelete.append(li);
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Modal trạng thái
+            $(".status-link").on("click", function (e) {
+                e.preventDefault();
+                const maKho = $(this).data("id");
+                const status = $(this).data("status");
+                $("#statusId").val(maKho);
+                $("#currentStatus").text(status ? "Bật" : "Tắt");
+                $("#statusSelect").val(status ? "true" : "false");
+                $("#statusModal").addClass("show");
+            });
+
+            $("#updateStatusBtn").on("click", function () {
+                const formData = $("#statusForm").serialize();
+                const maKho = $("#statusId").val();
+                const newStatus = $("#statusSelect").val() === "true";
+
+                $.ajax({
+                    url: "@Url.Action("ChangeStatus", "Kho")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            const statusLink = $(`a[data-id="${maKho}"]`);
+                            statusLink.text(newStatus ? "Bật" : "Tắt");
+                            statusLink.removeClass("status-on status-off").addClass(newStatus ? "status-on" : "status-off");
+                            statusLink.attr("data-status", newStatus);
+                            $("#statusModal").removeClass("show");
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                    }
+                });
+            });
+
+            // Đóng modal
+            $("[data-modal-close]").on("click", function () {
+                $(this).closest(".modal").removeClass("show");
+            });
+
+            // Đóng modal khi click bên ngoài
+            $(".modal").on("click", function (e) {
+                if ($(e.target).hasClass("modal")) {
+                    $(this).removeClass("show");
+                }
+            });
+        });
+    </script>
+}

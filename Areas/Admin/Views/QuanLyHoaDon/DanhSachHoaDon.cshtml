@@ -1,0 +1,454 @@
+﻿@*Areas/Admin/Views/QuanLyHoaDon/DanhSachHoaDon.cshtml*@
+
+@model IEnumerable<WebsiteBanHang.Models.QuanLyHoaDon.ViewModel.HoaDonViewModel>
+@{
+    ViewData["Title"] = "Danh Sách Hóa Đơn";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_QuanLyHoaDon.css">
+
+<h2 class="content-title">Danh Sách Hóa Đơn</h2>
+
+<!-- Khu vực tìm kiếm -->
+<div class="search-container">
+    <form asp-action="DanhSachHoaDon" asp-controller="QuanLyHoaDon" method="get">
+        <div class="search-wrapper">
+            <input type="text" id="nhapTuKhoa" name="tuKhoaTimKiem" class="search-input" placeholder="Tìm kiếm theo Số HĐ, Tên KH, Email KH, MaKH..." value="@ViewData["tuKhoaTimKiem"]" autocomplete="off" />
+            <input type="hidden" name="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+            <input type="hidden" name="chonPTTT" value="@ViewData["chonPTTT"]" />
+            <input type="hidden" name="tuNgay" value="@ViewData["tuNgay"]" />
+            <input type="hidden" name="denNgay" value="@ViewData["denNgay"]" />
+            <button type="submit" class="search-btn">Tìm</button>
+        </div>
+        <div id="danhSachGoiY" class="suggestions"></div>
+    </form>
+</div>
+
+<!-- Thông báo -->
+@if (ViewBag.KetQuaTimKiem != null)
+{
+    <p class="alert alert-error">@ViewBag.KetQuaTimKiem</p>
+    <h4 class="sub-text">Gợi ý hóa đơn</h4>
+}
+@if (TempData["Message"] != null)
+{
+    <p class="alert alert-success">@TempData["Message"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p class="alert alert-error">@TempData["Error"]</p>
+}
+
+<!-- Nút Thêm 
+<div class="action-bar">
+    <form asp-action="Add" asp-controller="QuanLyHoaDon" method="get">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="action-btn add-btn" disabled>Thêm hóa đơn mới</button>
+    </form>
+</div>
+-->
+<!-- Bảng danh sách hóa đơn -->
+<div class="table-container">
+    <form asp-action="DeleteMultiple" asp-controller="QuanLyHoaDon" method="post" id="hoaDonForm">
+        @Html.AntiForgeryToken()
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>Số HĐ</th>
+                    <th>Ngày Đặt</th>
+                    <th>Khách Hàng</th>
+                    <th>Tổng Tiền</th>
+                    <th>Phương Thức Thanh Toán</th>
+                    <th>Trạng Thái</th>
+                    <th>Mã Kho</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hoaDon in Model)
+                {
+                    <tr data-order-id="@hoaDon.SoHD">
+                        <td>
+                            <input type="checkbox" class="select-item" name="selectedSoHD" value="@hoaDon.SoHD" />
+                        </td>
+                        <td>@hoaDon.SoHD</td>
+                        <td>@hoaDon.NgayDat.ToString("dd/MM/yyyy")</td>
+                        <td>@hoaDon.TenKH</td>
+                        <td>@hoaDon.TongTien.ToString("N0") VND</td>
+                        <td>@hoaDon.TenPT</td>
+                        <td>@hoaDon.TenTT</td>
+                        <td>@string.Join(", ", hoaDon.MaKhoList)</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="@Url.Action("ChiTietHoaDon", "QuanLyHoaDon", new { id = hoaDon.SoHD, area = "Admin" })" class="action-link view-link">Xem</a>
+                                <!-- <a href="#" class="action-link edit-link" disabled>Sửa</a>-->
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+    <!-- Thanh cố định -->
+    <div class="fixed-bar">
+        <form asp-action="DanhSachHoaDon" asp-controller="QuanLyHoaDon" method="get" id="filterForm">
+            <input type="hidden" name="tuKhoaTimKiem" value="@Html.Encode(ViewData["tuKhoaTimKiem"])" />
+
+            <select name="sapXepGia" onchange="this.form.submit()" class="filter-select">
+                <option value="macDinh" selected="@(ViewData["sapXepGia"]?.ToString() == "macDinh" ? "selected" : null)">Sắp xếp giá: Mặc định</option>
+                <option value="thapDenCao" selected="@(ViewData["sapXepGia"]?.ToString() == "thapDenCao" ? "selected" : null)">Từ thấp đến cao</option>
+                <option value="caoDenThap" selected="@(ViewData["sapXepGia"]?.ToString() == "caoDenThap" ? "selected" : null)">Từ cao đến thấp</option>
+            </select>
+            <select name="chonTrangThai" onchange="this.form.submit()" class="filter-select">
+                <option value="tatCa" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatCa" ? "selected" : null)">Tất cả trạng thái</option>
+                @foreach (var trangThai in ViewBag.TrangThais)
+                {
+                    <option value="@trangThai.MaTT" selected="@(ViewData["chonTrangThai"]?.ToString() == trangThai.MaTT.ToString() ? "selected" : null)">@trangThai.TenTT</option>
+                }
+            </select>
+            <select name="chonPTTT" onchange="this.form.submit()" class="filter-select">
+                <option value="" selected="@(ViewData["chonPTTT"] == null ? "selected" : null)">Tất cả PTTT</option>
+                @foreach (var pttt in ViewBag.PTTTs)
+                {
+                    <option value="@pttt.MaPT" selected="@(ViewData["chonPTTT"]?.ToString() == pttt.MaPT.ToString() ? "selected" : null)">@pttt.TenPT</option>
+                }
+            </select>
+            <input type="date" name="tuNgay" value="@ViewData["tuNgay"]" class="filter-select" onchange="this.form.submit()" />
+            <input type="date" name="denNgay" value="@ViewData["denNgay"]" class="filter-select" onchange="this.form.submit()" />
+        </form>
+        <button type="button" class="action-btn update-btn" id="updateTrangThaiBtn" disabled>Cập nhật trạng thái</button>
+        <button type="button" class="action-btn update-btn" id="updatePTTTBtn" disabled>Cập nhật PTTT</button>
+        <button type="button" class="action-btn delete-btn" id="deleteSelectedBtn" disabled>Xóa/Ẩn</button>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xử lý</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa các hóa đơn sau không?</p>
+                <h6>Các hóa đơn sẽ bị xóa (trạng thái Hủy):</h6>
+                <ul id="hoaDonToDelete"></ul>
+                <p class="alert alert-error">Lưu ý: Chỉ các hóa đơn ở trạng thái Hủy mới được xóa.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="hoaDonForm" formaction="@Url.Action("DeleteMultiple", "QuanLyHoaDon", new { isDelete = true })" class="modal-btn delete-btn">Xóa</button>
+                <button type="submit" form="hoaDonForm" formaction="@Url.Action("XemChiTietSanPhamTheoHoaDon", "QuanLyHoaDon")" class="modal-btn detail-btn">Chi Tiết Sản Phẩm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo xóa -->
+<div class="modal" id="thongBaoXoaModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xử Lý Hóa Đơn Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoXoaTinNhan"></p>
+                <h6>Danh sách hóa đơn đã xóa:</h6>
+                <ul id="danhSachXoa"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cập nhật trạng thái -->
+<div class="modal" id="updateTrangThaiModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật trạng thái</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="updateTrangThaiForm" method="post" asp-action="CapNhatTrangThai" asp-controller="QuanLyHoaDon">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="selectedSoHD" id="selectedSoHDTrangThai" />
+                    <p>Các hóa đơn được chọn sẽ được cập nhật sang trạng thái mới.</p>
+                    <label for="newMaTT">Chọn trạng thái mới:</label>
+                    <select name="newMaTT" id="newMaTT" class="filter-select">
+                        @foreach (var trangThai in ViewBag.TrangThais)
+                        {
+                            <option value="@trangThai.MaTT">@trangThai.TenTT</option>
+                        }
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="updateTrangThaiForm" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cập nhật PTTT -->
+<div class="modal" id="updatePTTTModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật phương thức thanh toán</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="updatePTTTForm" method="post" asp-action="CapNhatPhuongThucThanhToan" asp-controller="QuanLyHoaDon">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="selectedSoHD" id="selectedSoHDPTTT" />
+                    <p>Các hóa đơn được chọn sẽ được cập nhật sang PTTT mới.</p>
+                    <label for="newMaPT">Chọn PTTT mới:</label>
+                    <select name="newMaPT" id="newMaPT" class="filter-select">
+                        @foreach (var pttt in ViewBag.PTTTs)
+                        {
+                            <option value="@pttt.MaPT">@pttt.TenPT</option>
+                        }
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="updatePTTTForm" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo cập nhật -->
+<div class="modal" id="thongBaoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập Nhật Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoTinNhan"></p>
+                <ul id="danhSachCapNhat"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            const nhapTuKhoa = $("#nhapTuKhoa");
+            const danhSachGoiY = $("#danhSachGoiY");
+
+            // Tìm kiếm gợi ý
+            nhapTuKhoa.on("input", function () {
+                const tuKhoa = $(this).val().trim();
+                const filter = "@ViewData["chonTrangThai"]";
+                if (tuKhoa.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("SearchSuggestions", "QuanLyHoaDon", new { area = "Admin" })",
+                        type: "GET",
+                        data: { term: tuKhoa, chonTrangThai: filter },
+                        success: function (danhSach) {
+                            danhSachGoiY.empty();
+                            if (danhSach.length > 0) {
+                                danhSach.forEach(hoaDon => {
+                                    danhSachGoiY.append(`
+                                        <div class="suggestion-item d-flex align-items-center">
+                                            <div>
+                                                <strong>Số HĐ: ${hoaDon.soHD}</strong><br/>
+                                                <small>Khách hàng: ${hoaDon.tenKH || "Không xác định"} (MaKH: ${hoaDon.maKH})</small><br/>
+                                                <small>Email: ${hoaDon.emailKH || "Không có"}</small><br/>
+                                                <small>Ngày đặt: ${hoaDon.ngayDat}</small>
+                                            </div>
+                                        </div>
+                                    `);
+                                });
+                                danhSachGoiY.addClass("show");
+                            } else {
+                                danhSachGoiY.removeClass("show");
+                            }
+                        },
+                        error: function () {
+                            danhSachGoiY.empty().removeClass("show");
+                        }
+                    });
+                } else {
+                    danhSachGoiY.empty().removeClass("show");
+                }
+            });
+
+            $(document).click(function (e) {
+                if (!nhapTuKhoa.is(e.target) && !danhSachGoiY.is(e.target) && danhSachGoiY.has(e.target).length === 0) {
+                    danhSachGoiY.removeClass("show");
+                }
+            });
+
+            // Chọn tất cả
+            $("#selectAll").on("change", function () {
+                $(".select-item").prop("checked", this.checked);
+                toggleButtons();
+            });
+
+            // Chọn từng hóa đơn
+            $(".select-item").on("change", function () {
+                toggleButtons();
+            });
+
+            // Kích hoạt/vô hiệu hóa nút
+            function toggleButtons() {
+                const anyChecked = $(".select-item:checked").length > 0;// số lượng hóa đơn được chọn phải là tối thiểu 1
+                $("#updateTrangThaiBtn").prop("disabled", !anyChecked);
+                $("#updatePTTTBtn").prop("disabled", !anyChecked);
+                $("#deleteSelectedBtn").prop("disabled", !anyChecked);
+            }
+
+            // Xử lý xóa nhiều
+            $("#deleteSelectedBtn").on("click", function () {
+                $("#confirmDeleteModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const hoaDonToDelete = $("#hoaDonToDelete");
+                hoaDonToDelete.empty();
+
+                const selectedIds = [];
+                selectedItems.each(function () {
+                    selectedIds.push($(this).val());
+                });
+
+                $.ajax({
+                    url: "@Url.Action("CheckHoaDonStatus", "QuanLyHoaDon")",
+                    type: "POST",
+                    data: { selectedSoHD: selectedIds },
+                    success: function (result) {
+                        let hasDeletable = false;
+                        result.forEach(hoaDon => {
+                            if (hoaDon.canDelete) {
+                                hoaDonToDelete.append(`<li>Số HĐ: ${hoaDon.soHD} - KH: ${hoaDon.tenKH}</li>`);
+                                hasDeletable = true;
+                            }
+                        });
+                        if (!hasDeletable) {
+                            hoaDonToDelete.append(`<li>Không có hóa đơn nào ở trạng thái Hủy.</li>`);
+                        }
+                    }
+                });
+            });
+
+            // Cập nhật trạng thái
+            $("#updateTrangThaiBtn").on("click", function () {
+                $("#updateTrangThaiModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const selectedIds = [];
+                selectedItems.each(function () {
+                    selectedIds.push($(this).val());
+                });
+                $("#selectedSoHDTrangThai").val(selectedIds.join(","));
+            });
+
+            $("#updateTrangThaiForm").on("submit", function (e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: "@Url.Action("CapNhatTrangThai", "QuanLyHoaDon")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            response.updatedHoaDon.forEach(hoaDon => {
+                                const row = $(`tr[data-order-id="${hoaDon.soHD}"]`);
+                                row.find("td:nth-child(7)").text(hoaDon.trangThaiMoi);
+                            });
+                            $("#updateTrangThaiModal").removeClass("show");
+                            $("#thongBaoTinNhan").text(response.message);
+                            const danhSach = $("#danhSachCapNhat");
+                            danhSach.empty();
+                            response.updatedHoaDon.forEach(hoaDon => {
+                                danhSach.append(`
+                                    <li>Số HĐ: ${hoaDon.soHD} - ${hoaDon.tenKH}: ${hoaDon.trangThaiCu} → ${hoaDon.trangThaiMoi}</li>
+                                `);
+                            });
+                            $("#thongBaoModal").addClass("show");
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                    }
+                });
+            });
+
+            // Cập nhật PTTT
+            $("#updatePTTTBtn").on("click", function () {
+                $("#updatePTTTModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const selectedIds = [];
+                selectedItems.each(function () {
+                    selectedIds.push($(this).val());
+                });
+                $("#selectedSoHDPTTT").val(selectedIds.join(","));
+            });
+
+            $("#updatePTTTForm").on("submit", function (e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: "@Url.Action("CapNhatPhuongThucThanhToan", "QuanLyHoaDon")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            response.updatedHoaDon.forEach(hoaDon => {
+                                const row = $(`tr[data-order-id="${hoaDon.soHD}"]`);
+                                row.find("td:nth-child(6)").text(hoaDon.ptttMoi);
+                            });
+                            $("#updatePTTTModal").removeClass("show");
+                            $("#thongBaoTinNhan").text(response.message);
+                            const danhSach = $("#danhSachCapNhat");
+                            danhSach.empty();
+                            response.updatedHoaDon.forEach(hoaDon => {
+                                danhSach.append(`
+                                    <li>Số HĐ: ${hoaDon.soHD} - ${hoaDon.tenKH}: ${hoaDon.ptttCu} → ${hoaDon.ptttMoi}</li>
+                                `);
+                            });
+                            $("#thongBaoModal").addClass("show");
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật PTTT.");
+                    }
+                });
+            });
+
+            // Đóng modal
+            $("[data-modal-close]").on("click", function () {
+                $(this).closest(".modal").removeClass("show");
+            });
+
+            // Đóng modal khi click bên ngoài
+            $(".modal").on("click", function (e) {
+                if ($(e.target).hasClass("modal")) {
+                    $(this).removeClass("show");
+                }
+            });
+        });
+    </script>
+}

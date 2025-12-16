@@ -1,0 +1,224 @@
+﻿@model IEnumerable<WebsiteBanHang.Models.SanPham>
+@using WebsiteBanHang.Models.QuanLyBanner
+
+@{
+    ViewData["Title"] = "Trang Chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var bannerViewModel = ViewBag.BannerViewModel as HomeBannerViewModel;
+}
+
+<section class="home-section">
+    <!-- Banner Carousel -->
+    <div id="homeBannerCarousel" class="carousel slide banner" data-bs-ride="carousel" data-bs-interval="2000">
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            @{
+                int index = 0;
+                int maxItem = Math.Max(bannerViewModel.SanPhamsDeXuat.Count, bannerViewModel.BannerQuangCao.Count);
+                for (int i = 0; i < maxItem; i++)
+                {
+                    if (i < bannerViewModel.SanPhamsDeXuat.Count)
+                    {
+                        <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="@index" class="@(index == 0 ? "active" : "")" aria-current="@(index == 0 ? "true" : "false")" aria-label="Slide @(index + 1)"></button>
+                        index++;
+                    }
+                    if (i < bannerViewModel.BannerQuangCao.Count)
+                    {
+                        <button type="button" data-bs-target="#homeBannerCarousel" data-bs-slide-to="@index" class="@(index == 0 ? "active" : "")" aria-current="@(index == 0 ? "true" : "false")" aria-label="Slide @(index + 1)"></button>
+                        index++;
+                    }
+                }
+            }
+        </div>
+        <div class="carousel-inner">
+            @{
+                index = 0;
+                // Xen kẽ sản phẩm và ảnh quảng cáo
+                int maxItems = Math.Max(bannerViewModel.SanPhamsDeXuat.Count, bannerViewModel.BannerQuangCao.Count);
+                for (int i = 0; i < maxItems; i++)
+                {
+                    // Hiển thị sản phẩm nếu còn sản phẩm
+                    if (i < bannerViewModel.SanPhamsDeXuat.Count)
+                    {
+                        var sanpham = bannerViewModel.SanPhamsDeXuat[i];
+                        <div class="carousel-item @(index == 0 ? "active" : "")">
+                            <img src="@sanpham.UrlAnh" class="d-block w-100 banner-img" alt="@sanpham.TenSP">
+                            <div class="carousel-caption banner-content">
+                                <h1>@sanpham.TenSP</h1>
+                                <p class="product-price">@sanpham.Gia.ToString("N0") VND</p>
+                                <a href="@Url.Action("ChiTietSanPham", "Home", new { id = sanpham.MaSP })" class="btn btn-primary">Chi Tiết</a>
+                            </div>
+                        </div>
+                        index++;
+                    }
+
+                    // Hiển thị ảnh quảng cáo nếu còn ảnh
+                    if (i < bannerViewModel.BannerQuangCao.Count)
+                    {
+                        var bannerQuangCao = bannerViewModel.BannerQuangCao[i];
+                        <div class="carousel-item @(index == 0 ? "active" : "")">
+                            <img src="@bannerQuangCao.UrlAnh" class="d-block w-100 banner-img" alt="@bannerQuangCao.MoTa">
+                            <div class="carousel-caption banner-content">
+                                <h1>@bannerQuangCao.MoTa</h1>
+                                <a href="@(string.IsNullOrEmpty(bannerQuangCao.UrlDichDen) ? Url.Action("SanPhams", "Home") : bannerQuangCao.UrlDichDen)" class="btn btn-primary">Mua Sắm Ngay</a>
+                            </div>
+                        </div>
+                        index++;
+                    }
+                }
+            }
+        </div>
+        <!-- Nút điều hướng -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeBannerCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homeBannerCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Products Section (giữ nguyên) -->
+    <div class="products-section">
+        <h2>Sản Phẩm Đề Xuất</h2>
+        @if (Model == null || !Model.Any())
+        {
+            <p class="no-products">Không có sản phẩm nào để hiển thị.</p>
+        }
+        else
+        {
+            <div class="product-grid">
+                @foreach (var sanpham in Model)
+                {
+                    <div class="product-card">
+                        <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-id="@sanpham.MaSP" class="product-img-link">
+                            <img src="@sanpham.UrlAnh" alt="@sanpham.TenSP" class="product-img" />
+                        </a>
+                        <div class="product-info">
+                            <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-id="@sanpham.MaSP" class="product-title">
+                                <h3>@sanpham.TenSP</h3>
+                            </a>
+                            @{
+                                string moTa = sanpham.MoTa != null ? System.Text.RegularExpressions.Regex.Replace(sanpham.MoTa, "<[^>]+>", "") : "Không có mô tả";
+                            }
+                            <p class="product-description">@moTa</p>
+                            <p class="product-price">@sanpham.Gia.ToString("N0") VND</p>
+                            <div class="product-actions">
+                                <a href="@Url.Action("ThanhToanChung", "HoaDon", new { maSP = sanpham.MaSP })" class="btn btn-primary">Mua Ngay</a>
+                                <a href="#" class="btn btn-secondary add-to-cart" data-product-id="@sanpham.MaSP">Thêm giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Danh Mục Đề Xuất -->
+    @{
+        var danhMucSanPham = ViewBag.DanhMucSanPham as Dictionary<WebsiteBanHang.Models.DanhMuc, List<WebsiteBanHang.Models.SanPham>>;
+        if (danhMucSanPham != null && danhMucSanPham.Any())
+        {
+            foreach (var dm in danhMucSanPham)
+            {
+                <div class="products-section">
+                    <h2>@dm.Key.TenDM</h2>
+                    @if (!dm.Value.Any())
+                    {
+                        <p class="no-products">Không có sản phẩm nào trong danh mục này.</p>
+                    }
+                    else
+                    {
+                        <div class="product-grid">
+                            @foreach (var sanpham in dm.Value)
+                            {
+                                <div class="product-card">
+                                    <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-id="@sanpham.MaSP" class="product-img-link">
+                                        <img src="@sanpham.UrlAnh" alt="@sanpham.TenSP" class="product-img" />
+                                    </a>
+                                    <div class="product-info">
+                                        <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-id="@sanpham.MaSP" class="product-title">
+                                            <h3>@sanpham.TenSP</h3>
+                                        </a>
+                                        @{
+                                            string moTa = sanpham.MoTa != null ? System.Text.RegularExpressions.Regex.Replace(sanpham.MoTa, "<[^>]+>", "") : "Không có mô tả";
+                                        }
+                                        <p class="product-description">@moTa</p>
+                                        <p class="product-price">@sanpham.Gia.ToString("N0") VND</p>
+                                        <div class="product-actions">
+                                            <a href="@Url.Action("ThanhToanChung", "HoaDon", new { maSP = sanpham.MaSP })" class="btn btn-primary">Mua Ngay</a>
+                                            <a href="#" class="btn btn-secondary add-to-cart" data-product-id="@sanpham.MaSP">Thêm giỏ</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        }
+    }
+</section>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/Web_Home.css" asp-append-version="true" />
+    <script>
+        $(document).ready(function () {
+            // Fade-in animation for product cards
+            $('.product-card').each(function(index) {
+                $(this).delay(index * 100).fadeIn(500);
+            });
+
+            // Đảm bảo carousel chạy tự động
+            $('#homeBannerCarousel').carousel({
+                interval: 2000,
+                ride: 'carousel'
+            });
+
+            // Tạo danh sách màu sắc
+            const colors = [
+                '#F28C38', // Cam đậm
+                '#007BFF', // Xanh dương
+                '#28A745', // Xanh lá
+                '#DC3545', // Đỏ
+                '#6F42C1', // Tím
+                '#FFC107', // Vàng
+            ];
+
+            // Gán màu ngẫu nhiên cho từng section và thẻ sản phẩm
+            $('.products-section').each(function() {
+                // Chọn màu ngẫu nhiên
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                // Lưu màu vào data-color của section
+                $(this).attr('data-color', randomColor);
+
+                // Áp dụng màu cho tiêu đề
+                $(this).find('h2').css({
+                    'background': `linear-gradient(90deg, transparent, ${randomColor}, transparent)`,
+                    'border-bottom': `2px solid ${randomColor}`
+                });
+
+                // Áp dụng ánh sáng cho các product-card trong section
+                $(this).find('.product-card').css({
+                    'box-shadow': `0 0 12px ${randomColor}80` // Màu ánh sáng với độ trong suốt
+                });
+
+                // Cập nhật ánh sáng khi hover
+                $(this).find('.product-card').hover(
+                    function() {
+                        $(this).css({
+                            'box-shadow': `0 4px 18px ${randomColor}B3` // Tăng cường ánh sáng khi hover
+                        });
+                    },
+                    function() {
+                        $(this).css({
+                            'box-shadow': `0 0 12px ${randomColor}80` // Trở về ánh sáng mặc định
+                        });
+                    }
+                );
+            });
+        });
+    </script>
+}

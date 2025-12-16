@@ -1,0 +1,303 @@
+﻿@*Ảeas/Admin/Views/BannerQuangCao/Update.cshtml*@
+
+@model WebsiteBanHang.Models.QuanLyBanner.BannerQuangCao
+@{
+    ViewData["Title"] = "Sửa Banner Quảng Cáo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_BannerQuangCao.css">
+
+<h2 class="content-title">Sửa Banner Quảng Cáo</h2>
+<div class="form-scroll-container">
+    <div class="form-container">
+        <form asp-action="Update" asp-controller="BannerQuangCao" method="post" enctype="multipart/form-data" id="bannerForm">
+            <input type="hidden" asp-for="MaAQC" />
+
+            <!-- Mô tả -->
+            <div class="form-group">
+                <label asp-for="MoTa" class="form-label">Mô Tả</label>
+                <div id="descriptionInput" class="form-input update-description-input" contenteditable="true">@Html.Raw(Model?.MoTa ?? "")</div>
+                <input type="hidden" asp-for="MoTa" id="descriptionHidden" />
+                <span asp-validation-for="MoTa" class="error-message"></span>
+            </div>
+
+            <!-- URL đích đến -->
+            <div class="form-group">
+                <label asp-for="UrlDichDen" class="form-label">URL Đích Đến</label>
+                <input asp-for="UrlDichDen" class="form-input" placeholder="/url" />
+                <span asp-validation-for="UrlDichDen" class="error-message"></span>
+            </div>
+
+            <!-- Ảnh banner -->
+            <div class="form-group">
+                <label class="form-label">Ảnh Banner</label>
+                <input type="file" name="urlAnh" class="form-input" id="nhapHinh" accept="image/*" />
+                <label class="form-label sub-label">Xem Trước Ảnh:</label>
+                <div class="thumbnail-preview">
+                    @if (!string.IsNullOrEmpty(Model.UrlAnh))
+                    {
+                        <img src="@Model.UrlAnh" alt="Banner" id="xemTruocHinh" class="preview-image" />
+                    }
+                    else
+                    {
+                        <p class="error-message">Chưa có ảnh.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Trạng thái hiển thị -->
+            <div class="form-group">
+                <label asp-for="TTHienThi" class="form-label">Trạng Thái Hiển Thị</label>
+                <select asp-for="TTHienThi" class="filter-select">
+                    <option value="true">Bật</option>
+                    <option value="false">Tắt</option>
+                </select>
+                <span asp-validation-for="TTHienThi" class="error-message"></span>
+            </div>
+
+            <div class="error-message">
+                @Html.ValidationSummary(true, "", new { @class = "error-message" })
+            </div>
+
+            <!-- Modal xác nhận lưu -->
+            <div class="modal" id="saveConfirmModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác Nhận</h5>
+                            <button type="button" class="modal-close" id="cancelSaveBtn" data-modal-close>×</button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn có chắc lưu thay đổi?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="modal-btn cancel-btn" id="cancelSaveBtn" data-modal-close>Hủy</button>
+                            <button type="button" class="modal-btn confirm-btn" id="confirmSaveBtn">Xác Nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Nút gửi -->
+<div class="action-bar-centered">
+    <button type="button" form="UpdateForm" class="action-btn confirm-btn" id="saveButton">Lưu</button>
+    <form asp-action="Index" asp-controller="BannerQuangCao" method="get" style="display: inline;">
+        <button type="submit" class="action-btn cancel-btn">Hủy</button>
+    </form>
+</div>
+
+<!-- Modal chứa trình soạn thảo -->
+<div class="modal update-description-modal" id="descriptionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chỉnh Sửa Mô Tả</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="custom-editor">
+                    <div class="toolbar">
+                        <button type="button" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
+                        <button type="button" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
+                        <button type="button" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+                        <button type="button" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                        <select onchange="execCmd('fontName', this.value)" title="Font Family">
+                            <option value="">Font</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <select onchange="execCmd('fontSize', this.value)" title="Font Size">
+                            <option value="">Size</option>
+                            <option value="2">10pt</option>
+                            <option value="3">12pt</option>
+                            <option value="4">14pt</option>
+                            <option value="5">18pt</option>
+                        </select>
+                        <input type="color" onchange="execCmd('foreColor', this.value)" title="Text Color">
+                        <button type="button" onclick="execCmd('insertUnorderedList')" title="Bullet List">•</button>
+                        <button type="button" onclick="execCmd('insertOrderedList')" title="Numbered List">1.</button>
+                        <button type="button" onclick="insertTable()" title="Insert Table">📋</button>
+                        <button type="button" onclick="insertImage()" title="Insert Image">🖼️</button>
+                        <button type="button" onclick="insertLink()" title="Insert Link">🔗</button>
+                    </div>
+                    <div id="descriptionEditor" contenteditable="true"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            $('#descriptionEditor').focus();
+        }
+
+        function insertTable() {
+            const table = $('<table>').css({
+                border: '1px solid #ccc'
+            });
+            const tbody = $('<tbody>');
+            for (let i = 0; i < 2; i++) {
+                const tr = $('<tr>');
+                for (let j = 0; j < 2; j++) {
+                    const td = $('<td>').css({
+                        border: '1px solid #ccc',
+                        padding: '5px'
+                    }).html(' ');
+                    tr.append(td);
+                }
+                tbody.append(tr);
+            }
+            table.append(tbody);
+            $('#descriptionEditor').append(table);
+        }
+
+        function insertImage() {
+            const input = $('<input>').attr({
+                type: 'file',
+                accept: 'image/*'
+            });
+            input.on('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $('<img>').attr({
+                            src: e.target.result,
+                            style: 'max-width: 100%'
+                        });
+                        $('#descriptionEditor').append(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            input.click();
+        }
+
+        function insertLink() {
+            const url = prompt('Nhập URL:');
+            if (url) {
+                const a = $('<a>').attr('href', url).text(url);
+                $('#descriptionEditor').append(a);
+            }
+        }
+
+        $(document).ready(function () {
+            // Validation
+            $("#bannerForm").validate({
+                rules: {
+                    MoTa: {
+                        required: true
+                    },
+                    UrlDichDen: {
+                        required: true,
+                        pattern: /^\/[a-zA-Z0-9\/\-_]*$/
+                    },
+                    urlAnh: {
+                        accept: "image/*"
+                    }
+                },
+                messages: {
+                    MoTa: {
+                        required: "Vui lòng nhập mô tả banner."
+                    },
+                    UrlDichDen: {
+                        required: "Vui lòng nhập URL đích đến.",
+                        pattern: "URL phải bắt đầu bằng '/' và chỉ chứa chữ cái, số, '/', '-', '_'."
+                    },
+                    urlAnh: {
+                        accept: "Vui lòng chọn file ảnh hợp lệ."
+                    }
+                },
+                errorElement: "span",
+                errorClass: "error-message"
+            });
+
+            // Mở modal mô tả
+            $('#descriptionInput').on('click', function () {
+                var inputContent = $(this).html();
+                $('#descriptionEditor').html(inputContent || '');
+                $('#descriptionModal').addClass('show');
+            });
+
+            // Khi modal đóng, sao chép nội dung từ editor về descriptionInput và hidden
+            $('.modal-btn[data-modal-close], .modal-close').on('click', function () {
+                $('#descriptionModal').removeClass('show');
+                var editorContent = $('#descriptionEditor').html();
+                $('#descriptionInput').html(editorContent);
+                $('#descriptionHidden').val(editorContent);
+            });
+
+            // Đóng modal khi click bên ngoài
+            $('#descriptionModal').on('click', function (e) {
+                if ($(e.target).hasClass('modal')) {
+                    $(this).removeClass('show');
+                }
+            });
+
+            // Khi người dùng chỉnh sửa trực tiếp trong descriptionInput, cập nhật hidden
+            $('#descriptionInput').on('input', function () {
+                var inputContent = $(this).html();
+                $('#descriptionHidden').val(inputContent);
+            });
+
+            // Preview ảnh
+            $('#nhapHinh').on('change', function () {
+                var tep = this.files[0];
+                if (tep) {
+                    var docTep = new FileReader();
+                    docTep.onload = function (e) {
+                        $('#xemTruocHinh').attr('src', e.target.result);
+                    };
+                    docTep.readAsDataURL(tep);
+                }
+            });
+
+            // Xác nhận lưu
+            let isConfirmed = false;
+            $('#bannerForm').on('submit', function (e) {
+                if (!isConfirmed) {
+                    e.preventDefault();
+                    $('#saveConfirmModal').addClass('show');
+                    return false;
+                }
+            });
+
+            $('#confirmSaveBtn').on('click', function () {
+                isConfirmed = true;
+                $('#saveConfirmModal').removeClass('show');
+                $('#bannerForm').submit();
+            });
+
+            $('#cancelSaveBtn, .modal-close').on('click', function () {
+                $('#saveConfirmModal').removeClass('show');
+                isConfirmed = false;
+            });
+
+            $('#saveConfirmModal').on('click', function (e) {
+                if ($(e.target).hasClass('modal')) {
+                    $(this).removeClass('show');
+                    isConfirmed = false;
+                }
+            });
+
+            // Mở modal xác nhận lưu
+            $('#saveButton').on('click', function () {
+                $('#saveConfirmModal').addClass('show');
+            });
+        });
+    </script>
+}

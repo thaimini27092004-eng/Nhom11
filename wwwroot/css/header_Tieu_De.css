@@ -1,0 +1,8 @@
+﻿/* header_Tieu_De.css */
+
+/* Đảm bảo header trải dài hết màn hình */
+.full-width {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}

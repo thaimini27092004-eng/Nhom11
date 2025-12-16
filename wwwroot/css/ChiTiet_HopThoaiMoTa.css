@@ -1,0 +1,66 @@
+﻿/* Kiểu cho modal hiển thị toàn bộ mô tả ChiTiet_HopThoaiMoTa.css*/
+.description-modal {
+    --bs-modal-width: 900px; /* 1.5 lần chiều rộng của .image-section (600px * 1.5) */
+}
+
+    .description-modal .modal-dialog {
+        margin-top: 200px; /* Dịch modal xuống 100px từ đỉnh màn hình */
+    }
+
+.description-modal-content {
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #e9ecef 100%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-height: 750px; /* Cố định chiều cao */
+    overflow-y: auto; /* Cuộn dọc nếu nội dung dài */
+    position: relative; /* Đảm bảo header và footer cố định trong modal */
+}
+
+.description-modal-header {
+    border-bottom: none;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    position: sticky; /* Cố định header ở phía trên modal */
+    top: 0; /* Đặt header ở trên cùng */
+    z-index: 1; /* Đảm bảo header nằm trên nội dung cuộn */
+}
+
+.description-modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.description-modal-body {
+    padding: 20px;
+    color: #333;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.description-modal-footer {
+    border-top: none;
+    padding: 10px 15px 15px;
+    justify-content: center;
+    position: sticky; /* Cố định footer ở phía dưới modal */
+    bottom: 0; /* Đặt footer ở dưới cùng */
+    background: linear-gradient(135deg, #ffffff 0%, #e9ecef 100%); /* Đảm bảo nền đồng bộ với modal */
+    z-index: 1; /* Đảm bảo footer nằm trên nội dung cuộn */
+}
+
+    .description-modal-footer .btn {
+        padding: 10px 25px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .description-modal-footer .btn:hover {
+            background-color: #5a6268;
+        }

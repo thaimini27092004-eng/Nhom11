@@ -1,0 +1,75 @@
+﻿
+@*Shared/_TraLoiList.cshtml*@
+
+@using System.Web
+@using WebsiteBanHang.Models.ViewModel
+
+@model IEnumerable<WebsiteBanHang.Models.QLDanhGia_PhanHoi.ViewModel.TraLoiViewModel>
+@{
+    var user = Context.User;
+    var khachHang = ViewData["KhachHang"] as WebsiteBanHang.Models.KhachHang;
+    int trangHienTai = Model.Any() ? Model.First().TrangHienTai : 1;
+    int tongSoTrang = Model.Any() ? Model.First().TongSoTrang : 1;
+    int maPH = Model.Any() ? Model.First().TraLoi.MaBL : 0;
+    foreach (var item in Model)
+    {
+        <div class="reply-item" data-matl="@item.TraLoi.MaPHBL">
+            <div class="reply-header">
+                <div class="user-info">
+                    @if (!string.IsNullOrEmpty(item.TraLoi.KhachHang?.AvatarUrl))
+                    {
+                        <img src="@item.TraLoi.KhachHang.AvatarUrl" alt="Avatar" class="avatar-img" />
+                    }
+                    else
+                    {
+                        <img src="/images/avatars/default.jpg" alt="Default Avatar" class="avatar-img" />
+                    }
+                    <strong>@item.TraLoi.KhachHang?.TenKH</strong>
+                    @if (item.DaMuaSanPham)
+                    {
+                        <span class="da-mua-label">Đã Mua Sản Phẩm</span>
+                    }
+                </div>
+                <span>@item.TraLoi.NgayPHBL?.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+            <div class="reply-content" id="reply-content-@item.TraLoi.MaPHBL">
+                <span class="reply-text" id="replyText-@item.TraLoi.MaPHBL">@Html.Raw(item.NoiDungHienThi)</span>
+                <button class="read-more-reply-btn" id="readMoreReplyBtn-@item.TraLoi.MaPHBL" onclick="CommentManager.toggleReplyContent(@item.TraLoi.MaPHBL)" style="display: none;">Xem thêm</button>
+                <button class="read-less-reply-btn" id="readLessReplyBtn-@item.TraLoi.MaPHBL" onclick="CommentManager.toggleReplyContent(@item.TraLoi.MaPHBL)" style="display: none;">Thu gọn</button>
+            </div>
+            <div class="reply-actions">
+                <a class="like-link reply-like-link @(item.DaThich ? "liked" : "")" onclick="CommentManager.likeTraLoi(@item.TraLoi.MaPHBL)" data-matl="@item.TraLoi.MaPHBL">
+                    <i class="fas fa-thumbs-up"></i> <span class="like-count">@(item.SoLuotThich > 0 ? item.SoLuotThich : "")</span>
+                </a>
+                <a class="reply-link" onclick="CommentManager.replyToTraLoi(@item.TraLoi.MaBL, @item.TraLoi.MaKH, '@HttpUtility.JavaScriptStringEncode(item.TraLoi.KhachHang?.TenKH)')">Trả lời</a>
+                @if (user.Identity.IsAuthenticated && khachHang != null && item.TraLoi.MaKH == khachHang.MaKH)
+                {
+                    <a class="edit-link" onclick="CommentManager.editTraLoi(@item.TraLoi.MaPHBL)">Chỉnh sửa</a>
+                    <a class="delete-link" onclick="CommentManager.deleteTraLoi(@item.TraLoi.MaPHBL)">Xóa</a>
+                }
+            </div>
+            @if (user.Identity.IsAuthenticated && khachHang != null && item.TraLoi.MaKH == khachHang.MaKH)
+            {
+                <div class="edit-input" id="edit-reply-input-@item.TraLoi.MaPHBL" style="display: none;">
+                    <textarea id="edit-reply-input-text-@item.TraLoi.MaPHBL" placeholder="Chỉnh sửa trả lời..." rows="2" class="form-control" maxlength="500">@item.TraLoi.NoiDungPHBL</textarea>
+                    <span id="edit-reply-char-count-@item.TraLoi.MaPHBL" class="char-count">Còn 500 ký tự</span>
+                    <div>
+                        <button class="btn btn-primary-new mt-2 submit-edit" onclick="CommentManager.submitEditTraLoi(@item.TraLoi.MaPHBL)" data-matl="@item.TraLoi.MaPHBL">Lưu</button>
+                        <button class="btn btn-secondary mt-2" onclick="CommentManager.cancelEditTraLoi(@item.TraLoi.MaPHBL)">Hủy</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        var moHinhPhanTrang = new PhanTrangViewModel();
+        moHinhPhanTrang.TrangHienTai = trangHienTai;
+        moHinhPhanTrang.TongSoTrang = tongSoTrang;
+        moHinhPhanTrang.DuongDan = "/Home/GetTraLoiByMaPH";
+        moHinhPhanTrang.MaDoiTuong = maPH;
+        moHinhPhanTrang.ThamSoDoiTuong = "maPH";
+        @await Html.PartialAsync("_PhanTrang", moHinhPhanTrang)
+    }
+}

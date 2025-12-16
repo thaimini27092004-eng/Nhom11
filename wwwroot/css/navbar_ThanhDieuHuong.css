@@ -1,0 +1,133 @@
+﻿
+/*navbar_ThanhDieuHuong.css*/
+/* Thu nhỏ navbar màu vàng mà giữ nguyên kích thước chữ */
+.navbar.navbar-expand-lg {
+    padding: 0.8rem 0.5rem;
+    height: auto;
+    line-height: 1;
+    background-color: #ffc107;
+}
+
+    /* Loại bỏ khoảng cách thừa trong container-fluid của navbar */
+    .navbar.navbar-expand-lg .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 0;
+    }
+
+    /* Đảm bảo navbar-collapse không làm tăng chiều cao */
+    .navbar.navbar-expand-lg .navbar-collapse {
+        padding: 0;
+        max-width: 100%;
+        /* Loại bỏ overflow-x: hidden để không cắt hiệu ứng box-shadow */
+    }
+
+    /* Điều chỉnh padding và kiểu chữ của navbar-brand và nav-link */
+    .navbar.navbar-expand-lg .navbar-brand,
+    .navbar.navbar-expand-lg .nav-link {
+        padding: 0.3rem 0.5rem;
+        line-height: 1;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+/* Thêm khoảng cách giữa các mục trong navbar */
+.navbar-nav.me-auto .nav-item {
+    margin-right: 1rem;
+}
+
+/* Làm nổi bật mục đang chọn (active) */
+.navbar-brand.active,
+.nav-link.active {
+    color: #fff;
+    background: linear-gradient(90deg, #ff6b6b, #660000);
+    border-radius: 5px;
+    padding: 0.3rem 0.8rem;
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.8);
+    font-weight: bold;
+    font-size: 1.1rem;
+    position: relative;
+    animation: glow 1.5s infinite;
+    max-width: 120px;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+    /* Thêm viền dưới động cho mục active */
+    .navbar-brand.active::after,
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        height: 3px;
+        background: #fff;
+        border-radius: 2px;
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Hiệu ứng sóng lan tỏa khi hover lên mục active */
+    .navbar-brand.active:hover::before,
+    .nav-link.active:hover::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 107, 107, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.5s ease, height 0.5s ease;
+        z-index: -1;
+    }
+
+    .navbar-brand.active:hover::before,
+    .nav-link.active:hover::before {
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+    }
+
+/* Hiệu ứng nhấp nháy ánh sáng */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 8px rgba(255, 107, 107, 0.8);
+    }
+
+    50% {
+        box-shadow: 0 0 15px rgba(255, 107, 107, 1), 0 0 20px rgba(255, 107, 107, 0.6);
+    }
+
+    100% {
+        box-shadow: 0 0 8px rgba(255, 107, 107, 0.8);
+    }
+}
+
+/* Hiệu ứng hover cho các mục không active */
+.navbar-brand:hover:not(.active),
+.nav-link:hover:not(.active) {
+    color: #ffeb3b;
+}
+
+/* Media query cho mobile */
+@media (max-width: 992px) {
+    .navbar-nav {
+        max-width: 100%;
+        /* Loại bỏ overflow-x: hidden để không cắt hiệu ứng */
+    }
+
+    .navbar-brand.active,
+    .nav-link.active {
+        padding: 0.3rem 0.5rem;
+        font-size: 1rem;
+        max-width: 100px;
+    }
+
+    .navbar-nav .nav-item {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}

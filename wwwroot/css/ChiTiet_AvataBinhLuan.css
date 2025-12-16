@@ -1,0 +1,14 @@
+﻿/*ChiTiet_AvataBinhLuan.css*/
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Khoảng cách giữa ảnh và tên */
+}
+
+.avatar-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; /* Bo tròn ảnh */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+}

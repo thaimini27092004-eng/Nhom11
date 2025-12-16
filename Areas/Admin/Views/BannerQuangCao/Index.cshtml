@@ -1,0 +1,433 @@
+﻿@*Ảeas/Admin/Views/BannerQuangCao/Index.cshtml*@
+@model IEnumerable<WebsiteBanHang.Models.QuanLyBanner.BannerQuangCao>
+@{
+    ViewData["Title"] = "Danh Sách Banner Quảng Cáo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_BannerQuangCao.css">
+
+<h2 class="content-title">Danh Sách Banner Quảng Cáo</h2>
+
+<!-- Khu vực tìm kiếm -->
+<div class="search-container">
+    <form asp-action="Index" asp-controller="BannerQuangCao" method="get">
+        <div class="search-wrapper">
+            <input type="text" id="nhapTuKhoa" name="tuKhoaTimKiem" class="search-input" placeholder="Tìm kiếm theo mô tả..." value="@ViewData["tuKhoaTimKiem"]" autocomplete="off" />
+            <input type="hidden" name="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+            <button type="submit" class="search-btn">Tìm</button>
+        </div>
+        <div id="danhSachGoiY" class="suggestions"></div>
+    </form>
+</div>
+
+<!-- Thông báo -->
+@if (ViewBag.KetQuaTimKiem != null)
+{
+    <p class="alert alert-error">@ViewBag.KetQuaTimKiem</p>
+    <h4 class="sub-text">Gợi ý banner</h4>
+}
+@if (TempData["Message"] != null)
+{
+    <p class="alert alert-success">@TempData["Message"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p class="alert alert-error">@TempData["Error"]</p>
+}
+
+<!-- Nút Thêm -->
+<div class="action-bar">
+    <form asp-action="Add" asp-controller="BannerQuangCao" method="get">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="action-btn add-btn">Thêm banner mới</button>
+    </form>
+</div>
+
+<!-- Bảng danh sách banner -->
+<div class="table-container">
+    <form asp-action="XoaNhieuBanner" asp-controller="BannerQuangCao" method="post" id="bannerForm">
+        @Html.AntiForgeryToken()
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>Mã Banner</th>
+                    <th>Mô Tả</th>
+                    <th>Ảnh</th>
+                    <th>URL Đích Đến</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var banner in Model)
+                {
+                    <tr data-banner-id="@banner.MaAQC">
+                        <td>
+                            <input type="checkbox" class="select-item" name="selectedBannerMaAQC" value="@banner.MaAQC" />
+                        </td>
+                        <td>@banner.MaAQC</td>
+                        <td>
+                            <div class="description-container">
+                                <span class="description-text" data-banner-id="@banner.MaAQC"></span>
+                                <button type="button" class="read-more-btn" data-banner-id="@banner.MaAQC" style="display: none;">Xem thêm</button>
+                            </div>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(banner.UrlAnh))
+                            {
+                                <img src="@banner.UrlAnh" alt="Banner" class="banner-image" />
+                            }
+                            else
+                            {
+                                <span>Không có ảnh</span>
+                            }
+                        </td>
+                        <td>@banner.UrlDichDen</td>
+                        <td>
+                            <a href="#" class="status-link @(banner.TTHienThi ? "status-on" : "status-off")" data-id="@banner.MaAQC" data-status="@banner.TTHienThi">
+                                @(banner.TTHienThi ? "Bật" : "Tắt")
+                            </a>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a asp-action="Update" asp-controller="BannerQuangCao" asp-route-id="@banner.MaAQC" class="action-link edit-link">Sửa</a>
+                                <a asp-action="Delete" asp-controller="BannerQuangCao" asp-route-id="@banner.MaAQC" class="action-link delete-link">Xóa</a>
+                                <a asp-action="Display" asp-controller="BannerQuangCao" asp-route-id="@banner.MaAQC" class="action-link view-link">Xem</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+    <!-- Thanh cố định -->
+    <div class="fixed-bar">
+        <form asp-action="Index" asp-controller="BannerQuangCao" method="get" id="filterForm">
+            <input type="hidden" name="tuKhoaTimKiem" value="@Html.Encode(ViewData["tuKhoaTimKiem"])" />
+            <select name="chonTrangThai" onchange="this.form.submit()" class="filter-select">
+                <option value="batHienThi" selected="@(ViewData["chonTrangThai"]?.ToString() == "batHienThi" ? "selected" : null)">Banner bật hiển thị</option>
+                <option value="tatHienThi" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatHienThi" ? "selected" : null)">Banner tắt hiển thị</option>
+                <option value="tatCa" selected="@(ViewData["chonTrangThai"]?.ToString() == "tatCa" ? "selected" : null)">Tất cả banner</option>
+            </select>
+            <select name="sapXepMoTa" onchange="this.form.submit()" class="filter-select">
+                <option value="macDinh" selected="@(ViewData["sapXepMoTa"]?.ToString() == "macDinh" ? "selected" : null)">Sắp xếp mô tả: Mặc định</option>
+                <option value="aDenZ" selected="@(ViewData["sapXepMoTa"]?.ToString() == "aDenZ" ? "selected" : null)">A-Z</option>
+                <option value="zDenA" selected="@(ViewData["sapXepMoTa"]?.ToString() == "zDenA" ? "selected" : null)">Z-A</option>
+            </select>
+        </form>
+        <button type="button" class="action-btn update-btn" id="updateTrangThaiBtn" disabled>Cập nhật trạng thái</button>
+        <button type="button" class="action-btn delete-btn" id="deleteSelectedBtn" disabled>Xóa</button>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa các banner sau không?</p>
+                <ul id="bannerToDelete"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="bannerForm" formaction="@Url.Action("XoaNhieuBanner", "BannerQuangCao")" class="modal-btn delete-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo xóa -->
+<div class="modal" id="thongBaoXoaModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa Banner Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoXoaTinNhan"></p>
+                <h6>Danh sách banner đã xóa:</h6>
+                <ul id="danhSachXoa"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cập nhật trạng thái -->
+<div class="modal" id="updateTrangThaiModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật trạng thái</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="updateTrangThaiForm" method="post" asp-action="CapNhatTrangThai" asp-controller="BannerQuangCao">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="selectedBannerMaAQC" id="selectedBannerMaAQC" />
+                    <p>Các banner được chọn sẽ được cập nhật sang trạng thái mới.</p>
+                    <label for="newTrangThai">Chọn trạng thái mới:</label>
+                    <select name="newTrangThai" id="newTrangThai" class="filter-select">
+                        <option value="true">Bật</option>
+                        <option value="false">Tắt</option>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="updateTrangThaiForm" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo cập nhật -->
+<div class="modal" id="thongBaoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập Nhật Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoTinNhan"></p>
+                <ul id="danhSachCapNhat"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal mô tả -->
+<div class="modal" id="descriptionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mô tả banner</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="fullDescription"></div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const nhapTuKhoa = $("#nhapTuKhoa");
+            const danhSachGoiY = $("#danhSachGoiY");
+
+            // Tìm kiếm gợi ý
+            nhapTuKhoa.on("input", function () {
+                const tuKhoa = $(this).val().trim();
+                const filter = "@ViewData["chonTrangThai"]";
+                if (tuKhoa.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("SearchSuggestions", "BannerQuangCao")",
+                        type: "GET",
+                        data: { term: tuKhoa, chonTrangThai: filter },
+                        success: function (danhSach) {
+                            danhSachGoiY.empty();
+                            if (danhSach.length > 0) {
+                                danhSach.forEach(banner => {
+                                    danhSachGoiY.append(`
+                                        <div class="suggestion-item d-flex align-items-center">
+                                            <img src="${banner.urlAnh}" alt="${banner.moTa}" class="suggestion-image" />
+                                            <div>
+                                                <strong>${banner.moTa}</strong>
+                                            </div>
+                                        </div>
+                                    `);
+                                });
+                                danhSachGoiY.addClass("show");
+                            } else {
+                                danhSachGoiY.removeClass("show");
+                            }
+                        },
+                        error: function () {
+                            danhSachGoiY.empty().removeClass("show");
+                        }
+                    });
+                } else {
+                    danhSachGoiY.empty().removeClass("show");
+                }
+            });
+
+            $(document).click(function (e) {
+                if (!nhapTuKhoa.is(e.target) && !danhSachGoiY.is(e.target) && danhSachGoiY.has(e.target).length === 0) {
+                    danhSachGoiY.removeClass("show");
+                }
+            });
+
+            // Xử lý mô tả
+            const descriptions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(b => new { b.MaAQC, b.MoTa })));
+            descriptions.forEach(item => {
+                const descriptionText = $(`.description-text[data-banner-id="${item.MaAQC}"]`);
+                const readMoreBtn = $(`.read-more-btn[data-banner-id="${item.MaAQC}"]`);
+                const fullText = (item.MoTa || "Không có mô tả").replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+                const words = fullText.split(/\s+/).filter(word => word.length > 0);
+
+                if (words.length > 27) {
+                    const truncatedText = words.slice(0, 27).join(' ') + '…';
+                    descriptionText.html(truncatedText);
+                    readMoreBtn.show();
+                } else {
+                    descriptionText.html(fullText);
+                    readMoreBtn.hide();
+                }
+
+                readMoreBtn.on('click', function () {
+                    event.stopPropagation();
+                    $("#fullDescription").html(fullText);
+                    $("#descriptionModal").addClass("show");
+                });
+            });
+
+            // Chọn tất cả
+            $("#selectAll").on("change", function () {
+                $(".select-item").prop("checked", this.checked);
+                toggleButtons();
+            });
+
+            // Chọn từng banner
+            $(".select-item").on("change", function () {
+                toggleButtons();
+            });
+
+            // Kích hoạt/vô hiệu hóa nút
+            function toggleButtons() {
+                const anyChecked = $(".select-item:checked").length > 0;
+                $("#updateTrangThaiBtn").prop("disabled", !anyChecked);
+                $("#deleteSelectedBtn").prop("disabled", !anyChecked);
+            }
+
+            // Xử lý xóa nhiều
+            $("#deleteSelectedBtn").on("click", function () {
+                $("#confirmDeleteModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const bannerToDelete = $("#bannerToDelete");
+                bannerToDelete.empty();
+
+                selectedItems.each(function () {
+                    const maAQC = $(this).val();
+                    const row = $(`tr[data-banner-id="${maAQC}"]`);
+                    const moTa = row.find("td:nth-child(3) .description-text").text();
+                    bannerToDelete.append(`<li>ID: ${maAQC} - Mô tả: ${moTa}</li>`);
+                });
+            });
+
+            // Modal trạng thái
+            $(".status-link").on("click", function (e) {
+                e.preventDefault();
+                const maAQC = $(this).data("id");
+                const status = $(this).data("status");
+                $("#statusId").val(maAQC);
+                $("#currentStatus").text(status ? "Bật" : "Tắt");
+                $("#statusSelect").val(status ? "true" : "false");
+                $("#statusModal").addClass("show");
+            });
+
+            $("#updateStatusBtn").on("click", function () {
+                const formData = $("#statusForm").serialize();
+                const maAQC = $("#statusId").val();
+                const newStatus = $("#statusSelect").val() === "true";
+
+                $.ajax({
+                    url: "@Url.Action("ChangeStatus", "BannerQuangCao")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            const statusLink = $(`a[data-id="${maAQC}"]`);
+                            statusLink.text(newStatus ? "Bật" : "Tắt");
+                            statusLink.removeClass("status-on status-off").addClass(newStatus ? "status-on" : "status-off");
+                            statusLink.attr("data-status", newStatus);
+                            $("#statusModal").removeClass("show");
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                    }
+                });
+            });
+
+            // Cập nhật trạng thái
+            $("#updateTrangThaiBtn").on("click", function () {
+                $("#updateTrangThaiModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const selectedIds = [];
+                selectedItems.each(function () {
+                    selectedIds.push($(this).val());
+                });
+                $("#selectedBannerMaAQC").val(selectedIds.join(","));
+            });
+
+            $("#updateTrangThaiForm").on("submit", function (e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: "@Url.Action("CapNhatTrangThai", "BannerQuangCao")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            response.updatedBanner.forEach(banner => {
+                                const row = $(`tr[data-banner-id="${banner.maAQC}"]`);
+                                const statusLink = row.find(".status-link");
+                                statusLink.text(banner.trangThaiMoi);
+                                statusLink.removeClass("status-on status-off").addClass(banner.trangThaiMoi === "Bật" ? "status-on" : "status-off");
+                                statusLink.attr("data-status", banner.trangThaiMoi === "Bật");
+                            });
+                            $("#updateTrangThaiModal").removeClass("show");
+                            $("#thongBaoTinNhan").text(response.message);
+                            const danhSach = $("#danhSachCapNhat");
+                            danhSach.empty();
+                            response.updatedBanner.forEach(banner => {
+                                danhSach.append(`
+                                    <li>ID: ${banner.maAQC} - ${banner.moTa}: ${banner.trangThaiCu} → ${banner.trangThaiMoi}</li>
+                                `);
+                            });
+                            $("#thongBaoModal").addClass("show");
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                    }
+                });
+            });
+
+            // Đóng modal
+            $("[data-modal-close]").on("click", function () {
+                $(this).closest(".modal").removeClass("show");
+            });
+
+            // Đóng modal khi click bên ngoài
+            $(".modal").on("click", function (e) {
+                if ($(e.target).hasClass("modal")) {
+                    $(this).removeClass("show");
+                }
+            });
+        });
+    </script>
+}

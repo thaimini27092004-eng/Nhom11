@@ -1,0 +1,396 @@
+﻿@*Admin/QuanLyNguoiDung/PhanQuyen.cshtml*@
+@model List<WebsiteBanHang.Areas.Admin.Controllers.UserRolesViewModel>
+@{
+    ViewData["Title"] = "Phân Quyền Người Dùng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_PhanQuyen.css">
+
+<h2 class="content-title">Danh Sách Người Dùng</h2>
+
+<div class="search-container">
+    <form asp-action="PhanQuyen" asp-controller="QuanLyNguoiDung" method="get">
+        <div class="search-wrapper">
+            <input type="text" id="nhapTuKhoa" name="tuKhoaTimKiem" class="search-input" placeholder="Tìm kiếm theo email, họ tên hoặc ID (cách nhau bởi dấu phẩy)..." value="@ViewData["tuKhoaTimKiem"]" autocomplete="off" />
+            <input type="hidden" name="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+            <button type="submit" class="search-btn">Tìm</button>
+        </div>
+        <div id="danhSachGoiY" class="suggestions"></div>
+    </form>
+</div>
+
+@if (ViewBag.KetQuaTimKiem != null)
+{
+    <p class="alert alert-error">@ViewBag.KetQuaTimKiem</p>
+    <h4 class="sub-text">Gợi ý người dùng</h4>
+}
+@if (TempData["Message"] != null)
+{
+    <p class="alert alert-success">@TempData["Message"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p class="alert alert-error">@TempData["Error"]</p>
+}
+
+<!--
+<div class="action-bar">
+    <form asp-action="Add" asp-controller="QuanLyNguoiDung" method="get">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="action-btn add-btn">Thêm người dùng mới</button>
+    </form>
+</div>
+-->
+
+<div class="table-container">
+    <form asp-action="DeleteMultiple" asp-controller="QuanLyNguoiDung" method="post" id="nguoidungForm">
+        @Html.AntiForgeryToken()
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>User ID</th>
+                    <th>Email</th>
+                    <th>Họ Tên</th>
+                    <th>Vai Trò</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr data-user-id="@user.UserId">
+                        <td>
+                            <input type="checkbox" class="select-item" name="selectedUserIds" value="@user.UserId" />
+                        </td>
+                        <td>@user.UserId</td>
+                        <td>@user.Email</td>
+                        <td>@user.HoTen</td>
+                        <td>@string.Join(", ", user.Roles)</td>
+                        <td>
+                            <a href="#" class="status-link @(user.IsLocked ? "status-off" : "status-on")" data-id="@user.UserId" data-status="@(!user.IsLocked)">
+                                @(user.IsLocked ? "Khóa" : "Hoạt động")
+                            </a>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="/Admin/QuanLyNguoiDung/Display?userId=@user.UserId" class="action-link view-link">Xem</a>
+                                <button type="button" class="action-link edit-link role-btn" data-user-id="@user.UserId" data-user-name="@user.HoTen">Phân quyền</button>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+    <div class="fixed-bar">
+        <form asp-action="PhanQuyen" asp-controller="QuanLyNguoiDung" method="get" id="filterForm">
+            <input type="hidden" name="tuKhoaTimKiem" value="@Html.Encode(ViewData["tuKhoaTimKiem"])" />
+            <select name="chonTrangThai" onchange="this.form.submit()" class="filter-select">
+                <option value="active" selected="@(ViewData["chonTrangThai"]?.ToString() == "active" ? "selected" : null)">Người dùng hoạt động</option>
+                <option value="locked" selected="@(ViewData["chonTrangThai"]?.ToString() == "locked" ? "selected" : null)">Người dùng bị khóa</option>
+                <option value="all" selected="@(ViewData["chonTrangThai"]?.ToString() == "all" ? "selected" : null)">Tất cả người dùng</option>
+            </select>
+        </form>
+        <button type="button" class="action-btn process-btn" id="processSelectedBtn" disabled>Xử lý</button>
+        <button type="button" class="action-btn delete-btn" id="deleteSelectedBtn" disabled>Xóa/Ẩn</button>
+    </div>
+</div>
+
+<div class="modal" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xử lý</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xử lý các người dùng sau không?</p>
+                <h6>Các người dùng sẽ bị xóa (không có hóa đơn):</h6>
+                <ul id="nguoidungToDelete"></ul>
+                <h6>Các người dùng sẽ bị khóa (có hóa đơn):</h6>
+                <ul id="nguoidungToHide"></ul>
+                <p class="alert alert-error">Lưu ý: Để xóa người dùng có hóa đơn, hãy xóa hóa đơn trước.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="nguoidungForm" formaction="@Url.Action("DeleteMultiple", "QuanLyNguoiDung")" class="modal-btn hide-btn">Khóa</button>
+                <button type="submit" form="nguoidungForm" formaction="@Url.Action("DeleteMultiple", "QuanLyNguoiDung", new { isDelete = true })" class="modal-btn delete-btn">Xóa</button>
+                <button type="submit" form="nguoidungForm" formaction="@Url.Action("XemChiTietHoaDonTheoNguoiDung", "QuanLyNguoiDung")" class="modal-btn detail-btn">Chi Tiết Hóa Đơn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="thongBaoXoaModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xử Lý Người Dùng Thành Công</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="thongBaoXoaTinNhan"></p>
+                <h6>Danh sách người dùng đã xóa:</h6>
+                <ul id="danhSachXoa"></ul>
+                <h6>Danh sách người dùng đã khóa:</h6>
+                <ul id="danhSachAn"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="statusModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thay đổi trạng thái</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="statusForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="userId" id="statusId" />
+                    <input type="hidden" name="chonTrangThai" id="chonTrangThai" value="@ViewData["chonTrangThai"]" />
+                    <p>Trạng thái hiện tại: <span id="currentStatus"></span></p>
+                    <label for="statusSelect">Chọn trạng thái mới:</label>
+                    <select name="status" id="statusSelect" class="filter-select">
+                        <option value="true">Hoạt động</option>
+                        <option value="false">Khóa</option>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="button" id="updateStatusBtn" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="roleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleModalLabel">Phân Quyền Người Dùng</h5>
+                <button type="button" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="roleForm" method="post" asp-action="PhanQuyen" asp-controller="QuanLyNguoiDung">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="userId" id="roleUserId" />
+                    <p>Phân quyền cho: <strong id="roleUserName"></strong></p>
+                    <div id="roleCheckboxes"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn cancel-btn" data-modal-close>Hủy</button>
+                <button type="submit" form="roleForm" class="modal-btn confirm-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const nhapTuKhoa = $("#nhapTuKhoa");
+            const danhSachGoiY = $("#danhSachGoiY");
+
+            nhapTuKhoa.on("input", function () {
+                console.log("Input event triggered");
+                const tuKhoa = $(this).val().trim();
+                const filter = "@ViewData["chonTrangThai"]";
+                if (tuKhoa.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("SearchSuggestions", "QuanLyNguoiDung")",
+                        type: "GET",
+                        data: { term: tuKhoa, chonTrangThai: filter },
+                        success: function (danhSach) {
+                            danhSachGoiY.empty();
+                            if (danhSach.length > 0) {
+                                danhSach.forEach(user => {
+                                    danhSachGoiY.append(`
+                                        <div class="suggestion-item d-flex align-items-center">
+                                            <div>
+                                                <strong>${user.hoTen}</strong><br/>
+                                                <small>${user.email}</small>
+                                            </div>
+                                        </div>
+                                    `);
+                                });
+                                danhSachGoiY.addClass("show");
+                            } else {
+                                danhSachGoiY.removeClass("show");
+                            }
+                        },
+                        error: function () {
+                            danhSachGoiY.empty().removeClass("show");
+                        }
+                    });
+                } else {
+                    danhSachGoiY.empty().removeClass("show");
+                }
+            });
+
+            $(document).click(function (e) {
+                if (!nhapTuKhoa.is(e.target) && !danhSachGoiY.is(e.target) && danhSachGoiY.has(e.target).length === 0) {
+                    danhSachGoiY.removeClass("show");
+                }
+            });
+
+            $("#selectAll").on("change", function () {
+                $(".select-item").prop("checked", this.checked);
+                toggleButtons();
+            });
+
+            $(".select-item").on("change", function () {
+                toggleButtons();
+            });
+
+            function toggleButtons() {
+                const anyChecked = $(".select-item:checked").length > 0;
+                $("#processSelectedBtn").prop("disabled", !anyChecked);
+                $("#deleteSelectedBtn").prop("disabled", !anyChecked);
+            }
+
+            $("#deleteSelectedBtn").on("click", function () {
+                $("#confirmDeleteModal").addClass("show");
+                const selectedItems = $(".select-item:checked");
+                const nguoidungToDelete = $("#nguoidungToDelete");
+                const nguoidungToHide = $("#nguoidungToHide");
+                nguoidungToDelete.empty();
+                nguoidungToHide.empty();
+
+                const selectedIds = [];
+                selectedItems.each(function () {
+                    selectedIds.push($(this).val());
+                });
+
+                $.ajax({
+                    url: "@Url.Action("CheckUserInHoaDon", "QuanLyNguoiDung")",
+                    type: "POST",
+                    data: { selectedUserIds: selectedIds },
+                    success: function (result) {
+                        result.forEach(user => {
+                            const li = `<li>ID: ${user.userId} - Tên: ${user.hoTen}</li>`;
+                            if (user.hasHoaDon) {
+                                nguoidungToHide.append(li);
+                            } else {
+                                nguoidungToDelete.append(li);
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(".status-link").on("click", function (e) {
+                e.preventDefault();
+                const userId = $(this).data("id");
+                const status = $(this).data("status");
+                $("#statusId").val(userId);
+                $("#currentStatus").text(status ? "Hoạt động" : "Khóa");
+                $("#statusSelect").val(status ? "true" : "false");
+                $("#statusModal").addClass("show");
+            });
+
+            $("#updateStatusBtn").on("click", function () {
+                const formData = $("#statusForm").serialize();
+                const userId = $("#statusId").val();
+                const newStatus = $("#statusSelect").val() === "true";
+
+                $.ajax({
+                    url: "@Url.Action("ChangeStatus", "QuanLyNguoiDung")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            const statusLink = $(`a[data-id="${userId}"]`);
+                            statusLink.text(newStatus ? "Hoạt động" : "Khóa");
+                            statusLink.removeClass("status-on status-off").addClass(newStatus ? "status-on" : "status-off");
+                            statusLink.attr("data-status", newStatus);
+                            $("#statusModal").removeClass("show");
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật trạng thái.");
+                    }
+                });
+            });
+
+            $(".role-btn").on("click", function () {
+                const userId = $(this).data("user-id");
+                const userName = $(this).data("user-name");
+                $("#roleUserId").val(userId);
+                $("#roleUserName").text(userName);
+                $("#roleModalLabel").text(`Phân Quyền cho ${userName}`);
+
+                $.ajax({
+                    url: "@Url.Action("GetUserRoles", "QuanLyNguoiDung")",
+                    type: "GET",
+                    data: { userId: userId },
+                    success: function (data) {
+                        const roleCheckboxes = $("#roleCheckboxes");
+                        roleCheckboxes.empty();
+                        data.allRoles.forEach(role => {
+                            const checked = data.currentRoles.includes(role) ? "checked" : "";
+                            roleCheckboxes.append(`
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="selectedRoles" value="${role}" ${checked} />
+                                    <label class="form-check-label">${role}</label>
+                                </div>
+                            `);
+                        });
+                        $("#roleModal").addClass("show");
+                    },
+                    error: function () {
+                        alert("Không thể tải danh sách vai trò.");
+                    }
+                });
+            });
+
+            $("#roleForm").on("submit", function (e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: "@Url.Action("PhanQuyen", "QuanLyNguoiDung")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            $("#roleModal").removeClass("show");
+                            location.reload();
+                        } else {
+                            alert("Có lỗi xảy ra: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi khi gửi yêu cầu cập nhật vai trò.");
+                    }
+                });
+            });
+                    $(".view-link").on("click", function (e) {
+            console.log("Nút Xem được nhấp, href:", $(this).attr("href"));
+        });
+            $("[data-modal-close]").on("click", function () {
+                $(this).closest(".modal").removeClass("show");
+            });
+
+            $(".modal").on("click", function (e) {
+                if ($(e.target).hasClass("modal")) {
+                    $(this).removeClass("show");
+                }
+            });
+        });
+    </script>
+}

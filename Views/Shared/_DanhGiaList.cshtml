@@ -1,0 +1,130 @@
+﻿@*Shared/_DanhGiaList.cshtml*@
+@using WebsiteBanHang.Models.ViewModel
+
+@model IEnumerable<WebsiteBanHang.Models.QLDanhGia_PhanHoi.ViewModel.DanhGiaViewModel>
+
+<div id="danhGiaList" class="danhgia-list-new">
+    @{
+        bool coDanhGia = false;
+        var user = Context.User;
+        var khachHang = ViewData["KhachHang"] as WebsiteBanHang.Models.KhachHang;
+        int trangHienTai = Model.Any() ? Model.First().TrangHienTai : 1;
+        int tongSoTrang = Model.Any() ? Model.First().TongSoTrang : 1;
+        int maSP = Model.Any() ? Model.First().DanhGia.MaSP : 0;
+        foreach (var item in Model)
+        {
+            coDanhGia = true;
+            <div class="danhgia-item" data-madg="@item.DanhGia.MaDG">
+                <div class="danhgia-header">
+                    <div class="user-info">
+                        @if (!string.IsNullOrEmpty(item.DanhGia.CTHD?.HoaDon?.KhachHang?.AvatarUrl))
+                        {
+                            <img src="@item.DanhGia.CTHD.HoaDon.KhachHang.AvatarUrl" alt="Avatar" class="avatar-img" />
+                        }
+                        else
+                        {
+                            <img src="/images/avatars/default.jpg" alt="Default Avatar" class="avatar-img" />
+                        }
+                        <strong>@item.DanhGia?.CTHD?.HoaDon?.KhachHang?.TenKH</strong>
+                        @if (item.DaMuaSanPham)
+                        {
+                            <span class="so-hoa-don-label">Đánh giá hoá đơn số: #@item.DanhGia.SoHD</span>
+                        }
+                    </div>
+                    <span>@item.DanhGia?.NgayDG?.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <div class="star-display">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= item.DanhGia?.Sao)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-star empty"></i>
+                        }
+                    }
+                </div>
+                <div class="danhgia-content" id="content-@item.DanhGia.MaDG" data-sao="@item.DanhGia.Sao">
+                    <span class="danhgia-text" id="danhgiaText-@item.DanhGia.MaDG">@item.DanhGia.NoiDung</span>
+                    <button class="read-more-danhgia-btn" id="readMoreDanhGiaBtn-@item.DanhGia.MaDG" onclick="DanhGiaManager.toggleDanhGiaContent(@item.DanhGia.MaDG)" style="display: none;">Xem thêm</button>
+                    <button class="read-less-danhgia-btn" id="readLessDanhGiaBtn-@item.DanhGia.MaDG" onclick="DanhGiaManager.toggleDanhGiaContent(@item.DanhGia.MaDG)" style="display: none;">Thu gọn</button>
+                </div>
+                <div class="danhgia-actions">
+                    <a class="like-link danhgia-like-link @(item.DaThich ? "liked" : "")" onclick="DanhGiaManager.likeDanhGia(@item.DanhGia.MaDG)" data-madg="@item.DanhGia.MaDG">
+                        <i class="fas fa-thumbs-up"></i> <span class="like-count">@(item.SoLuotThich > 0 ? item.SoLuotThich : "")</span>
+                    </a>
+                    <a class="reply-link" onclick="DanhGiaManager.showPhanHoiInput(@item.DanhGia.MaDG)">Trả lời</a>
+                    @if (item.SoLuongPhanHoiDanhGia > 0)
+                    {
+                        <a class="view-replies"
+                           onclick="DanhGiaManager.showPhanHoiDanhGia(@item.DanhGia.MaDG)"
+                           data-madg="@item.DanhGia.MaDG"
+                           data-so-luong-phanhoi="@item.SoLuongPhanHoiDanhGia">
+                            Xem @item.SoLuongPhanHoiDanhGia phản hồi
+                        </a>
+                        <a class="hide-replies"
+                           onclick="DanhGiaManager.hidePhanHoiDanhGia(@item.DanhGia.MaDG)"
+                           data-madg="@item.DanhGia.MaDG"
+                           style="display: none;">
+                            Ẩn phản hồi
+                        </a>
+                    }
+                    @if (user.Identity.IsAuthenticated && khachHang != null && item.DanhGia.CTHD?.HoaDon?.MaKH == khachHang.MaKH)
+                    {
+                        <a class="edit-link" onclick="DanhGiaManager.editDanhGia(@item.DanhGia.MaDG)">Chỉnh sửa</a>
+                        <a class="delete-link" onclick="DanhGiaManager.deleteDanhGia(@item.DanhGia.MaDG)">Xóa</a>
+                    }
+                </div>
+                <div class="phanhoi-input" id="phanHoiInput-@item.DanhGia.MaDG" style="display: none;">
+                    @if (user.Identity.IsAuthenticated)
+                    {
+                        <textarea id="phanHoiInputText-@item.DanhGia.MaDG" placeholder="Viết phản hồi..." rows="2" class="form-control" maxlength="500"></textarea>
+                    }
+                    else
+                    {
+                        <textarea id="phanHoiInputText-@item.DanhGia.MaDG" placeholder="Viết phản hồi (yêu cầu đăng nhập để gửi)..." rows="2" class="form-control" maxlength="500"></textarea>
+                    }
+                    <span id="phanHoiCharCount-@item.DanhGia.MaDG" class="char-count">Còn 500 ký tự</span>
+                    <button class="btn btn-primary-new mt-2 submit-phanhoi" onclick="DanhGiaManager.submitPhanHoiDanhGia(@item.DanhGia.MaDG)" data-madg="@item.DanhGia.MaDG">Gửi</button>
+                </div>
+                @if (user.Identity.IsAuthenticated)
+                {
+                    <div class="edit-input edit-input-danhgia" id="editInput-@item.DanhGia.MaDG" style="display: none;">
+                        <div class="star-rating" id="editStarRating-@item.DanhGia.MaDG">
+                            <i class="fas fa-star" data-value="1"></i>
+                            <i class="fas fa-star" data-value="2"></i>
+                            <i class="fas fa-star" data-value="3"></i>
+                            <i class="fas fa-star" data-value="4"></i>
+                            <i class="fas fa-star" data-value="5"></i>
+                        </div>
+                        <textarea id="editInputText-@item.DanhGia.MaDG" placeholder="Chỉnh sửa đánh giá..." rows="3" class="form-control" maxlength="300">@item.DanhGia.NoiDung</textarea>
+                        <span id="editCharCount-@item.DanhGia.MaDG" class="char-count">Còn 300 ký tự</span>
+                        <div>
+                            <button class="btn btn-primary-new mt-2 submit-edit" onclick="DanhGiaManager.submitEditDanhGia(@item.DanhGia.MaDG)" data-madg="@item.DanhGia.MaDG">Lưu</button>
+                            <button class="btn btn-secondary mt-2" onclick="DanhGiaManager.cancelEditDanhGia(@item.DanhGia.MaDG)">Hủy</button>
+                        </div>
+                    </div>
+                }
+                <div class="phanhoi-list" id="phanHoiList-@item.DanhGia.MaDG" style="display: none;"></div>
+            </div>
+        }
+        if (!coDanhGia)
+        {
+            <div id="noDanhGiaMessage" class="no-danhgia-message-new">
+                <p>Chưa có đánh giá nào? Hãy mua sản phẩm và để lại đánh giá!</p>
+            </div>
+        }
+        else
+        {
+            var moHinhPhanTrang = new PhanTrangViewModel();
+            moHinhPhanTrang.TrangHienTai = trangHienTai;
+            moHinhPhanTrang.TongSoTrang = tongSoTrang;
+            moHinhPhanTrang.DuongDan = "/Home/GetDanhGiaByMaSP";
+            moHinhPhanTrang.MaDoiTuong = maSP;
+            moHinhPhanTrang.ThamSoDoiTuong = "maSP";
+            @await Html.PartialAsync("_PhanTrang", moHinhPhanTrang)
+        }
+    }
+</div>

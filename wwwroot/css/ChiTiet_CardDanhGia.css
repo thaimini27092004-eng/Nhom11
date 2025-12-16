@@ -1,0 +1,189 @@
+﻿/* css/ChiTiet_CardDanhGia.cshtml CSS cho card đánh giá mới */
+/* CSS cho card đánh giá mới */
+.comment-card-new.danhgia-card {
+    width: 100%;
+    padding: 2rem;
+    padding-left: 0.5rem;
+    background: #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+    .comment-card-new.danhgia-card.mobile-view {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .comment-card-new.danhgia-card h3 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2d3436;
+        margin-bottom: 1.5rem;
+    }
+
+/* Ô input đánh giá */
+.danhgia-input-new {
+    margin-bottom: 2rem;
+}
+
+    .danhgia-input-new textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 2px solid #b2bec3;
+        font-size: 1.2rem;
+        background: #fff;
+        transition: border-color 0.3s ease;
+    }
+
+        .danhgia-input-new textarea:focus {
+            border-color: #00b894;
+            outline: none;
+        }
+
+    .danhgia-input-new .btn-primary-new {
+        background: #00b894;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+
+        .danhgia-input-new .btn-primary-new:hover {
+            background: #009e7f;
+        }
+
+/* Danh sách đánh giá */
+.danhgia-list-new .danhgia-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #dfe6e9;
+    margin-bottom: 1rem;
+}
+
+.danhgia-item .danhgia-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    color: #2d3436;
+    margin-bottom: 0.5rem;
+}
+
+    .danhgia-item .danhgia-header strong {
+        font-weight: bold;
+    }
+
+.danhgia-item .danhgia-content {
+    font-size: 1.1rem;
+    color: #636e72;
+    margin-bottom: 0.5rem;
+}
+
+.danhgia-item .danhgia-actions {
+    font-size: 1rem;
+    color: #b2bec3;
+}
+
+.danhgia-list-new .danhgia-item .danhgia-actions a:not(.like-link),
+.danhgia-list-new .phanhoi-item .phanhoi-actions a:not(.like-link) {
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #00b894 !important;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .danhgia-list-new .danhgia-item .danhgia-actions a:not(.like-link):hover,
+    .danhgia-list-new .phanhoi-item .phanhoi-actions a:not(.like-link):hover {
+        color: #009e7f !important;
+    }
+
+/* Ô input phản hồi đánh giá */
+.danhgia-item .phanhoi-input {
+    margin-top: 1rem;
+}
+
+    .danhgia-item .phanhoi-input textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 2px solid #b2bec3;
+        font-size: 1.2rem;
+        background: #fff;
+        transition: border-color 0.3s ease;
+    }
+
+        .danhgia-item .phanhoi-input textarea:focus {
+            border-color: #00b894;
+            outline: none;
+        }
+
+    .danhgia-item .phanhoi-input .btn-primary-new {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.2rem;
+        border-radius: 10px;
+    }
+
+/* Danh sách phản hồi đánh giá */
+.danhgia-item .phanhoi-list .phanhoi-item {
+    padding: 0.75rem 0 0.75rem 1.5rem;
+    border-left: 2px solid #00b894;
+    margin-top: 0.5rem;
+}
+
+.phanhoi-item .phanhoi-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    color: #2d3436;
+    margin-bottom: 0.5rem;
+}
+
+    .phanhoi-item .phanhoi-header strong {
+        font-weight: bold;
+    }
+
+.phanhoi-item .phanhoi-content {
+    font-size: 1rem;
+    color: #636e72;
+}
+
+/* Thông báo chưa có đánh giá */
+.no-danhgia-message-new {
+    font-size: 1.1rem;
+    color: #b2bec3;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.char-count {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 5px;
+    display: block;
+}
+
+.da-mua-label {
+    font-size: 0.8rem;
+    color: #00b894;
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+
+.so-hoa-don-label {
+    font-size: 0.8rem;
+    color: #ff0000;
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+
+.danhgia-overview {
+    font-size: 1rem;
+    color: #b2bec3;
+    margin-bottom: 1rem;
+}

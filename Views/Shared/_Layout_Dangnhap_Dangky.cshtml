@@ -1,0 +1,52 @@
+﻿<!--Shared/_Lauout_DangNhap_DangKy.cshtml-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebsiteBanHang</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/nut-dang-nhap-dang-ky.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/HieuUngKeoRem.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Lớp phủ rèm cho hiệu ứng chuyển trang -->
+    <div class="curtain"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script >
+
+        // JavaScript cho hiệu ứng kéo rèm (sử dụng event delegation)
+                    document.addEventListener('click', function(e) {
+                        const link = e.target.closest('.curtain-link, .auth-button:not(.logout-button)');
+                        if (link) {
+                            e.preventDefault();
+                            const href = link.getAttribute('href');
+                            const curtain = document.querySelector('.curtain');
+                            if (curtain) {
+                                console.log('Kích hoạt hiệu ứng kéo rèm cho:', href);
+                                curtain.classList.add('active');
+                                setTimeout(() => {
+                                    window.location.href = href;
+                                }, 800);
+                            } else {
+                                console.error('Không tìm thấy phần tử .curtain');
+                                window.location.href = href;
+                            }
+                        }
+                    });
+
+    </script>
+</body>
+</html>

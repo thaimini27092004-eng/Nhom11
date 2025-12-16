@@ -1,0 +1,32 @@
+﻿/* css/ChiTiet_DanhGiaLike.css */
+.danhgia-item .danhgia-actions .like-link,
+.phanhoi-item .phanhoi-actions .like-link {
+    cursor: pointer;
+    color: #6c757d; /* Màu xám khi chưa thích */
+    margin-right: 15px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt */
+}
+
+    .danhgia-item .danhgia-actions .like-link.liked,
+    .phanhoi-item .phanhoi-actions .like-link.liked {
+        color: #dc3545; /* Màu đỏ khi được thích */
+        font-weight: bold;
+    }
+
+    .danhgia-item .danhgia-actions .like-link .like-count,
+    .phanhoi-item .phanhoi-actions .like-link .like-count {
+        margin-left: 5px;
+    }
+
+    .danhgia-item .danhgia-actions .like-link:hover,
+    .phanhoi-item .phanhoi-actions .like-link:hover {
+        text-decoration: underline;
+    }
+
+.phanhoi-actions {
+    margin-top: 5px;
+    font-size: 0.9em;
+}

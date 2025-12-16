@@ -1,0 +1,44 @@
+﻿@*SanPham/Display.cshtml*@
+@model WebsiteBanHang.Models.SanPham
+@{
+    ViewData["Title"] = "Chi tiết Sản Phẩm";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Admin_SanPham.css">
+
+<h2 class="content-title">Chi tiết Sản Phẩm</h2>
+<hr class="content-divider" />
+
+<div class="form-container">
+    <div class="product-details">
+        <div class="product-image-container">
+            @if (!string.IsNullOrEmpty(Model.UrlAnh))
+            {
+                <img src="@Model.UrlAnh" alt="Product Image" class="preview-image" />
+            }
+        </div>
+
+        <div class="product-info">
+            <table class="info-table">
+                <tr>
+                    <td class="label-cell"><strong>Tên sản phẩm:</strong></td>
+                    <td>@Model.TenSP</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Giá:</strong></td>
+                    <td>@Model.Gia</td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><strong>Mô tả:</strong></td>
+                    <td>@Html.Raw(Model.MoTa)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button type="button" class="action-btn edit-btn" onclick="window.location.href='@Url.Action("Update", "SanPham", new { id = Model.MaSP })'">Chỉnh sửa</button>
+        <button type="button" class="action-btn cancel-btn" onclick="window.location.href='@Url.Action("Index", "SanPham")'">Quay Lại</button>
+    </div>
+</div>

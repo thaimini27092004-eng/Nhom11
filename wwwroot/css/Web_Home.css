@@ -1,0 +1,294 @@
+﻿/* Root Variables (giữ nguyên) */
+:root {
+    --primary-color: #F28C38; /* Cam đậm */
+    --secondary-color: #007BFF; /* Xanh dương */
+    --background-dark: #1A1A1A; /* Đen */
+    --background-gray: #2D2D2D; /* Xám đậm */
+    --text-light: #FFFFFF; /* Trắng */
+    --text-muted: #A0A0A0; /* Xám nhạt */
+    --font-primary: 'Inter', sans-serif;
+    --font-heading: 'Montserrat', sans-serif;
+    --header-height: 80px;
+}
+
+/* Home Section */
+.home-section {
+    padding: 40px 0;
+}
+
+/* Banner Carousel */
+.banner {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.9);
+}
+
+
+
+.carousel-caption.banner-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-light);
+    width: 90%;
+}
+
+.banner-content h1 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.banner-content .product-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.banner-content .btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .banner-content .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-size: 50%;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    bottom: 10px;
+}
+
+    .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--text-muted);
+        border: none;
+        margin: 0 5px;
+        opacity: 0.7;
+        transition: background-color 0.3s, opacity 0.3s;
+    }
+
+        .carousel-indicators button.active {
+            background-color: var(--primary-color);
+            opacity: 1;
+        }
+
+/* Products Section */
+.products-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    margin-bottom: 60px; /* Tăng khoảng cách giữa các section */
+}
+
+    /* Tiêu đề của Products Section */
+    .products-section h2 {
+        font-family: var(--font-heading);
+        font-size: 2.2rem; /* Tăng kích thước chữ */
+        text-align: center;
+        margin-bottom: 40px; /* Tăng khoảng cách dưới tiêu đề */
+        color: var(--text-light);
+        padding: 10px 0; /* Thêm padding để nổi bật */
+    }
+
+.no-products {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* Product Card */
+.product-card {
+    background-color: var(--background-gray);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: none; /* For fade-in effect */
+    display: flex;
+    flex-direction: column;
+    /* Ánh sáng mặc định (sẽ được gán động qua JS) */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Ánh sáng mặc định nhẹ */
+}
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Tăng cường ánh sáng khi hover */
+    }
+
+.product-img-link {
+    display: block;
+}
+
+.product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    text-decoration: none;
+    color: var(--text-light);
+}
+
+    .product-title h3 {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        margin: 0 0 10px;
+    }
+
+.product-description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: 2.8em; /* 2 dòng với line-height 1.4 */
+}
+
+.product-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; /* Đẩy nút xuống dưới cùng */
+}
+
+    .product-actions .btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .product-actions .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+    }
+
+    .product-actions .btn-secondary {
+        background-color: var(--secondary-color);
+        border: none;
+    }
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .banner {
+        height: 300px;
+    }
+
+    .banner-content h1 {
+        font-size: 2rem;
+    }
+
+    .banner-content .product-price {
+        font-size: 1.2rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .carousel-indicators button {
+        width: 10px;
+        height: 10px;
+        margin: 0 4px;
+    }
+}
+
+@media (max-width: 576px) {
+    .banner {
+        height: 200px;
+    }
+
+    .banner-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .banner-content .product-price {
+        font-size: 1rem;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-actions {
+        flex-direction: column;
+    }
+
+        .product-actions .btn {
+            width: 100%;
+        }
+
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        margin: 0 3px;
+    }
+}

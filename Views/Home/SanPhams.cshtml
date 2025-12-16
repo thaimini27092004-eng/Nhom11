@@ -1,0 +1,122 @@
+﻿@*/Views/Home/SanPhams*@
+@model IEnumerable<WebsiteBanHang.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Sản Phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="products-page">
+    <div class="container-fluid">
+        @if (ViewBag.KetQuaTimKiem != null)
+        {
+            <div class="search-alert">
+                <span>@ViewBag.KetQuaTimKiem</span>
+            </div>
+            <h2 class="section-title">Gợi ý sản phẩm</h2>
+        }
+
+        <!-- Biểu tượng Bộ lọc -->
+        <div class="bo-loc-container">
+            <button class="nut-bo-loc" id="toggleBoLoc">
+                <i class="bi bi-funnel"></i> Bộ lọc
+            </button>
+            <div class="thanh-bo-loc" id="thanhBoLoc">
+                <form asp-action="SanPhams" asp-controller="Home" method="get" id="filterForm">
+                    <input type="hidden" name="tuKhoaTimKiem" value="@ViewData["tuKhoaTimKiem"]" />
+                    <div class="nhom-bo-loc">
+                        <label class="nhan-bo-loc">Danh mục</label>
+                        <select name="chonDanhMuc" class="lua-chon-bo-loc">
+                            <option value="" selected="@(ViewData["chonDanhMuc"] == null ? "selected" : null)">Tất cả danh mục</option>
+                            @foreach (var danhmuc in ViewBag.danhmucs)
+                            {
+                                <option value="@danhmuc.MaDM" selected="@(ViewData["chonDanhMuc"]?.ToString() == danhmuc.MaDM.ToString() ? "selected" : null)">@danhmuc.TenDM</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="nhom-bo-loc">
+                        <label class="nhan-bo-loc">Kho</label>
+                        <select name="chonKho" class="lua-chon-bo-loc">
+                            <option value="" selected="@(ViewData["chonKho"] == null ? "selected" : null)">Tất cả kho</option>
+                            @foreach (var kho in ViewBag.khos)
+                            {
+                                <option value="@kho.MaKho" selected="@(ViewData["chonKho"]?.ToString() == kho.MaKho.ToString() ? "selected" : null)">@kho.TenKho</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="nhom-bo-loc">
+                        <label class="nhan-bo-loc">Sắp xếp giá</label>
+                        <select name="sapXepGia" class="lua-chon-bo-loc">
+                            <option value="macDinh" selected="@(ViewData["sapXepGia"]?.ToString() == "macDinh" ? "selected" : null)">Mặc định</option>
+                            <option value="thapDenCao" selected="@(ViewData["sapXepGia"]?.ToString() == "thapDenCao" ? "selected" : null)">Từ thấp đến cao</option>
+                            <option value="caoDenThap" selected="@(ViewData["sapXepGia"]?.ToString() == "caoDenThap" ? "selected" : null)">Từ cao đến thấp</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="nut-loc">Lọc</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            @if (Model == null || !Model.Any())
+            {
+                <p class="no-products">Không có sản phẩm nào để hiển thị.</p>
+            }
+            else
+            {
+                @foreach (var sanpham in Model)
+                {
+                    <div class="product-card">
+                        <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-id="@sanpham.MaSP" class="product-img-link">
+                            <img src="@sanpham.UrlAnh" alt="@sanpham.TenSP" class="product-img" />
+                        </a>
+                        <div class="product-info">
+                            <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-id="@sanpham.MaSP" class="product-title">
+                                <h3>@sanpham.TenSP</h3>
+                            </a>
+                            @{
+                                string moTa = sanpham.MoTa != null ? System.Text.RegularExpressions.Regex.Replace(sanpham.MoTa, "<[^>]+>", "") : "Không có mô tả";
+                            }
+                            <p class="product-description">@moTa</p>
+                            <p class="product-price">@sanpham.Gia.ToString("N0") VND</p>
+                            <div class="product-actions">
+                                <a href="@Url.Action("ThanhToanChung", "HoaDon", new { maSP = sanpham.MaSP })" class="btn btn-primary">Mua Ngay</a>
+                                <a href="#" class="btn btn-secondary add-to-cart" data-product-id="@sanpham.MaSP">Thêm giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/Web_Home_SanPhams.css" asp-append-version="true" />
+    <script>
+        $(document).ready(function () {
+            // Hiệu ứng fade-in cho product-card
+            $('.product-card').each(function(index) {
+                $(this).delay(index * 100).fadeIn(500);
+            });
+
+            // Toggle thanh bộ lọc
+            $('#toggleBoLoc').click(function() {
+                $('#thanhBoLoc').toggleClass('hien-thi');
+            });
+
+            // Đóng thanh bộ lọc khi click bên ngoài
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.bo-loc-container').length) {
+                    $('#thanhBoLoc').removeClass('hien-thi');
+                }
+            });
+
+            // Đồng bộ giá trị tuKhoaTimKiem từ ViewData vào ô tìm kiếm
+            const tuKhoa = '@Html.Raw(ViewData["tuKhoaTimKiem"])';
+            if (tuKhoa) {
+                $('#nhapTuKhoa').val(tuKhoa);
+            }
+        });
+    </script>
+}

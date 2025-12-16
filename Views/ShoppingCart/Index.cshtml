@@ -1,0 +1,254 @@
+﻿@using WebsiteBanHang.Models.GioHang
+@model ShoppingCart
+
+@{
+    ViewData["Title"] = "Giỏ Hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="cart-section">
+    <h2>Giỏ Hàng</h2>
+
+    <!-- Thông báo -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["Error"]
+        </div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Message"]
+        </div>
+    }
+
+    <!-- Kiểm tra giỏ hàng trống -->
+    @if (!Model.Items.Any())
+    {
+        <div class="alert alert-info">
+            Giỏ hàng của bạn đang trống.
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary ms-2">Tiếp tục mua sắm</a>
+        </div>
+    }
+    else
+    {
+        <!-- Form thanh toán -->
+        <form asp-action="CheckoutSelectedItems" method="post">
+            @Html.AntiForgeryToken()
+            <div class="cart-table position-relative">
+                <!-- Nút xóa nhiều -->
+                <div class="position-absolute top-0 end-0 p-3">
+                    <button type="button" class="delete-selected" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                        Xóa
+                    </button>
+                </div>
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" /></th>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr data-product-id="@item.ProductId">
+                                <td>
+                                    <input type="checkbox" class="select-item" data-product-id="@item.ProductId" @(item.IsSelected ? "checked" : "") />
+                                </td>
+                                <td>
+                                    <div class="product-info">
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="product-img" onerror="this.src='https://via.placeholder.com/50x50';">
+                                        <span>@item.Name</span>
+                                    </div>
+                                </td>
+                                <td>@item.Price.ToString("N0") Vnđ</td>
+                                <td>
+                                    <div class="quantity-group input-group input-group-sm">
+                                        <button type="button" class="btn btn-outline-secondary decrease-quantity">-</button>
+                                        <input type="number" class="form-control quantity" value="@item.Quantity" min="1" data-price="@item.Price" data-product-id="@item.ProductId" />
+                                        <button type="button" class="btn btn-outline-secondary increase-quantity">+</button>
+                                    </div>
+                                </td>
+                                <td class="item-total">@((item.Price * item.Quantity).ToString("N0")) Vnđ</td>
+                                <td>
+                                    <button type="button" class="btn remove-item"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#confirmSingleDeleteModal"
+                                            data-product-id="@item.ProductId"
+                                            data-product-name="@item.Name">
+                                        Xóa
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="cart-summary">
+                <h4>Tổng tiền: <span id="grandTotal" class="grand-total">@Model.Items.Where(i => i.IsSelected).Sum(i => i.Price * i.Quantity).ToString("N0") Vnđ</span></h4>
+                <a asp-controller="HoaDon" asp-action="DanhSachHoaDon" class="btn btn-secondary">Danh sách hóa đơn</a>
+                <button type="submit" class="btn btn-primary">Đi đến thanh toán</button>
+            </div>
+        </form>
+
+        <!-- Modal xóa nhiều sản phẩm -->
+        <div class="modal fade custom-modal" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận xóa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Bạn có chắc chắn muốn xóa các sản phẩm đã chọn khỏi giỏ hàng không?
+                    </div>
+                    <div class="modal-footer">
+                        <form asp-action="RemoveSelectedFromCart" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="button" class="btn btn-custom-modal" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-custom-modal">Xóa</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal xóa từng sản phẩm -->
+        <div class="modal fade custom-modal" id="confirmSingleDeleteModal" tabindex="-1" aria-labelledby="confirmSingleDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmSingleDeleteModalLabel">Xác nhận xóa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="singleDeleteMessage">
+                        Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="singleDeleteForm" asp-action="RemoveSingleFromCart" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" id="singleDeleteProductId" />
+                            <button type="button" class="btn btn-custom-modal" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-custom-modal">Xóa</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/Web_ShoppingCart_Index.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#selectAll').on('change', function () {
+                $('.select-item').prop('checked', this.checked).trigger('change');
+            });
+
+            $('.select-item').on('change', function () {
+                var productId = $(this).data('product-id');
+                var isSelected = $(this).is(':checked');
+
+                $.ajax({
+                    url: '@Url.Action("UpdateSelection", "ShoppingCart")',
+                    type: 'POST',
+                    data: {
+                        productId: productId,
+                        isSelected: isSelected,
+                        '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            updateGrandTotal();
+                        } else {
+                            alert(response.message);
+                            $(this).prop('checked', !isSelected);
+                        }
+                    }.bind(this),
+                    error: function () {
+                        alert('Có lỗi xảy ra khi cập nhật trạng thái.');
+                        $(this).prop('checked', !isSelected);
+                    }.bind(this)
+                });
+            });
+
+            $('.increase-quantity').on('click', function () {
+                var input = $(this).prev();
+                input.val(parseInt(input.val()) + 1);
+                updateQuantity(input);
+            });
+
+            $('.decrease-quantity').on('click', function () {
+                var input = $(this).next();
+                if (parseInt(input.val()) > 1) {
+                    input.val(parseInt(input.val()) - 1);
+                    updateQuantity(input);
+                }
+            });
+
+            $('.quantity').on('change', function () {
+                if (parseInt(this.value) < 1) this.value = 1;
+                updateQuantity($(this));
+            });
+
+            function updateQuantity(input) {
+                var productId = input.data('product-id');
+                var quantity = parseInt(input.val());
+
+                $.ajax({
+                    url: '@Url.Action("UpdateSelection", "ShoppingCart")',
+                    type: 'POST',
+                    data: {
+                        productId: productId,
+                        quantity: quantity,
+                        '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.removed) {
+                                input.closest('tr').remove();
+                            } else {
+                                input.closest('tr').find('.item-total').text(response.newTotal + ' Vnđ');
+                            }
+                            updateGrandTotal();
+                        } else {
+                            alert(response.message);
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi cập nhật số lượng.');
+                        location.reload();
+                    }
+                });
+            }
+
+            function updateGrandTotal() {
+                var grandTotal = 0;
+                $('tr').each(function () {
+                    var checkbox = $(this).find('.select-item');
+                    if (checkbox.is(':checked')) {
+                        var total = parseFloat($(this).find('.item-total').text().replace(/[^0-9]/g, ""));
+                        grandTotal += total;
+                    }
+                });
+                $('#grandTotal').text(grandTotal.toLocaleString('vi-VN') + ' Vnđ');
+            }
+
+            $('.remove-item').on('click', function () {
+                var productId = $(this).data('product-id');
+                var productName = $(this).data('product-name');
+                $('#singleDeleteMessage').text('Bạn có chắc chắn muốn xóa sản phẩm "' + productName + '" khỏi giỏ hàng không?');
+                $('#singleDeleteProductId').val(productId);
+            });
+        });
+    </script>
+}

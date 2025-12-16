@@ -1,0 +1,34 @@
+﻿/*css/ChiTiet_ThuGonNoiDungDanhGia.cshtml Kiểu cho phần nội dung đánh giá và nút "Xem thêm"/"Thu gọn" */
+.danhgia-container {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.danhgia-text {
+    display: inline; /* Đảm bảo nội dung hiển thị inline với nút "Xem thêm" */
+}
+
+.read-more-danhgia-btn,
+.read-less-danhgia-btn {
+    display: none; /* Ẩn mặc định, sẽ hiển thị bằng JavaScript nếu cần */
+    background: linear-gradient(90deg, #28a745, #ffc107);
+    color: #ffffff;
+    border: none;
+    padding: 0.2rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-left: 0;
+    vertical-align: middle;
+}
+
+    .read-more-danhgia-btn:hover,
+    .read-less-danhgia-btn:hover {
+        background: linear-gradient(90deg, #218838, #e0a800);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        transform: scale(1.05);
+    }
