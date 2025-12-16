@@ -1,0 +1,42 @@
+﻿
+@*Areas/Identity/Pages/CustomAccount/DuLieuCaNhan.cshtml*@
+
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.CustomAccount.DuLieuCaNhanModel
+
+@{
+    ViewData["Title"] = "Dữ liệu cá nhân";
+
+}
+
+<style>
+    .manage-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+        .manage-card:hover {
+            transform: translateY(-5px);
+        }
+</style>
+
+<h1 class="text-center mb-4" style="color: #343a40;">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="manage-card">
+            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <div class="alert alert-success">@Model.StatusMessage</div>
+            }
+            <p>Dữ liệu cá nhân của bạn được lưu trữ dưới dạng JSON. Bạn có thể tải xuống hoặc xóa tài khoản.</p>
+            <a asp-page-handler="DownloadPersonalData" class="btn btn-primary btn-block mt-3">Tải xuống dữ liệu</a>
+            <form id="delete" method="post" asp-page-handler="DeletePersonalData">
+                <button type="submit" class="btn btn-danger btn-block mt-3" data-disable-with="Đang xóa...">Xóa tài khoản</button>
+            </form>
+        </div>
+    </div>
+</div>

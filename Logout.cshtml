@@ -1,0 +1,24 @@
+﻿@*Areas/Identity/Pages/Account/Logout.cshtml*@
+
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Đăng xuất";
+    Layout = null;
+
+}
+
+<header>
+    <h1>@ViewData["Title"]</h1>
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <p>Bạn đã đăng nhập. Vui lòng sử dụng nút "Đăng xuất" để thoát.</p>
+    }
+    else
+    {
+        <div class="alert alert-success">
+            <p>Bạn đã đăng xuất thành công khỏi ứng dụng.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Quay lại trang chủ</a>
+        </div>
+    }
+</header>

@@ -1,0 +1,226 @@
+﻿@*Areas/Identity/Pages/Account/DoiMatKhau.cshtml*@
+
+@page
+@model WebsiteBanHang.Areas.Identity.Pages.Account.DoiMatKhaudModel
+
+@{
+    ViewData["Title"] = "Quên Mật Khẩu";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/css/GiaoDien_DangNhap.css" rel="stylesheet">
+    <link href="/css/Logo_Load.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <!-- Hiệu ứng tải -->
+        <div id="loading" style="display: none;">
+            <div class="loading-wrapper">
+                <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="loading-logo">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Form nhập email -->
+        <form id="emailForm" method="post" style="display: block;">
+            @Html.AntiForgeryToken()
+            <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="logo">
+            <h3>Quên Mật Khẩu</h3>
+            <p class="sub-text">Nhập email để lấy lại mật khẩu</p>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Input.Email" placeholder="Nhập email của bạn" id="Input_Email" autocomplete="email" aria-required="true" required />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <button type="button" id="sendCodeBtn" class="login-btn">Lấy mã xác nhận</button>
+        </form>
+
+        <!-- Form nhập mã xác nhận -->
+        <form id="codeForm" method="post" style="display: none;">
+            <img src="/images/logo/logo_dangnhap.PNG" alt="Logo" class="logo">
+            <h3>Nhập Mã Xác Nhận</h3>
+            <p class="sub-text">Vui lòng nhập mã xác nhận đã được gửi đến email của bạn</p>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" id="Input_Email_Hidden" name="Email" value="@Model.Input?.Email" />
+            <input id="Input_Code" name="Code" placeholder="Nhập mã xác nhận" aria-required="true" required />
+            <div class="timer" id="timer-display"></div>
+            <span id="code-error" class="text-danger"></span>
+            <div class="additional-links">
+                <a href="#" id="resendCode" class="custom-link">Gửi lại mã xác nhận</a>
+                <span class="separator">|</span>
+                <a href="#" id="reenterEmail" class="custom-link">Nhập lại email</a>
+            </div>
+            <button type="button" id="verifyCodeBtn" class="login-btn" disabled>Gửi mã xác nhận</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.validation.unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            let timer; // Biến toàn cục để lưu bộ đếm
+            let timeLeft = 0; // Biến toàn cục để lưu thời gian còn lại
+
+            // Hàm để bắt đầu bộ đếm ngược
+            function startTimer() {
+                if (timer) {
+                    clearInterval(timer);
+                }
+
+                timeLeft = 10; // 3 phút
+                $("#verifyCodeBtn").prop("disabled", false);
+                $("#timer-display").text("Mã xác nhận hết hạn sau: 3:00");
+                timer = setInterval(function () {
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        $("#timer-display").text("Mã xác nhận đã hết hạn. Vui lòng yêu cầu mã mới.");
+                        $("#verifyCodeBtn").prop("disabled", true);
+                        $("#resendCode").show();
+                    } else {
+                        $("#timer-display").text(
+                            "Mã xác nhận hết hạn sau: " +
+                            Math.floor(timeLeft / 60) + ":" +
+                            (timeLeft % 60).toString().padStart(2, '0')
+                        );
+                    }
+                    timeLeft--;
+                }, 1000);
+            }
+
+            // Hàm hiển thị/ẩn hiệu ứng tải
+            function toggleLoading(show) {
+                if (show) {
+                    $("#loading").show();
+                    // Không ẩn form hoàn toàn, chỉ làm mờ nhẹ
+                    $("#emailForm, #codeForm").css("opacity", "0.5");
+                } else {
+                    $("#loading").hide();
+                    $("#emailForm, #codeForm").css("opacity", "1");
+                }
+            }
+
+            // Xử lý khi nhấn "Lấy mã xác nhận"
+            $("#sendCodeBtn").on("click", function (e) {
+                e.preventDefault();
+                var email = $("#Input_Email").val();
+
+                if (!$("#emailForm").valid()) {
+                    return;
+                }
+
+                toggleLoading(true);
+
+                $.ajax({
+                    url: "/Identity/Account/DoiMatKhau?handler=SendCode",
+                    method: "POST",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: { Email: email },
+                    success: function (response) {
+                        toggleLoading(false);
+                        if (response.success) {
+                            $("#emailForm").hide();
+                            $("#codeForm").show();
+                            $("#Input_Email_Hidden").val(email);
+                            $("#code-error").text("");
+                            startTimer();
+                        } else {
+                            $("#emailForm").show();
+                            $("#emailForm .text-danger").text(response.message || "Có lỗi xảy ra khi gửi mã xác nhận.");
+                        }
+                    },
+                    error: function () {
+                        toggleLoading(false);
+                        $("#emailForm").show();
+                        $("#emailForm .text-danger").text("Có lỗi xảy ra khi gửi mã xác nhận.");
+                    }
+                });
+            });
+
+            // Xử lý khi nhấn "Gửi lại mã xác nhận"
+            $("#resendCode").on("click", function (e) {
+                e.preventDefault();
+                var email = $("#Input_Email_Hidden").val();
+
+                toggleLoading(true);
+
+                $.ajax({
+                    url: "/Identity/Account/DoiMatKhau?handler=SendCode",
+                    method: "POST",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: { Email: email },
+                    success: function (response) {
+                        toggleLoading(false);
+                        if (response.success) {
+                            $("#codeForm").show();
+                            $("#code-error").text("Mã xác nhận mới đã được gửi!");
+                            startTimer();
+                        } else {
+                            $("#codeForm").show();
+                            $("#code-error").text(response.message || "Có lỗi xảy ra khi gửi mã xác nhận.");
+                        }
+                    },
+                    error: function () {
+                        toggleLoading(false);
+                        $("#codeForm").show();
+                        $("#code-error").text("Có lỗi xảy ra khi gửi mã xác nhận.");
+                    }
+                });
+            });
+
+            // Xử lý khi nhấn "Nhập lại email"
+            $("#reenterEmail").on("click", function (e) {
+                e.preventDefault();
+                $("#codeForm").hide();
+                $("#emailForm").show();
+                $("#Input_Email").val("");
+                $("#emailForm .text-danger").text("");
+            });
+
+            // Xử lý khi nhấn "Gửi mã xác nhận"
+            $("#verifyCodeBtn").on("click", function (e) {
+                e.preventDefault();
+                var email = $("#Input_Email_Hidden").val();
+                var code = $("#Input_Code").val();
+
+                if (!$("#codeForm").valid()) {
+                    return;
+                }
+
+                toggleLoading(true);
+
+                $.ajax({
+                    url: "/Identity/Account/DoiMatKhau?handler=VerifyCode",
+                    method: "POST",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    data: { Email: email, Code: code },
+                    success: function (response) {
+                        toggleLoading(false);
+                        if (response.success) {
+                            window.location.href = "/Identity/Account/CapNhatMatKhau?email=" + encodeURIComponent(email) + "&token=" + response.token;
+                        } else {
+                            $("#codeForm").show();
+                            $("#code-error").text(response.message || "Mã xác nhận không hợp lệ hoặc đã hết hạn.");
+                        }
+                    },
+                    error: function () {
+                        toggleLoading(false);
+                        $("#codeForm").show();
+                        $("#code-error").text("Có lỗi xảy ra khi xác nhận mã.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
